@@ -9,8 +9,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Navigate to directory
         run: |
-          cd ../backend
           ls
+          cd ../backend
       - name: Lint Python
         uses: actions/checkout@v4
         with:
