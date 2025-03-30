@@ -1,5 +1,5 @@
 [scripts]
-check = "bash -c 'isort . -c -v'"
+check = "isort . -c -v"
 sort = "isort ."
 
 [[source]]
