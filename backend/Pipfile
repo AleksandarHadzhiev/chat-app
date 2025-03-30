@@ -1,3 +1,7 @@
+[scripts]
+check = "isort . -c -v"
+sort = "isort ."
+
 [[source]]
 url = "https://pypi.org/simple"
 verify_ssl = true
@@ -9,6 +13,9 @@ fastapi = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 sqlmodel = "*"
 psycopg2 = "*"
+black = "*"
+pycodestyle = "*"
+isort = "*"
 
 [dev-packages]
 

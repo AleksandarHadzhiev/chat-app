@@ -1,0 +1,23 @@
+name: Backend styling
+
+on: [push]
+
+jobs:
+  styling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Navigate to directory
+        run: |
+          cd ../backend
+          ls
+      - name: Lint Python
+        uses: actions/checkout@v4
+        with:
+          python-version: 3.12
+      - name: Install pipenv
+        run: pip install pipenv
+      - name: Install Dependencies
+        run: pipenv install
+      - name: Run lint
+        run: pipenv run check
