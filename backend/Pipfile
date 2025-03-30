@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+uvicorn = {extras = ["standard"], version = "*"}
+fastapi = {extras = ["standard"], version = "*"}
+sqlalchemy = "*"
+sqlmodel = "*"
+psycopg2 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
