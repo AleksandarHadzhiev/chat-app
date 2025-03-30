@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
+
 
 def create_app(server="dev"):
     

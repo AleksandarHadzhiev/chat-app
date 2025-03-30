@@ -1,6 +1,7 @@
+from src.db.db import DB
 from src.db.postgres import PostgresSQL
 from src.db.sqlite import SQLite
-from src.db.db import DB
+
 
 class DBFactory:
     def __init__(self, url):
