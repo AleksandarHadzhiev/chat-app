@@ -19,8 +19,6 @@ jobs:
         run: pip install pipenv
       - name: Pipenv version
         run: pipenv --version
-      - name: Install Dependencies
-        run: pipenv install
       - name: Check Pipfile content
         run: cat Pipfile
       - name: Run lint
