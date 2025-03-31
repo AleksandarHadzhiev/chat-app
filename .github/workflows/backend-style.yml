@@ -8,9 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Navigate to directory
-        run: cd ..backend
-      - name: List elements
-        run: ls
       - name: Lint Python
         uses: actions/checkout@v4
         with:
@@ -20,6 +17,8 @@ jobs:
       - name: Pipenv version
         run: pipenv --version
       - name: Check Pipfile content
+        working-directory: ./backend
         run: cat Pipfile
       - name: Run lint
+        working-directory: ./backend
         run: pipenv run check
