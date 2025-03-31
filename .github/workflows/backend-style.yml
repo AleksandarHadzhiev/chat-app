@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Navigate to directory
-        run: cd backend
+        run: cd ..backend
       - name: List elements
         run: ls
       - name: Lint Python
