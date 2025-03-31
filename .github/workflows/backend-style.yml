@@ -21,7 +21,5 @@ jobs:
         run: pipenv install
       - name: Pipenv version
         run: pipenv --version
-      - name: Start envrionment
-        run: pipenv shell
       - name: Run lint
         run: pipenv run check
