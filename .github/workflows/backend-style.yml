@@ -16,3 +16,4 @@ jobs:
         run: |  
           pipenv sync
           pipenv run check
+          pipenv run b-check
