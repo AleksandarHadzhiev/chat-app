@@ -9,7 +9,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Navigate to directory
         run: |
-          ls
           cd backend
           ls
       - name: Lint Python
@@ -21,7 +20,7 @@ jobs:
       - name: Pipenv version
         run: pipenv --version
       - name: Install Dependencies
-        run: pipenv sync
+        run: pipenv install
       - name: Check Pipfile content
         run: cat Pipfile
       - name: Run lint
