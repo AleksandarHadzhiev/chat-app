@@ -1,0 +1,18 @@
+name: Backend styling
+
+on: [push]
+
+jobs:
+  styling:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          python-version: 3.12
+      - name: Install pipenv
+        run: pip install pipenv
+      - name: Run lint
+        working-directory: ./backend
+        run: |  
+          pipenv sync
+          pipenv run check

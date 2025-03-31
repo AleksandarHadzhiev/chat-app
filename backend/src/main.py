@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
+
 
 def create_app(server="dev"):
     
@@ -11,4 +13,6 @@ def create_app(server="dev"):
     @app.get("/")
     async def root():
         return {"message": "Hello, World!"}
+
+
     return app
