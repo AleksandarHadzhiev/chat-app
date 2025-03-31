@@ -9,10 +9,8 @@ class SQLite(DB):
         self.url = f"{url}{self.sqlite_file_name}"
         self.engine = create_engine(self.url)
 
-
     def create_db_and_tables(self):
         SQLModel.metadata.create_all(self.engine)
-
 
     def get_session(self):
         with Session(self.engine) as session:

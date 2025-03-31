@@ -3,19 +3,16 @@ class Config:
     FRONTEND_URL = ""
     FRONTEND_URL = ""
 
+
 class ConfigFactory:
     def __init__(self, type="dev"):
         self.type = type
-        self.types = {
-            "dev": DevConfig(),
-            "test": TestConfig()
-        }
+        self.types = {"dev": DevConfig(), "test": TestConfig()}
 
     def get_config(self) -> Config:
         if self.type in self.types:
             return self.types[self.type]
 
-        
 
 class DevConfig(Config):
     USERNAME = "user"
@@ -29,4 +26,3 @@ class TestConfig(Config):
     PASSWORD = "test"
     FRONTEND_URL = "https://localhost:3000"
     DATABASE_URL = f"sqlite:///"
-    

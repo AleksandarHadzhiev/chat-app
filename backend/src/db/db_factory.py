@@ -8,13 +8,12 @@ class DBFactory:
         self.url: str = url
         self.databases = {
             "postgresql": PostgresSQL(self.url),
-            "sqllite": SQLite(self.url)
+            "sqllite": SQLite(self.url),
         }
-
 
     def get_db(self) -> DB:
         keys = list(self.databases.keys())
-        
+
         for key in keys:
             if self.url.startswith(key):
                 return self.databases[key]
