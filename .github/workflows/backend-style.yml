@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Navigate to directory
-      - name: Lint Python
-        uses: actions/checkout@v4
         with:
           python-version: 3.12
       - name: Install pipenv
