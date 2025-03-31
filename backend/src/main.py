@@ -13,4 +13,6 @@ def create_app(server="dev"):
     @app.get("/")
     async def root():
         return {"message": "Hello, World!"}
+
+
     return app

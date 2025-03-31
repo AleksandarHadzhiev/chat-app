@@ -1,6 +1,8 @@
 [scripts]
 check = "isort . -c -v"
 sort = "isort ."
+start = "uvicorn app:app --host 127.0.0.1 --port 8000"
+docker = "uvicorn app:app --host 0.0.0.0 --port 8000"
 
 [[source]]
 url = "https://pypi.org/simple"
@@ -12,12 +14,14 @@ uvicorn = {extras = ["standard"], version = "*"}
 fastapi = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 sqlmodel = "*"
-psycopg2 = "*"
 black = "*"
 pycodestyle = "*"
 isort = "*"
+psycopg2-binary = "*"
+
 
 [dev-packages]
+
 
 [requires]
 python_version = "3.12"
