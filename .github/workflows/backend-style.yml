@@ -19,5 +19,7 @@ jobs:
         run: pip install pipenv
       - name: Install Dependencies
         run: pipenv install
+      - name: Start envrionment
+        run: pipenv shell
       - name: Run lint
-        run: isort .
+        run: pipenv run check
