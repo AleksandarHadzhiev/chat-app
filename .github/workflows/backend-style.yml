@@ -9,11 +9,5 @@ jobs:
       - uses: actions/checkout@v4
         with:
           python-version: 3.12
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Run lint
-        working-directory: ./backend
-        run: |  
-          pipenv sync
-          pipenv run check
-          pipenv run b-check
+        working-directory: ./backend/tools
+        run: bash lint_check.sh
