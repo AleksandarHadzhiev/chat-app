@@ -1,5 +1,6 @@
 [scripts]
 check = "isort . -c -v"
+py-check = "pylint ."
 b-check = "black . --check"
 sort = "isort ."
 black = "black ."
@@ -20,10 +21,9 @@ black = "*"
 pycodestyle = "*"
 isort = "*"
 psycopg2-binary = "*"
-
+pylint = "*"
 
 [dev-packages]
-
 
 [requires]
 python_version = "3.12"
