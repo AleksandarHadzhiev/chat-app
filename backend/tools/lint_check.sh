@@ -3,7 +3,7 @@
 # Navigate to the backend folder
 cd ..
 
-pipenv shell
+ls
 
 # Run isort check on code
 echo "____________________ISORT_CHECK____________________"
