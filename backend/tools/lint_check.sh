@@ -7,13 +7,13 @@ pipenv shell
 
 # Run isort check on code
 echo "____________________ISORT_CHECK____________________"
-isort . -c -v
+pipenv run check
 
 # Run black check on code
 echo "____________________BLACK_CHECK____________________"
-black . --check
+pipenv run b-check
 
 
 # Run pylint check on code
 echo "____________________PYLINT_CHECK____________________"
-pylint .
+pipenv run py-check
