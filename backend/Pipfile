@@ -22,6 +22,7 @@ pycodestyle = "*"
 isort = "*"
 psycopg2-binary = "*"
 pylint = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 
