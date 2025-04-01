@@ -5,6 +5,8 @@ cd ..
 
 ls
 
+pipenv install
+
 # Run isort check on code
 echo "____________________ISORT_CHECK____________________"
 pipenv run check
