@@ -12,5 +12,8 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Run lint
-        working-directory: ./backend/tools
-        run: bash lint_check.sh
+        working-directory: ./backend
+        run: |
+          pipenv sync
+          pipenv run check
+          pipenv run b-check
