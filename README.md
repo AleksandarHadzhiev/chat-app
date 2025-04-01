@@ -4,7 +4,7 @@ A chat-app utilizing websockets
 
 ## Description
 
-A chat application with React.js as a frontend service and FastAPI as a backend service. Together with that there will be a websocket server running in the backend, and the frontend will serve as a client. The application will provide the option for the user to login using Google or email + password combination. PostgreSQL as a DB service and hosting the application on Google Cloud.
+A chat application with Next.js as a frontend service and FastAPI as a backend service. Together with that there will be a websocket server running in the backend, and the frontend will serve as a client. The application will provide the option for the user to login using Google or email + password combination. PostgreSQL as a DB service and hosting the application on Google Cloud.
 
 <!-- 
 TO BE ADDED 
