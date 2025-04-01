@@ -1,22 +1,28 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel
-
 from src.db.db import DB
-
+import psycopg2
 
 class PostgresSQL(DB):
-    def __init__(self, url):
-        self.url = url
-        self.engine = create_engine(self.url)
+    """Postgresql database."""
+    def set(self, settings):
+        """Initialize the database."""
+        self.settings = settings
+        self.connection = psycopg2.connect(
+            database=settings.DATABASE_DB,
+            host=settings.HOST,
+            user=settings.USERNAME,
+            port=settings.DATABASE_PORT,
+            password=settings.PASSWORD,
+        )
 
     def create_db_and_tables(self):
-        SQLModel.metadata.create_all(self.engine)
+        """Create the database and tables."""
+        # TODO:
+        # With the introduction of real modules, replace the code with the actual modules
+        query = "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))"
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(query)
+
 
     def get_db(self):
-        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
-        db = SessionLocal()
-        try:
-            return db
-        finally:
-            db.close()
+        """Get the created database."""
+        return self.cursor
