@@ -16,9 +16,17 @@ class PostgresSQL(DB):
         self._connect()
         # TODO:
         # With the introduction of real modules, replace the code with the actual modules
-        query = "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))"
+        create_users_table = "CREATE TABLE users (id SERIAL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, username VARCHAR(255))"
+        create_groups_table = "CREATE TABLE groups (id SERIAL, title VARCHAR(255) NOT NULL)"
+        create_connection_between_users_and_groups_table = "CREATE TABLE groups_users (group_id integer NOT NULL, user_id integer NOT NULL)"
+        create_messages_table = "CREATE TABLE messages (id SERIAL, author VARCHAR(255) NOT NULL, user_id integer NOT NULL, content VARCHAR, group_id integer NOT NULL)"
+        
         self.cursor = self.connection.cursor()
-        self.cursor.execute(query)
+        self.cursor.execute(create_users_table)
+        self.cursor.execute(create_groups_table)
+        self.cursor.execute(create_connection_between_users_and_groups_table)
+        self.cursor.execute(create_messages_table)
+        self.connection.commit()
 
 
     def _connect(self):
