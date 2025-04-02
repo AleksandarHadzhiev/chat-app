@@ -1,9 +1,45 @@
 version: '3.8'
 services:
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=user
+      - POSTGRES_DB=users
+    ports:
+      - '5432:5432'
+
+  mysql:
+    container_name: database
+    image: mysql:latest
+    ports:
+      - "32001:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: employees
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    profiles: [ app, full ]
   backend:
+    container_name: api
+    links:
+      - "mysql"
     build: .
     expose:
       - "8000"
     ports:
       - "8000:8000"
     restart: "always"
+    profiles: [ app, full ]
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    restart: "always"
+    profiles: [ full ]

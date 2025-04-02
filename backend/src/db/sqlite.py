@@ -4,15 +4,14 @@ from src.db.db import DB
 
 
 class SQLite(DB):
-    def __init__(self, url):
+    def set(self, settings):
         self.sqlite_file_name = "database.db"
-        self.url = f"{url}{self.sqlite_file_name}"
-        self.engine = create_engine(self.url)
-
+        self.url = f"{settings.DATABASE_URL}{self.sqlite_file_name}"
+        print(self.url)
+        self.engine = create_engine(self.url, echo=True)
 
     def create_db_and_tables(self):
         SQLModel.metadata.create_all(self.engine)
-
 
     def get_session(self):
         with Session(self.engine) as session:

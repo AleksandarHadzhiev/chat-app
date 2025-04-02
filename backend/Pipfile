@@ -1,8 +1,12 @@
 [scripts]
 check = "isort . -c -v"
+py-check = "pylint ."
+b-check = "black . --check"
 sort = "isort ."
+black = "black ."
 start = "uvicorn app:app --host 127.0.0.1 --port 8000"
 docker = "uvicorn app:app --host 0.0.0.0 --port 8000"
+test =  "pytest"
 
 [[source]]
 url = "https://pypi.org/simple"
@@ -18,10 +22,11 @@ black = "*"
 pycodestyle = "*"
 isort = "*"
 psycopg2-binary = "*"
-
+pylint = "*"
+mysql-connector-python = "*"
+pytest-cov = "*"
 
 [dev-packages]
-
 
 [requires]
 python_version = "3.12"

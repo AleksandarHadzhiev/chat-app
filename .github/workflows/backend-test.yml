@@ -1,9 +1,9 @@
-name: Backend styling
+name: Backend test
 
 on: [push]
 
 jobs:
-  styling:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,6 +11,6 @@ jobs:
           python-version: 3.12
       - name: Install pipenv
         run: pip install pipenv
-      - name: Run lint
+      - name: Run tests
         working-directory: ./backend/tools
-        run: bash lint_check.sh
+        run: bash test.sh
