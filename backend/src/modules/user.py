@@ -3,7 +3,6 @@ class User:
         self.email = email
         self.password = password
 
-
     def set_username(self, username):
         self.username = username
 
@@ -11,4 +10,3 @@ class User:
         self.id = id
         self.__init__(email=email, password=password)
         self.set_username(username=username)
-                      

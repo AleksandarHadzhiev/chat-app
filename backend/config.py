@@ -1,7 +1,9 @@
 """Starting point of the application"""
 
+
 class Config:
     """Base config."""
+
     DATABASE_URL = ""
     FRONTEND_URL = ""
     FRONTEND_URL = ""
@@ -10,6 +12,7 @@ class Config:
 
 class ConfigFactory:
     """Config factory for using the appropriate environment configuration."""
+
     def __init__(self, type):
         """Init the facotry."""
         self.type = type
@@ -25,8 +28,10 @@ class ConfigFactory:
             return self.types[self.type]
         return None
 
+
 class DevConfig(Config):
     """Development config."""
+
     ENVIRONMENT = "dev"
 
     USERNAME = "user"
@@ -40,6 +45,7 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     """Test config."""
+
     ENVIRONMENT = "test"
 
     FRONTEND_URL = "https://localhost:3000"
@@ -48,6 +54,7 @@ class TestConfig(Config):
 
 class DockerConfig(Config):
     """Docker config."""
+
     ENVIRONMENT = "docker"
 
     HOST = "database"

@@ -21,14 +21,14 @@ def test_create_test_config():
     db = db_factory.get_db()
     assert config.ENVIRONMENT == env
     assert type(db) == type(SQLite())
-    
+
 
 def test_create_docker_config():
     env = "docker"
     config = ConfigFactory(type=env).get_config()
     db_factory = DBFactory(env=env, settings=config)
     db = db_factory.get_db()
-    
+
     assert config.ENVIRONMENT == env
     assert type(db) == type(MySQL())
 
@@ -36,11 +36,10 @@ def test_create_docker_config():
 def test_create_none():
     env = "None"
     config = ConfigFactory(type=env).get_config()
-    
+
     assert config == None
-    
+
     db_factory = DBFactory(env=env, settings=config)
     db = db_factory.get_db()
-    
 
     assert db == None
