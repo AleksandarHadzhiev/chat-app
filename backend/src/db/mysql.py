@@ -9,7 +9,6 @@ class MySQL(DB):
         super().set(settings)
         self.settings = settings
 
-
     def create_db_and_tables(self):
         self._connect()
         self.cursor = self.connection.cursor()
@@ -19,7 +18,6 @@ class MySQL(DB):
             "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))"
         )
 
-
     def _connect(self):
         self.connection = mysql.connector.connect(
             host=self.settings.HOST,
@@ -27,7 +25,6 @@ class MySQL(DB):
             database=self.settings.DATABASE_NAME,
             password=self.settings.DATABASE_PASSWORD,
         )
-
 
     def get_db(self):
         return self.cursor

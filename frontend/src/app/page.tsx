@@ -1,9 +1,28 @@
+'use client'
+
 import Image from "next/image";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
+  const myuuid = uuidv4();
+  const socket = new WebSocket("ws:/127.0.0.1:8000/ws/" + myuuid)
+
+  socket.addEventListener('open', (event) => {
+    console.log("Connected to server");
+  })
+
+  socket.addEventListener('close', (event) => {
+    console.log("Connected to server");
+  })
+
+  socket.onmessage = (event) => {
+    console.log(event.data)
+  }
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+        <button onClick={() => { socket.send("Hello") }}>Socket</button>
         <Image
           className="dark:invert"
           src="/next.svg"
