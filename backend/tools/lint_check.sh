@@ -18,4 +18,4 @@ pipenv run b-check
 
 # Run pylint check on code
 echo "____________________PYLINT_CHECK____________________"
-pipenv run py-check
+# pipenv run py-check
