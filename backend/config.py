@@ -3,11 +3,11 @@
 
 class Config:
     """Base config."""
-
     DATABASE_URL = ""
     FRONTEND_URL = ""
     FRONTEND_URL = ""
     ENVIRONMENT = ""
+    CODE_LENGTH = 4
 
 
 class ConfigFactory:
