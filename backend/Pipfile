@@ -25,6 +25,7 @@ psycopg2-binary = "*"
 pylint = "*"
 mysql-connector-python = "*"
 pytest-cov = "*"
+mailtrap = "*"
 
 [dev-packages]
 
