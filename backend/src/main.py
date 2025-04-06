@@ -4,14 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.websocket.ws_server import ConnectionManager
-
+from src.users.routers import UsersRouter
 
 def create_app(server="dev"):
 
     config = ConfigFactory(type=server).get_config()
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
     app = FastAPI()
-    origins = ["http://localhost:3000/"]
+    origins = ["http://localhost:3000"]
 
     app.add_middleware(
         CORSMiddleware,
@@ -22,10 +22,15 @@ def create_app(server="dev"):
     )
 
     connection_manager = ConnectionManager()
+    users_router = UsersRouter(db=db, settings=config)
+    app.include_router(users_router.router)
+
+    @app.on_event("startup")
+    def bootup():
+        db.create_db_and_tables()
 
     @app.get("/")
     async def root():
-        db.create_db_and_tables()
         return {"message": "Hello, World!"}
 
     @app.websocket("/ws/{id}")
