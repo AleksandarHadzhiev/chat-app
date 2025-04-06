@@ -1,4 +1,4 @@
-from backend.src.users.dtos.base import BaseDTO
+from src.users.dtos.base import BaseDTO
 
 
 class EmailField(BaseDTO):

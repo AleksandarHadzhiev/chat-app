@@ -22,8 +22,8 @@ def create_app(server="dev"):
     )
 
     connection_manager = ConnectionManager()
-    users_router = UsersRouter(db=db, settings=config)
-    app.include_router(users_router.router)
+    users = UsersRouter(db=db, settings=config)
+    app.include_router(users.router)
 
     @app.on_event("startup")
     def bootup():

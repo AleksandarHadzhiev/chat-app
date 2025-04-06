@@ -1,4 +1,4 @@
-from backend.src.users.dtos.base import BaseDTO
+from src.users.dtos.base import BaseDTO
 from src.users.dtos.fields.email_field import EmailField
 from src.users.dtos.fields.username_field import UsernameField
 from src.users.dtos.fields.password_field import PasswordField
