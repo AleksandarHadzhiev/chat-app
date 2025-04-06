@@ -1,0 +1,14 @@
+{
+    "stepOne": "Gebruikersgegevens",
+    "stepTwo": "Verificatie",
+    "stepThree": "Bevestiging",
+    "email":"E-mail",
+    "exampple": "voorbeeld@gmail.com",
+    "password": "Wachtwoord",
+    "username": "Gebruikersnaam",
+    "button": "Doorgaan",
+    "account": "Je hebt een account?",
+    "sign in": "Aanmelden",
+    "code": "Code",
+    "thanks": "Bedankt voor uw registratie."
+}
