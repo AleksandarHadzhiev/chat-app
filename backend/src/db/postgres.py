@@ -1,9 +1,9 @@
 import psycopg2
 
-from src.db.db import DB
+from src.db.db import Database
 
 
-class PostgresSQL(DB):
+class PostgresSQL(Database):
     """Postgresql database."""
 
     def set(self, settings):
@@ -15,7 +15,7 @@ class PostgresSQL(DB):
         self._connect()
         # TODO:
         # With the introduction of real modules, replace the code with the actual modules
-        create_users_table = "CREATE TABLE users (id SERIAL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, username VARCHAR(255))"
+        create_users_table = "CREATE TABLE users (id SERIAL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, username VARCHAR(255), verified BOOLEAN DEFAULT FALSE)"
         create_groups_table = (
             "CREATE TABLE groups (id SERIAL, title VARCHAR(255) NOT NULL)"
         )
@@ -40,4 +40,5 @@ class PostgresSQL(DB):
 
     def get_db(self):
         """Get the created database."""
-        return self.cursor
+        return self.connection
+

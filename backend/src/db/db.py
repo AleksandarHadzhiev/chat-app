@@ -1,4 +1,4 @@
-class DB:
+class Database:
     def set(self, settings):
         pass
 
