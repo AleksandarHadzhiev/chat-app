@@ -1,35 +1,35 @@
 "use client"
 
-import UsersHandler from "@/ApiCalls/UsersHandler"
-import ChildContext from "@/components/General/Context"
-import translationLoader from "@/tools/TranslationLoader"
-import Dutch from "../../dictionaries/NL/reset-password.json"
-import { FormEvent, useContext, useEffect, useState } from "react"
+// import UsersHandler from "@/ApiCalls/UsersHandler"
+// import ChildContext from "@/components/General/Context"
+// import translationLoader from "@/tools/TranslationLoader"
+// import Dutch from "../../dictionaries/NL/reset-password.json"
+// import { FormEvent, useContext, useEffect, useState } from "react"
 
 export default function ResetPassword() {
-    const [Data, setData] = useState(Dutch)
-    let { language } = useContext(ChildContext)
-    useEffect(() => {
-        async function load() {
-            const data = await translationLoader(language, "reset-password.json")
-            setData(data)
-        }
-        load()
-    }, [language])
+    // const [Data, setData] = useState(Dutch)
+    // const { language } = useContext(ChildContext)
+    // useEffect(() => {
+    //     async function load() {
+    //         const data = await await new translationLoader().translationLoader(language, "reset-password.json")
+    //         setData(data)
+    //     }
+    //     load()
+    // }, [language])
 
 
-    const usersAPI = new UsersHandler()
-    const [password, setPassword] = useState('')
-    function login(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault()
-        const data = {
-            password: password
-        }
-        usersAPI.login("http://localhost:8000/login", data)
-    }
+    // const usersAPI = new UsersHandler()
+    // const [password, setPassword] = useState('')
+    // function login(e: FormEvent<HTMLFormElement>) {
+    //     e.preventDefault()
+    //     const data = {
+    //         password: password
+    //     }
+    //     usersAPI.login("http://localhost:8000/login", data)
+    // }
     return (
         <div className="bg-white w-full h-ull flex flex-col items-center justify-center text-black">
-            <h1 className="text-3xl text-orange-600">{Data.header}</h1>
+            {/* <h1 className="text-3xl text-orange-600">{Data.header}</h1>
             <form
                 onSubmit={(e) => { login(e) }}
                 className="mt-4 bg-white border-1 border-gray-200 w-82 h-82 rounded-lg drop-shadow-md">
@@ -54,7 +54,7 @@ export default function ResetPassword() {
                     <button className="rounded-lg bg-orange-600 w-1/2 h-1/3 hover:bg-orange-400 text-white">{Data.button}</button>
                     <p>{Data.account}<a className="text-orange-600 hover:text-orange-700" href="/register">{Data.signup}</a></p>
                 </div>
-            </form>
+            </form> */}
         </div>
     )
 }

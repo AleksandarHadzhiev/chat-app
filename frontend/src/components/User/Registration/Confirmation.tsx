@@ -6,10 +6,10 @@ import Data from "../../../dictionaries/NL/registration.json"
 export default function Confirmation() {
     const [data, setData] = useState(Data)
 
-    let { language } = useContext(ChildContext)
+    const { language } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
-            const data = await translationLoader(language, "registration.json")
+            const data = await await new translationLoader().translationLoader(language, "registration.json")
             setData(data)
         }
         load()

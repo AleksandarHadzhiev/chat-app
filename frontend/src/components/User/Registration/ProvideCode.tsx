@@ -3,16 +3,18 @@ import UsersHandler from "@/ApiCalls/UsersHandler"
 import ChildContext from "@/components/General/Context"
 import translationLoader from "@/tools/TranslationLoader"
 import Data from "../../../dictionaries/NL/registration.json"
+import { VerifyDTO } from "@/ApiCalls/DTOs/User/VerifyDTO"
 
-//@ts-ignore
+//@ts-expect-error
+// Providing a function and can not specify the type
 export default function ProvdeCode({ registration }) {
 
     const [data, setData] = useState(Data)
 
-    let { language } = useContext(ChildContext)
+    const { language } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
-            const data = await translationLoader(language, "registration.json")
+            const data = await await new translationLoader().translationLoader(language, "registration.json")
             setData(data)
         }
         load()
@@ -45,12 +47,16 @@ export default function ProvdeCode({ registration }) {
 
     function verify(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        const data = {
-            code: code,
-            email: localStorage.getItem('email')
+        const email = localStorage.getItem("email")
+        if (email) {
+            const data: VerifyDTO = {
+                email: email,
+                code: code
+            }
+            usersAPI.verify("http://localhost:8000/verification", data)
+            registration(e)
         }
-        usersAPI.verify("http://localhost:8000/verification", data)
-        registration(e)
+
     }
 
     function updateValue(e: ChangeEvent<HTMLInputElement>) {

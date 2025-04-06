@@ -7,7 +7,8 @@ import ChildContext from "./Context";
 
 
 
-//@ts-ignore
+//@ts-expect-error
+// Providing a function and can not specify the type
 export function Layout({ children }) {
     const [ln, setLanguage] = useState('NL')
     return (

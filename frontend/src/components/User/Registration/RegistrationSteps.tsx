@@ -2,15 +2,16 @@ import ChildContext from "@/components/General/Context"
 import translationLoader from "@/tools/TranslationLoader"
 import { useContext, useEffect, useState } from "react"
 import Data from "../../../dictionaries/NL/registration.json"
-//@ts-ignore
+//@ts-expect-error
+// Providing a function and can not specify the type
 export default function RegistrationSteps({ step }) {
 
     const [data, setData] = useState(Data)
 
-    let { language } = useContext(ChildContext)
+    const { language } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
-            const data = await translationLoader(language, "registration.json")
+            const data = await await new translationLoader().translationLoader(language, "registration.json")
             setData(data)
         }
         load()

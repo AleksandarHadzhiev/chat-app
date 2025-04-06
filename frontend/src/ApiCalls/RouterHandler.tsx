@@ -11,7 +11,7 @@ export default class RoutersHandler {
         })
     }
 
-    post(url: string, data: any) {
+    post(url: string, data: { email: string; username?: string; password?: string; code?: string; }) {
         axios.post(url, data).then(async (response) => {
             console.log(await response.data)
             const data = response.data

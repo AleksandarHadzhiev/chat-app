@@ -1,21 +1,22 @@
 import { FormEvent, useContext, useEffect, useState } from "react"
-import UsersHandler from "@/ApiCalls/UsersHandler"
+// import UsersHandler from "@/ApiCalls/UsersHandler"
 import ChildContext from "@/components/General/Context"
 import translationLoader from "@/tools/TranslationLoader"
 import Data from "../../../dictionaries/NL/registration.json"
 
-//@ts-ignore
+//@ts-expect-error
+// Providing a function and can not specify the type
 export default function ProvdeUserData({ registration }) {
     const [data, setData] = useState(Data)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [username, setUsername] = useState("")
-    const usersAPI = new UsersHandler()
+    // const usersAPI = new UsersHandler()
 
-    let { language } = useContext(ChildContext)
+    const { language } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
-            const data = await translationLoader(language, "registration.json")
+            const data = await await new translationLoader().translationLoader(language, "registration.json")
             setData(data)
         }
         load()

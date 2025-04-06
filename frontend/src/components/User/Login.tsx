@@ -4,13 +4,12 @@ import Dutch from "../../dictionaries/nl/login.json"
 import ChildContext from "../General/Context"
 import translationLoader from "@/tools/TranslationLoader"
 
-//@ts-ignore
 export default function Login() {
     const [Data, setData] = useState(Dutch)
-    let { language } = useContext(ChildContext)
+    const { language } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
-            const data = await translationLoader(language, "login.json")
+            const data = await await new translationLoader().translationLoader(language, "login.json")
             setData(data)
         }
         load()

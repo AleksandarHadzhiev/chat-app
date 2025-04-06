@@ -1,15 +1,15 @@
 import LanguageDropDown from "./LanguageDropDown"
 import Dutch from "./Languages/Dutch"
-import English from "./Languages/English"
 import { useState } from "react"
 
-//@ts-ignore
+//@ts-expect-error
+// Providing a function and can not specify the type
 export default function LanguagePicker({ setLanguage }) {
     const [isVisible, setIsVisible] = useState(false)
     const [ln, setLn] = useState(Dutch)
     return (
         <div
-            onClick={(e) => { setIsVisible(!isVisible) }}
+            onClick={() => { setIsVisible(!isVisible) }}
             className="flex w-28 h-10 flex border-2 border-black rounded-lg">
             <div className="w-2/3 h-full flex flex-col items-center justify-center text-black">
                 <div className="w-full h-full flex">
