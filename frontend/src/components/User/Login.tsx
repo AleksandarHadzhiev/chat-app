@@ -1,6 +1,6 @@
 import UsersHandler from "@/ApiCalls/UsersHandler"
 import { FormEvent, useContext, useEffect, useState } from "react"
-import Dutch from "../../dictionaries/nl/login.json"
+import Dutch from "../../dictionaries/NL/login.json"
 import ChildContext from "../General/Context"
 import translationLoader from "@/tools/TranslationLoader"
 

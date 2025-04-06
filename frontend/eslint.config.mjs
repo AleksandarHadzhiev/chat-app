@@ -10,10 +10,10 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.config9({
+  ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript"],
     rules: {
-      "@typescript-eslint/ban-ts-ignore": "off"
+      "@typescript-eslint/ban-ts-comment": "off"
     }
   })
 ];

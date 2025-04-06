@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 export default function languageLoader(language: string) {
-    const path = `../components/General/Languages/${language}.tsx`
+    const path = `@/components/General/Languages/${language}`
 
     const element = dynamic(() => import(path), {
         ssr: false,

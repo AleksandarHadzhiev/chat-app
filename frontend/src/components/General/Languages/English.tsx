@@ -1,3 +1,6 @@
+'use client'
+
+
 export default function English() {
     return (
         <div className="w-full h-full text-black flex items-center justify-center">

@@ -1,3 +1,4 @@
+'use client'
 import LanguageDropDown from "./LanguageDropDown"
 import Dutch from "./Languages/Dutch"
 import { useState } from "react"

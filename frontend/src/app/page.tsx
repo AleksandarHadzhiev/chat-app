@@ -19,14 +19,14 @@ export default function Home() {
   // socket.onmessage = (event) => {
   //   console.log(event.data)
   // }
-  const { language } = useContext(ChildContext)
-  useEffect(() => {
-    async function load() {
-      const data = await new translationLoader().translationLoader(language, "login.json")
-      console.log(data)
-    }
-    load()
-  }, [language])
+  // const { language } = useContext(ChildContext)
+  // useEffect(() => {
+  //   async function load() {
+  //     const data = await new translationLoader().translationLoader(language, "login.json")
+  //     console.log(data)
+  //   }
+  //   load()
+  // }, [language])
   return (
     <h3>Welcome to the app</h3>
   );

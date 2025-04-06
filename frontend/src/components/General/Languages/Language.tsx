@@ -1,10 +1,12 @@
-import languageLoader from "@/tools/languages"
-import { MouseEvent } from "react"
+'use client'
 
+import { MouseEvent, useState } from "react"
+import languageLoader from "@/tools/languages"
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function Language({ language, pickLanguage, setLn }) {
     const Element = languageLoader(language)
+
     function pick(e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) {
         setLn(Element)
         pickLanguage(e)

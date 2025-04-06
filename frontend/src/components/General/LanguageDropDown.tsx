@@ -1,3 +1,5 @@
+'use client'
+
 import { Key, MouseEvent } from "react"
 import Language from "./Languages/Language"
 
