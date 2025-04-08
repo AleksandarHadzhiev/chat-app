@@ -5,7 +5,7 @@ from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.websocket.ws_server import ConnectionManager
 from src.users.routers import UsersRouter
-
+from src.languages.router import LanguagesRouter
 def create_app(server="dev"):
 
     config = ConfigFactory(type=server).get_config()
@@ -23,7 +23,9 @@ def create_app(server="dev"):
 
     connection_manager = ConnectionManager()
     users = UsersRouter(db=db, settings=config)
+    languages = LanguagesRouter(db=db, settings=config)
     app.include_router(users.router)
+    app.include_router(languages.router)
 
     @app.on_event("startup")
     def bootup():
