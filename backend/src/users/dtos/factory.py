@@ -11,7 +11,7 @@ class DTOFactory:
         self.settings = settings
         self.supported_formats = [
             [{"email": "", "password": "", "username": ""}, UserDTO()],
-            [{"code": "", "email": ""}, CodeDTO()],
+            [{"email": "", "code": ""}, CodeDTO()],
             [{"email": "", "password": ""}, LoginDTO()],
             [{"email": ""}, ForgotPasswordDTO()],
             [{"code": "", "email": "", "password": ""}, ResetPasswordDTO()],
@@ -22,8 +22,7 @@ class DTOFactory:
         for dto in self.supported_formats:
             keys = list(dict(dto[0]).keys())
             incoming_keys = list(self.incomind_data.keys())
-            print(keys)
-            print(incoming_keys)
+
             if incoming_keys == keys:
                 _dto: BaseDTO = dto[1]
                 _dto.set(data=self.incomind_data, settings=self.settings)

@@ -12,4 +12,4 @@ class CodeField(BaseDTO):
             return {"fail": "Empty code"}
         elif len(self.code) != self.settings.CODE_LENGTH:
             return {"fail": "Invalid code format"}
-        return {"email": self.code}
+        return {"code": self.code}

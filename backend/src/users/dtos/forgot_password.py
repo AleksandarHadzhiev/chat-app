@@ -10,7 +10,7 @@ class ForgotPasswordDTO(BaseDTO):
 
 
     def set_email(self, data):
-        response = EmailField(data=data["email"]).validate_data()
+        response = EmailField(data=data["email"], settings=self.settings).validate_data()
         if "fail" in response:
             self.errors.append(response)
         else:

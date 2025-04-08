@@ -13,7 +13,7 @@ class ResetPasswordDTO(BaseDTO):
 
 
     def set_password(self, data):
-        response = PasswordField(data=data["password"]).validate_data()
+        response = PasswordField(data=data["password"],  settings=self.settings).validate_data()
         if "fail" in response:
             self.errors.append(response)
         else:
@@ -21,7 +21,7 @@ class ResetPasswordDTO(BaseDTO):
 
 
     def set_email(self, data):
-        response = EmailField(data=data["email"]).validate_data()
+        response = EmailField(data=data["email"],  settings=self.settings).validate_data()
         if "fail" in response:
             self.errors.append(response)
         else:
@@ -29,7 +29,7 @@ class ResetPasswordDTO(BaseDTO):
 
 
     def set_code(self, data):
-        response = CodeField(data=data["code"]).validate_data()
+        response = CodeField(data=data["code"],  settings=self.settings).validate_data()
         if "fail" in response:
             self.errors.append(response)
         else:
