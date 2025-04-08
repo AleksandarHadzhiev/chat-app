@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation'
 
 import ChildContext from "@/components/General/Context"
 import TranslationLoader from "@/tools/TranslationLoader"
-import Data from "../../../dictionaries/NL/registration.json"
 import Notification from "@/components/General/Notification"
 
 export default function Register() {
@@ -28,7 +27,11 @@ export default function Register() {
         }
     }
 
-    const [data, setData] = useState(Data)
+    const [data, setData] = useState({
+        stepOne: "",
+        stepTwo: "",
+        stepThree: "",
+    })
 
     const { language } = useContext(ChildContext)
     useEffect(() => {

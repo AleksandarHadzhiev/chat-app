@@ -21,7 +21,9 @@ class UsersService():
         if "fail" in data:
             return data
         response = self.repository.login(data=data)
-        return response
+        if response:
+            return response
+        return {"error":"wrong-credentials"}
 
 
     def register(self, incoming_data):

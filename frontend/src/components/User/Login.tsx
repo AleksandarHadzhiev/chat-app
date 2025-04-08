@@ -1,36 +1,57 @@
 import UsersHandler from "@/ApiCalls/UsersHandler"
 import { FormEvent, useContext, useEffect, useState } from "react"
 import ChildContext from "../General/Context"
-import Translations from "@/dictionaries/EN/login.json"
 import TranslationLoader from "@/tools/TranslationLoader"
+import Notification from "../General/Notification"
+import { redirect } from 'next/navigation'
 
 export default function Login() {
-    const [Data, setData] = useState(Translations)
+    const [Data, setData] = useState({
+        header: "",
+        email: "",
+        exampple: "",
+        password: "",
+        account: "",
+        here: "",
+        button: "",
+        signup: "",
+        "forgot-password": ""
+    })
     const { language } = useContext(ChildContext)
+    const [response, setResponse] = useState("")
+    const [notification, setNotificaiton] = useState("")
 
     useEffect(() => {
         async function load() {
             const loader = new TranslationLoader(language, "login")
             const response = await loader.getTranslatiosn()
             const incoming_data = JSON.parse(response.data)
-            if (incoming_data && incoming_data.translations.header != Data.header)
-                setData(incoming_data.translations)
+            setData(incoming_data.translations)
         }
         load()
-    }, [language, Data])
+    }, [language, response])
     const usersAPI = new UsersHandler()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    function login(e: FormEvent<HTMLFormElement>) {
+    async function login(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const data = {
             email: email,
             password: password
         }
-        usersAPI.login("http://localhost:8000/login", data)
+        const response = await usersAPI.login("http://localhost:8000/login", data, Data)
+        if ("tag" in response) {
+            setResponse(response.tag)
+            setNotificaiton(response.message)
+        }
+        else {
+            localStorage.setItem("user", JSON.stringify(response))
+            redirect("/")
+        }
     }
     return (
         <div className="bg-white w-full h-full flex flex-col items-center justify-center text-black">
+            <Notification response={response} notification={notification} />
             <h1 className="text-3xl text-orange-600">{Data?.header}</h1>
             <form
                 onSubmit={(e) => { login(e) }}

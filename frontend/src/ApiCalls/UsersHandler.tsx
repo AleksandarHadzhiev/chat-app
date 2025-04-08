@@ -18,8 +18,10 @@ export default class UsersHandler {
     }
 
     async login(url: string, data: LoginDTO, transitions: any) {
+        console.log(transitions)
         const handler = new RoutersHandler()
         const response = await handler.post(url, data)
+        console.log(response)
         return this.notificationHandler(response, transitions)
     }
 

@@ -13,7 +13,11 @@ class DutchLoginTranlsations(Base):
             "here": "Hier",
             "button": "Aanmelden",
             "account": "Heb je nog geen account?",
-            "signup": "Zing mee"
+            "signup": "Zing mee",
+            "fail": "Mislukt vanwege: ",
+            "empty-email": "Lege e-mail",
+            "empty-password": "Leeg wachtwoord",
+            "wrong-credentials": "Het e-mailadres of wachtwoord is onjuist",
         }
 
 
