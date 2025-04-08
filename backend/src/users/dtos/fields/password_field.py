@@ -9,5 +9,5 @@ class PasswordField(BaseDTO):
 
     def validate_data(self):
         if self.password.replace(" ", "") == "":
-            return {"fail": "Empty password"}
+            return "empty-password"
         return {"password": self.password}

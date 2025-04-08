@@ -9,7 +9,7 @@ class CodeField(BaseDTO):
 
     def validate_data(self):
         if self.code.replace(" ", "") == "":
-            return {"fail": "Empty code"}
+            return "empty-code"
         elif len(self.code) != self.settings.CODE_LENGTH:
-            return {"fail": "Invalid code format"}
+            return "invalid-code"
         return {"code": self.code}

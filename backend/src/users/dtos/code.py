@@ -6,14 +6,14 @@ from src.users.dtos.base import BaseDTO
 class CodeDTO(BaseDTO):
     def set(self, data, settings):
         self.settings = settings
+        self.errors = []
         self.set_email(data=data)
         self.set_code(data=data)
-        self.errors = []
 
 
     def set_email(self, data):
         response = EmailField(data=data["email"], settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.email = response["email"]
@@ -21,7 +21,7 @@ class CodeDTO(BaseDTO):
 
     def set_code(self, data):
         response = CodeField(data=data["code"], settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.code = response["code"]

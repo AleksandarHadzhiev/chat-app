@@ -17,7 +17,15 @@ class RegistrationTranslations(Base):
             "account": "You have an account?",
             "sign in": "Sing in",
             "code": "Code",
-            "thanks": "Thank you for registering."
+            "thanks": "Thank you for registering.",
+            "success": "Thank you for registering. You have received an email, please check it!",
+            "fail": "Failed due to: ",
+            "empty-email": "Empty email",
+            "empty-password": "Empty password",
+            "empty-username": "Empty username",
+            "empty-code": "Empty code",
+            "invalid-code": "Invalid code",
+            "unverified": "The provided email or code is unverified"
         }
 
 

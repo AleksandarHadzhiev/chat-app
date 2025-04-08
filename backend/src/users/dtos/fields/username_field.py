@@ -9,5 +9,5 @@ class UsernameField(BaseDTO):
 
     def validate_data(self):
         if self.username.replace(" ", "") == "":
-            return {"fail": "Empty username"}
+            return "empty-username"
         return {"username": self.username}

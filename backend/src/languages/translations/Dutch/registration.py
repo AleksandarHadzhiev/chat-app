@@ -15,7 +15,15 @@ class DutchRegistrationTranslations(Base):
             "account": "Je hebt een account?",
             "sign in": "Aanmelden",
             "code": "Code",
-            "thanks": "Bedankt voor uw registratie."
+            "thanks": "Bedankt voor uw registratie.",
+            "success": "Bedankt voor uw registratie. U hebt een e-mail ontvangen, controleer deze!",
+            "fail": "Mislukt vanwege: ",
+            "empty-email": "Lege e-mail",
+            "empty-password": "Leeg wachtwoord",
+            "empty-username": "Lege gebruikersnaam",
+            "empty-code": "Lege code",
+            "invalid-code": "Ongeldige code",
+            "unverified": "Het opgegeven e-mailadres of de code is niet geverifieerd"
         }
 
 

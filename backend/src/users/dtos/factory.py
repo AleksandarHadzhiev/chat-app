@@ -22,7 +22,6 @@ class DTOFactory:
         for dto in self.supported_formats:
             keys = list(dict(dto[0]).keys())
             incoming_keys = list(self.incomind_data.keys())
-
             if incoming_keys == keys:
                 _dto: BaseDTO = dto[1]
                 _dto.set(data=self.incomind_data, settings=self.settings)

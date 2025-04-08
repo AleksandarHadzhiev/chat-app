@@ -5,13 +5,13 @@ from src.users.dtos.fields.email_field import EmailField
 class ForgotPasswordDTO(BaseDTO):
     def set(self, data, settings):
         self.settings = settings
-        self.set_email(data=data)
         self.errors = []
+        self.set_email(data=data)
 
 
     def set_email(self, data):
         response = EmailField(data=data["email"], settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.email = response["email"]

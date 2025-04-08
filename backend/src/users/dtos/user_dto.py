@@ -6,15 +6,15 @@ from src.users.dtos.fields.password_field import PasswordField
 class UserDTO(BaseDTO):
     def set(self, data, settings):
         self.settings = settings
+        self.errors = []
         self.set_email(data=data)
         self.set_username(data=data)
         self.set_password(data=data)
-        self.errors = []
 
 
     def set_email(self, data):
         response = EmailField(data=data["email"], settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.email = response["email"]
@@ -22,7 +22,7 @@ class UserDTO(BaseDTO):
 
     def set_username(self, data):
         response = UsernameField(data=data["username"],  settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.username = response["username"]
@@ -30,7 +30,7 @@ class UserDTO(BaseDTO):
 
     def set_password(self, data):
         response = PasswordField(data=data["password"],  settings=self.settings).validate_data()
-        if "fail" in response:
+        if type(response) == str:
             self.errors.append(response)
         else:
             self.password = response["password"]

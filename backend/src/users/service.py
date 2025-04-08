@@ -32,7 +32,7 @@ class UsersService():
             return data
         self.repository.register(data=data)
         self._email_flow(data)
-        return {"message": "Thank you for registering. You have received an email, please check it!"}
+        return {"message": "success"}
 
 
     def _email_flow(self, data):
@@ -63,8 +63,8 @@ class UsersService():
             return data
         if self.verifications[email] == code:
             self.repository.verify(email=email)
-            return {"Message": "Verified account"}
-        return {"Message": "Unverified account"}
+            return {"message": "success"}
+        return {"error": "unverified"}
 
 
     def forgot_password(self, incoming_data):

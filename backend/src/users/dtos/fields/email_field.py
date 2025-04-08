@@ -9,7 +9,7 @@ class EmailField(BaseDTO):
 
     def validate_data(self):
         if self.email.replace(" ", "") == "":
-            return {"fail": "Empty email"}
+            return "empty-email"
         elif "@" not in self.email:
-            return {"fail": "Invalid email"}
+            return "empty-email"
         return {"email": self.email}
