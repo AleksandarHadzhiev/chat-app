@@ -19,7 +19,6 @@ class DBFactory:
         for key in keys:
             if self.env.startswith(key):
                 db = self.databases[key]
-                print(db)
                 db.set(self.settings)
                 return db
         return None

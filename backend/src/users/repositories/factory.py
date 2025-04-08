@@ -19,8 +19,6 @@ class RepositoryFactory:
         keys = list(self.databases.keys())
 
         for key in keys:
-            print(type(self.db))
             if type(self.db) == key:
-                print(self.databases[key])
                 return self.databases[key]
         return None
