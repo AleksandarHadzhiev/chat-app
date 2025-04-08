@@ -1,23 +1,10 @@
-import ChildContext from "@/components/General/Context"
-import translationLoader from "@/tools/TranslationLoader"
-import { useState, useContext, useEffect } from "react"
-import Data from "../../../dictionaries/NL/registration.json"
-
-export default function Confirmation() {
-    const [data, setData] = useState(Data)
-
-    const { language } = useContext(ChildContext)
-    useEffect(() => {
-        async function load() {
-            const data = await await new translationLoader().translationLoader(language, "registration.json")
-            setData(data)
-        }
-        load()
-    }, [language])
+//@ts-expect-error
+// Providing a function and can not specify the type
+export default function Confirmation({ translations }) {
 
     return (
         <div className="w-full h-1/2 flex flex-col items-center justify-center">
-            <p>{data.thanks}</p>
+            <p>{translations.thanks}</p>
             <div className="flex">
                 <div role="status">
                     <svg aria-hidden="true" className="w-8 h-8 text-oragne-300 animate-spin dark:text-orange-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

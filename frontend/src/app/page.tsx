@@ -1,9 +1,8 @@
 'use client'
 
 
-import React, { useContext, useEffect } from 'react';
-import ChildContext from '@/components/General/Context';
-import translationLoader from '@/tools/TranslationLoader';
+import React, { useContext, useEffect, useState } from 'react';
+import TranslationLoader from '@/tools/TranslationLoader';
 export default function Home() {
   // const myuuid = uuidv4();
   // const socket = new WebSocket("ws:/127.0.0.1:8000/ws/" + myuuid)
@@ -27,6 +26,18 @@ export default function Home() {
   //   }
   //   load()
   // }, [language])
+
+  useEffect(() => {
+    async function load() {
+      const loader = new TranslationLoader("EN", "login")
+      const response = await loader.getTranslatiosn()
+      JSON.parse(response.data)
+      console.log(JSON.parse(response.data).translations)
+    }
+
+    load()
+  }, [])
+
   return (
     <h3>Welcome to the app</h3>
   );

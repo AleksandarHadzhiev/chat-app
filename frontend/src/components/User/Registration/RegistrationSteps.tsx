@@ -1,21 +1,7 @@
-import ChildContext from "@/components/General/Context"
-import translationLoader from "@/tools/TranslationLoader"
-import { useContext, useEffect, useState } from "react"
-import Data from "../../../dictionaries/NL/registration.json"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function RegistrationSteps({ step }) {
+export default function RegistrationSteps({ step, translations }) {
 
-    const [data, setData] = useState(Data)
-
-    const { language } = useContext(ChildContext)
-    useEffect(() => {
-        async function load() {
-            const data = await await new translationLoader().translationLoader(language, "registration.json")
-            setData(data)
-        }
-        load()
-    }, [language])
 
     const focus = "w-12 h-1 bg-orange-600"
     const notFocused = "w-12 h-1 bg-orange-300"
@@ -24,7 +10,7 @@ export default function RegistrationSteps({ step }) {
     return (
         <div className="flex w-full items-center justify-center space-x-2">
             <div className="text-orange-600">
-                <h3>{data.stepOne}</h3>
+                <h3>{translations.stepOne}</h3>
             </div>
             <div className="flex items-center justify-center">
                 <div className={step < 2 ? notFocused : focus}></div>
@@ -33,7 +19,7 @@ export default function RegistrationSteps({ step }) {
                 </svg>
             </div>
             <div className={step < 2 ? "text-orange-300" : "text-orange-600"}>
-                <h3>{data.stepTwo}</h3>
+                <h3>{translations.stepTwo}</h3>
             </div>
             <div className="flex items-center justify-center">
                 <div className={step < 3 ? notFocused : focus}></div>
@@ -42,7 +28,7 @@ export default function RegistrationSteps({ step }) {
                 </svg>
             </div>
             <div className={step < 3 ? "text-orange-300" : "text-orange-600"}>
-                <h3>{data.stepThree}</h3>
+                <h3>{translations.stepThree}</h3>
             </div>
         </div>
     )

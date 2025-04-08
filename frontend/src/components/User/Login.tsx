@@ -1,19 +1,23 @@
 import UsersHandler from "@/ApiCalls/UsersHandler"
 import { FormEvent, useContext, useEffect, useState } from "react"
-import Dutch from "../../dictionaries/NL/login.json"
 import ChildContext from "../General/Context"
-import translationLoader from "@/tools/TranslationLoader"
+import Translations from "@/dictionaries/EN/login.json"
+import TranslationLoader from "@/tools/TranslationLoader"
 
 export default function Login() {
-    const [Data, setData] = useState(Dutch)
+    const [Data, setData] = useState(Translations)
     const { language } = useContext(ChildContext)
+
     useEffect(() => {
         async function load() {
-            const data = await await new translationLoader().translationLoader(language, "login.json")
-            setData(data)
+            const loader = new TranslationLoader(language, "login")
+            const response = await loader.getTranslatiosn()
+            const incoming_data = JSON.parse(response.data)
+            if (incoming_data && incoming_data.translations.header != Data.header)
+                setData(incoming_data.translations)
         }
         load()
-    }, [language])
+    }, [language, Data])
     const usersAPI = new UsersHandler()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -27,7 +31,7 @@ export default function Login() {
     }
     return (
         <div className="bg-white w-full h-full flex flex-col items-center justify-center text-black">
-            <h1 className="text-3xl text-orange-600">{Data.header}</h1>
+            <h1 className="text-3xl text-orange-600">{Data?.header}</h1>
             <form
                 onSubmit={(e) => { login(e) }}
                 className="bg-white border-1 border-gray-200 w-82 h-82 rounded-lg drop-shadow-md">
@@ -68,7 +72,7 @@ export default function Login() {
                 </div>
                 <div className="w-full flex flex-col space-y-3 h-1/3 flex items-center justify-center">
                     <button className="rounded-lg bg-orange-600 w-1/2 h-1/3 hover:bg-orange-400 text-white">{Data.button}</button>
-                    <p>{Data.account} <a className="text-orange-600 hover:text-orange-700" href="/register">{Data.button}</a></p>
+                    <p>{Data.account} <a className="text-orange-600 hover:text-orange-700" href="/register">{Data.signup}</a></p>
                 </div>
             </form>
         </div>
