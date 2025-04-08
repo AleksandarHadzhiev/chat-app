@@ -1,20 +1,20 @@
 'use client'
 import LanguageDropDown from "./LanguageDropDown"
-import Dutch from "./Languages/Dutch"
 import { useState } from "react"
+
 
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function LanguagePicker({ setLanguage }) {
     const [isVisible, setIsVisible] = useState(false)
-    const [ln, setLn] = useState(Dutch)
+    const [ln, setLn] = useState("<p>Loading...</p>")
     return (
         <div
             onClick={() => { setIsVisible(!isVisible) }}
-            className="flex w-28 h-10 flex border-2 border-black rounded-lg">
+            className="flex w-24 h-12 flex border-2 border-black rounded-lg transition delay-150 duration-300 ease-in-out">
             <div className="w-2/3 h-full flex flex-col items-center justify-center text-black">
-                <div className="w-full h-full flex">
-                    {ln}
+                <div className="w-full h-full flex pl-2">
+                    <div className="w-full h-full text-black flex items-center justify-center hover:bg-gray-400" dangerouslySetInnerHTML={{ __html: ln }}></div>
                 </div>
                 <div className={isVisible ? "visible bg-gray-200 mt-25 border-2 border-black w-full" : "hidden"}>
                     <LanguageDropDown setLn={setLn} setLanguage={setLanguage} />
