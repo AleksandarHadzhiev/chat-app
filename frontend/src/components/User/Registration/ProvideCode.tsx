@@ -30,7 +30,7 @@ export default function ProvdeCode({ registration, translations }) {
     }, [code])
 
 
-    function verify(e: FormEvent<HTMLFormElement>) {
+    async function verify(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const email = localStorage.getItem("email")
         if (email) {
@@ -38,8 +38,8 @@ export default function ProvdeCode({ registration, translations }) {
                 email: email,
                 code: code
             }
-            usersAPI.verify("http://localhost:8000/verification", data)
-            registration(e)
+            const response = await usersAPI.verify("http://localhost:8000/verification", data, translations)
+            registration(e, response.tag, response.message)
         }
     }
 
@@ -82,6 +82,7 @@ export default function ProvdeCode({ registration, translations }) {
                                     type="text"
                                     name="digit"
                                     value={code[Number(index)] ? code[Number(index)] : ""}
+                                    onChange={(e) => { e.preventDefault() }}
                                     onKeyDown={(e) => { goBack(e) }} />
                             ))}
                     </div>

@@ -11,12 +11,12 @@ export default function LanguagePicker({ setLanguage }) {
     return (
         <div
             onClick={() => { setIsVisible(!isVisible) }}
-            className="flex w-24 h-12 flex border-2 border-black rounded-lg transition delay-150 duration-300 ease-in-out">
+            className="flex w-24 h-12 flex border-2 border-black rounded-lg hover:bg-gray-400">
             <div className="w-2/3 h-full flex flex-col items-center justify-center text-black">
                 <div className="w-full h-full flex pl-2">
-                    <div className="w-full h-full text-black flex items-center justify-center hover:bg-gray-400" dangerouslySetInnerHTML={{ __html: ln }}></div>
+                    <div className="w-full h-full text-black flex items-center justify-center" dangerouslySetInnerHTML={{ __html: ln }}></div>
                 </div>
-                <div className={isVisible ? "visible bg-gray-200 mt-25 border-2 border-black w-full" : "hidden"}>
+                <div className={isVisible ? "visible bg-gray-200 mt-20 border-2 border-black w-full" : "hidden"}>
                     <LanguageDropDown setLn={setLn} setLanguage={setLanguage} />
                 </div>
             </div>

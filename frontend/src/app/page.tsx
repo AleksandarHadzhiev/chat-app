@@ -1,7 +1,7 @@
 'use client'
 
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TranslationLoader from '@/tools/TranslationLoader';
 export default function Home() {
   // const myuuid = uuidv4();
@@ -39,6 +39,8 @@ export default function Home() {
   }, [])
 
   return (
-    <h3>Welcome to the app</h3>
+    <div>
+      <h3>Welcome to the app</h3>
+    </div>
   );
 }

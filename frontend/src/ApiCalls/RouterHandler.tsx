@@ -1,27 +1,29 @@
-import axios from "axios";
-
+import axios, { AxiosError } from "axios";
 export default class RoutersHandler {
 
-    get(url: string) {
-        axios.get(url).then(async (response) => {
-            console.log(await response.data)
-            return await response.data
-        }).catch((error) => {
-            console.log(error)
-        })
+    async get(url: string) {
+        return await axios.get(url)
     }
 
-    post(url: string, data: { email: string; username?: string; password?: string; code?: string; }) {
-        axios.post(url, data).then(async (response) => {
-            console.log(await response.data)
-            const data = response.data
-            if (data != "null") {
-                alert("Success")
+    async post(url: string, data: { email: string; username?: string; password?: string; code?: string; }) {
+
+        try {
+            const response = await axios.post(url, data)
+            if (response.status == 201) {
+                return response.data
             }
-            return await response.data
-        }).catch((error) => {
-            console.log(error)
+            else if (response.status == 200) {
+                return response.data
+            }
+        } catch (_error: any) {
+            let error = _error.data
+            if (_error instanceof AxiosError) {
+                const reason = _error.response?.data
+                if ("fail" in reason)
+                    return reason
+            }
             return error
-        })
+        }
+
     }
 }

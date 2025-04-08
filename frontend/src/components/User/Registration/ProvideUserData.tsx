@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react"
 import UsersHandler from "@/ApiCalls/UsersHandler"
-
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function ProvdeUserData({ registration, translations }) {
@@ -9,7 +8,7 @@ export default function ProvdeUserData({ registration, translations }) {
     const [username, setUsername] = useState("")
     const usersAPI = new UsersHandler()
 
-    function submit(e: FormEvent<HTMLFormElement>) {
+    async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         localStorage.setItem("email", email)
         const data = {
@@ -17,8 +16,8 @@ export default function ProvdeUserData({ registration, translations }) {
             password: password,
             username: username
         }
-        registration(e)
-        usersAPI.register("http://localhost:8000/register", data)
+        const response = await usersAPI.register("http://localhost:8000/register", data, translations)
+        registration(e, response.tag, response.message)
     }
 
 

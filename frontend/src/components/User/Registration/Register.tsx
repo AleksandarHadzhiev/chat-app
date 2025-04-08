@@ -8,12 +8,24 @@ import { redirect } from 'next/navigation'
 import ChildContext from "@/components/General/Context"
 import TranslationLoader from "@/tools/TranslationLoader"
 import Data from "../../../dictionaries/NL/registration.json"
+import Notification from "@/components/General/Notification"
 
 export default function Register() {
     const [step, setStep] = useState(1)
-    function registration(e: FormEvent<HTMLFormElement>) {
+    const [response, setResponse] = useState("")
+    const [notification, setNotificaiton] = useState("")
+    function registration(e: FormEvent<HTMLFormElement>, response: string, notification: string) {
         e.preventDefault()
-        setStep(step + 1)
+        setNotificaiton(notification)
+        setResponse(response)
+
+        if (response != "") {
+            if (response == "success")
+                setStep(step + 1)
+            setTimeout(() => {
+                setResponse('')
+            }, 3000);
+        }
     }
 
     const [data, setData] = useState(Data)
@@ -24,11 +36,10 @@ export default function Register() {
             const loader = new TranslationLoader(language, "registration")
             const response = await loader.getTranslatiosn()
             const incoming_data = JSON.parse(response.data)
-            if (incoming_data && incoming_data.translations.accountOne != Data.account)
-                setData(incoming_data.translations)
+            setData(incoming_data.translations)
         }
         load()
-    }, [language, Data])
+    }, [language, response])
 
     if (step === 3) {
         setTimeout(() => {
@@ -37,6 +48,7 @@ export default function Register() {
     }
     return (
         <div className="bg-white w-full h-full flex flex-col items-center justify-center text-black space-y-4">
+            <Notification notification={notification} response={response} />
             <RegistrationSteps step={step} translations={data} />
             {
                 step === 1 ? < ProvdeUserData registration={registration} translations={data} /> :
