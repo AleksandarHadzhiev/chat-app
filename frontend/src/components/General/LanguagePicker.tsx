@@ -11,7 +11,7 @@ export default function LanguagePicker({ setLanguage }) {
     return (
         <div
             onClick={() => { setIsVisible(!isVisible) }}
-            className="flex w-24 h-12 flex border-2 border-black rounded-lg hover:bg-gray-400">
+            className="flex w-28 h-12 flex border-2 border-black rounded-lg hover:bg-gray-400">
             <div className="w-2/3 h-full flex flex-col items-center justify-center text-black">
                 <div className="w-full h-full flex pl-2">
                     <div className="w-full h-full text-black flex items-center justify-center" dangerouslySetInnerHTML={{ __html: ln }}></div>

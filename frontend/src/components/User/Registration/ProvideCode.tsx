@@ -13,7 +13,7 @@ export default function ProvdeCode({ registration, translations }) {
 
     useEffect(() => {
         let className = "cursor-not-allowed rounded-lg bg-gray-600 w-1/2 h-1/3 text-black"
-        let button = document.getElementById('submit');
+        const button = document.getElementById('submit');
         if (code == '') {
             const inputElement = document.getElementById('0');
             inputElement?.focus()
@@ -27,7 +27,7 @@ export default function ProvdeCode({ registration, translations }) {
         }
         setClassName(className)
 
-    }, [code])
+    }, [code, length])
 
 
     async function verify(e: FormEvent<HTMLFormElement>) {

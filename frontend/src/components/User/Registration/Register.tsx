@@ -3,13 +3,14 @@ import RegistrationSteps from "./RegistrationSteps"
 import ProvdeUserData from "./ProvideUserData"
 import ProvdeCode from "./ProvideCode"
 import Confirmation from "./Confirmation"
-import { redirect } from 'next/navigation'
+import { useRouter } from "next/navigation"
 
 import ChildContext from "@/components/General/Context"
 import TranslationLoader from "@/tools/TranslationLoader"
 import Notification from "@/components/General/Notification"
 
 export default function Register() {
+    const router = useRouter()
     const [step, setStep] = useState(1)
     const [response, setResponse] = useState("")
     const [notification, setNotificaiton] = useState("")
@@ -46,7 +47,7 @@ export default function Register() {
 
     if (step === 3) {
         setTimeout(() => {
-            redirect("/")
+            router.push('/login')
         }, 1500);
     }
     return (

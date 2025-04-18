@@ -52,7 +52,7 @@ export default function ForgotPassword() {
             </div>
             <div className="w-full flex flex-col space-y-3 h-1/3 flex items-center justify-center">
                 <button className="rounded-lg bg-orange-600 w-1/2 h-1/3 hover:bg-orange-400 text-white">{Data.button}</button>
-                <p>{Data.account} <a className="text-orange-600 hover:text-orange-700" href="/register">{Data.signup}</a></p>
+                <p>{Data.account} <Link className="text-orange-600 hover:text-orange-700" href="/register">{Data.signup}</Link></p>
             </div>
         </form> */}
         </div>

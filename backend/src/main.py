@@ -1,3 +1,6 @@
+import json
+import threading
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -5,7 +8,12 @@ from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.websocket.ws_server import ConnectionManager
 from src.users.routers import UsersRouter
+from src.groups.route import GroupsRouter
 from src.languages.router import LanguagesRouter
+from src.messages.router import MessagesRouter
+from src.messages.service import MessagesService
+
+
 def create_app(server="dev"):
 
     config = ConfigFactory(type=server).get_config()
@@ -24,28 +32,35 @@ def create_app(server="dev"):
     connection_manager = ConnectionManager()
     users = UsersRouter(db=db, settings=config)
     languages = LanguagesRouter(db=db, settings=config)
+    groups = GroupsRouter(db=db, settings=config)
+    messages = MessagesRouter(db=db, settings=config)
     app.include_router(users.router)
     app.include_router(languages.router)
+    app.include_router(groups.router)
+    app.include_router(messages.router)
 
     @app.on_event("startup")
     def bootup():
         db.create_db_and_tables()
 
-    @app.get("/")
-    async def root():
-        return {"message": "Hello, World!"}
 
-    @app.websocket("/ws/{id}")
-    async def websocket_server(websocket: WebSocket, id: str):
-        await connection_manager.connect(ws=websocket, id=id)
+    @app.websocket("/ws/{id}/{username}")
+    async def websocket_server(websocket: WebSocket, id: str, username: str):
+        await connection_manager.connect(ws=websocket, id=id, username=username, db=db, config=config)
         try:
             while True:
                 data = await websocket.receive_text()
-                data = f"{id}: {data}"
-                await connection_manager.broadcast(id=id, data=data)
+                message = json.loads(data)
+                await connection_manager.broadcast(id=id, message=message)
+                thread = threading.Thread(
+                    target=MessagesService(db=db, settings=config).create, 
+                    args=(message,)
+                )
+                thread.start()
         except WebSocketDisconnect:
             connection_manager.disconnect(id=id)
             disconnect_message = f"Client #{id} left the chat"
             await connection_manager.broadcast(id, disconnect_message)
+
 
     return app

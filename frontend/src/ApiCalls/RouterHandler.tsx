@@ -16,7 +16,7 @@ export default class RoutersHandler {
                 return response.data
             }
         } catch (_error: any) {
-            let error = _error.data
+            const error = _error.data
             if (_error instanceof AxiosError) {
                 const reason = _error.response?.data
                 if ("fail" in reason)

@@ -2,6 +2,7 @@ from src.users.service import UsersService
 from fastapi import Request, Response, status
 import json
 
+
 class UsersController():
     def __init__(self, db, settings):
         self.service = UsersService(db=db, settings=settings)

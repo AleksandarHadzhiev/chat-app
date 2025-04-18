@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react"
 import UsersHandler from "@/ApiCalls/UsersHandler"
+import Link from "next/link"
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function ProvdeUserData({ registration, translations }) {
@@ -19,7 +20,6 @@ export default function ProvdeUserData({ registration, translations }) {
         const response = await usersAPI.register("http://localhost:8000/register", data, translations)
         registration(e, response.tag, response.message)
     }
-
 
     return (
         <form onSubmit={(e) => { submit(e) }} className="bg-white border-1 border-gray-200 w-82 h-82 rounded-lg drop-shadow-md">
@@ -72,7 +72,7 @@ export default function ProvdeUserData({ registration, translations }) {
             </div>
             <div className="w-full flex flex-col space-y-3 h-1/3 flex items-center justify-center">
                 <button className="rounded-lg bg-orange-600 w-1/2 h-1/3 hover:bg-orange-400 text-white">{translations.button}</button>
-                <p>{translations.account}<a className="text-orange-600 hover:text-orange-700" href="/login">{translations["sign in"]}</a></p>
+                <p>{translations.account}<Link className="text-orange-600 hover:text-orange-700" href="/login">{translations["sign in"]}</Link></p>
             </div>
         </form>
 

@@ -23,7 +23,7 @@ export default function LanguageDropDown({ setLn, setLanguage }) {
         }
 
         load()
-    }, [isFetched])
+    }, [isFetched, setLn])
     function pickLanguage(e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) {
         const language = e.currentTarget.children[1].textContent
         setLanguage(language)

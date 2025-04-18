@@ -1,5 +1,5 @@
 from src.users.repositories.repository import Repository
-
+import logging
 
 class PostgresRepository(Repository):
     def __init__(self, db):
@@ -13,7 +13,42 @@ class PostgresRepository(Repository):
         create_user += f" VALUES ('{data["email"]}', '{data["password"]}', '{data["username"]}')"
         cursor.execute(create_user)
         _db.commit()
+        self._join_general_chat_on_registration(data=data, cursor=cursor)
+        _db.commit()
 
+
+    def _join_general_chat_on_registration(self, data, cursor):
+        user = self._get_user(data=data, cursor=cursor)
+        if user:
+            join_general = f"""
+                INSERT INTO members
+                (group_id, user_id)
+                VALUES
+                (1, {user['id']})
+            """
+            cursor.execute(join_general)
+        else:
+            logging.exception("User does not exist")
+            
+
+    def _get_user(self, data, cursor):
+        print(data)
+        get_user = "SELECT * FROM users"
+        get_user += f" WHERE email = '{data["email"]}'"
+        get_user += f" AND password = '{data["password"]}';"
+        cursor.execute(get_user)
+        users = cursor.fetchall()
+        user = None
+        if len(users) > 0:
+            user = {
+                "id": users[0][0],
+                "email": users[0][1],
+                "password": users[0][2],
+                "username": users[0][3],
+                "verified": users[0][4]
+            }
+        return user
+            
 
     def login(self, data):
         _db = self.db.get_db()
@@ -29,7 +64,7 @@ class PostgresRepository(Repository):
                 "id": users[0][0],
                 "email": users[0][1],
                 "password": users[0][2],
-                "usename": users[0][3],
+                "username": users[0][3],
                 "verified": users[0][4]
             }
             return user
@@ -67,7 +102,7 @@ class PostgresRepository(Repository):
                 "id": users[0][0],
                 "email": users[0][1],
                 "password": users[0][2],
-                "usename": users[0][3],
+                "username": users[0][3],
                 "verified": users[0][4]
             }
             return user
