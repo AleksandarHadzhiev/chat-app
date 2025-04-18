@@ -1,4 +1,5 @@
 import threading
+
 from fastapi import WebSocket
 
 from src.messages.service import MessagesService
@@ -13,17 +14,11 @@ class ConnectionManager:
         if id not in self.active_connections:
             self.active_connections[id] = ws
             text = f"{username} joined the server"
-            
-            message = {
-                "userId": id,
-                "author": "GGC",
-                "content": text,
-                "groupId": 1
-            }
+
+            message = {"userId": id, "author": "GGC", "content": text, "groupId": 1}
             MessagesService(db=db, settings=config).create(data=message)
         else:
             self.active_connections[id] = ws
-
 
     async def disconnect(self, id):
         self.active_connections.pop(id)

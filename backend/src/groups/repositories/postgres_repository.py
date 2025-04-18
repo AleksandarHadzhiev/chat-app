@@ -1,4 +1,5 @@
 import logging
+
 from src.users.repositories.repository import Repository
 
 
@@ -6,7 +7,6 @@ class PostgresRepository(Repository):
     def __init__(self, db):
         self.db = db
 
-    
     def create(self, data):
         try:
             _db = self.db.get_db()
@@ -20,7 +20,6 @@ class PostgresRepository(Repository):
         except Exception as e:
             logging.exception(e)
 
-
     def _add_as_a_member(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
@@ -31,7 +30,7 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_created_group_to_join)
         groups = cursor.fetchall()
-        if (len(groups) > 0):
+        if len(groups) > 0:
             print(groups)
             for group in groups:
                 print(group)
@@ -39,7 +38,6 @@ class PostgresRepository(Repository):
                 join_data = {"group_id": id, "user_id": data["admin"]}
                 self.join(join_data)
                 self._creeate_message_for_creating_chat(id=id, title=data["title"])
-
 
     def _creeate_message_for_creating_chat(self, id, title):
         _db = self.db.get_db()
@@ -68,10 +66,9 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
-        if (len(groups) > 0):
-            return self._format_groups_data(groups=groups)    
+        if len(groups) > 0:
+            return self._format_groups_data(groups=groups)
         return []
-
 
     def get_all(self):
         _db = self.db.get_db()
@@ -81,10 +78,9 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
-        if (len(groups) > 0):
-            return self._format_groups_data(groups=groups)    
+        if len(groups) > 0:
+            return self._format_groups_data(groups=groups)
         return []
-
 
     def _format_groups_data(self, groups):
         formatted_groups = []
@@ -97,7 +93,6 @@ class PostgresRepository(Repository):
             if formatted_group not in formatted_groups:
                 formatted_groups.append(formatted_group)
         return formatted_groups
-
 
     def join(self, data):
         _db = self.db.get_db()
@@ -115,7 +110,6 @@ class PostgresRepository(Repository):
         _db.commit()
         return {"message": "Joined group"}
 
-
     def _check_if_already_a_member(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
@@ -127,26 +121,21 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
-        if (len(groups) > 0):
+        if len(groups) > 0:
             return True
         return False
-
 
     def leave(self, data):
         pass
 
-
     def kick_member_out(self, data):
         pass
-
 
     def get_group(self, data):
         pass
 
-
     def edit(self, data):
         pass
-
 
     def delete(self, email):
         pass

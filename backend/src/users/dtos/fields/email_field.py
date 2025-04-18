@@ -6,7 +6,6 @@ class EmailField(BaseDTO):
         self.email = data
         self.settings = settings
 
-
     def validate_data(self):
         if self.email.replace(" ", "") == "":
             return "empty-email"

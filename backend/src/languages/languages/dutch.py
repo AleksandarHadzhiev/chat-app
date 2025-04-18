@@ -1,4 +1,5 @@
-from src.languages.languages.base import Language 
+from src.languages.languages.base import Language
+
 
 class Dutch(Language):
     def __init__(self):
@@ -12,7 +13,6 @@ class Dutch(Language):
             </svg>
             <p style="padding-left:2px;">NL</p>
         """
-
 
     def get_data(self):
         return self.data

@@ -1,5 +1,6 @@
 import json
 import logging
+
 from src.users.repositories.repository import Repository
 
 
@@ -7,12 +8,13 @@ class PostgresRepository(Repository):
     def __init__(self, db):
         self.db = db
 
-    
     def create(self, data):
         try:
             user_id = data["userId"]
             group_id = data["groupId"]
-            is_part_of_group = self._is_part_of_group(user_id=user_id, group_id=group_id)
+            is_part_of_group = self._is_part_of_group(
+                user_id=user_id, group_id=group_id
+            )
             if is_part_of_group:
                 _db = self.db.get_db()
                 cursor = _db.cursor()
@@ -34,7 +36,6 @@ class PostgresRepository(Repository):
         except Exception as e:
             logging.exception(e)
 
-
     def _is_part_of_group(self, user_id, group_id):
         _db = self.db.get_db()
         cursor = _db.cursor()
@@ -47,10 +48,9 @@ class PostgresRepository(Repository):
         cursor.execute(get_all)
         groups = cursor.fetchall()
         print(groups)
-        if (len(groups) > 0):
+        if len(groups) > 0:
             return True
         return False
-
 
     def get_all(self, group_id):
         _db = self.db.get_db()
@@ -61,10 +61,9 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_messages)
         messages = cursor.fetchall()
-        if len(messages) > 0 :
+        if len(messages) > 0:
             return self._format_messages(messages=messages)
         return []
-
 
     def _format_messages(self, messages):
         formatted_messages = []
@@ -79,10 +78,8 @@ class PostgresRepository(Repository):
             formatted_messages.append(formatted_message)
         return formatted_messages
 
-
     def edit(self, data):
         pass
-
 
     def delete(self, message_id):
         pass

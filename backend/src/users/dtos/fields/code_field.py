@@ -6,7 +6,6 @@ class CodeField(BaseDTO):
         self.code: str = data
         self.settings = settings
 
-
     def validate_data(self):
         if self.code.replace(" ", "") == "":
             return "empty-code"

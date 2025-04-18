@@ -1,21 +1,23 @@
-from src.users.repositories.repository import Repository
 import logging
+
+from src.users.repositories.repository import Repository
+
 
 class PostgresRepository(Repository):
     def __init__(self, db):
         self.db = db
 
-    
     def register(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
         create_user = "INSERT INTO users (email, password, username)"
-        create_user += f" VALUES ('{data["email"]}', '{data["password"]}', '{data["username"]}')"
+        create_user += (
+            f" VALUES ('{data["email"]}', '{data["password"]}', '{data["username"]}')"
+        )
         cursor.execute(create_user)
         _db.commit()
         self._join_general_chat_on_registration(data=data, cursor=cursor)
         _db.commit()
-
 
     def _join_general_chat_on_registration(self, data, cursor):
         user = self._get_user(data=data, cursor=cursor)
@@ -29,7 +31,6 @@ class PostgresRepository(Repository):
             cursor.execute(join_general)
         else:
             logging.exception("User does not exist")
-            
 
     def _get_user(self, data, cursor):
         print(data)
@@ -45,10 +46,9 @@ class PostgresRepository(Repository):
                 "email": users[0][1],
                 "password": users[0][2],
                 "username": users[0][3],
-                "verified": users[0][4]
+                "verified": users[0][4],
             }
         return user
-            
 
     def login(self, data):
         _db = self.db.get_db()
@@ -65,11 +65,10 @@ class PostgresRepository(Repository):
                 "email": users[0][1],
                 "password": users[0][2],
                 "username": users[0][3],
-                "verified": users[0][4]
+                "verified": users[0][4],
             }
             return user
         return None
-
 
     def reset_password(self, data):
         _db = self.db.get_db()
@@ -80,7 +79,6 @@ class PostgresRepository(Repository):
         cursor.execute(verify_user)
         _db.commit()
 
-
     def verify(self, email):
         _db = self.db.get_db()
         cursor = _db.cursor()
@@ -88,7 +86,6 @@ class PostgresRepository(Repository):
         verify_user += f" WHERE email = '{email}'"
         cursor.execute(verify_user)
         _db.commit()
-    
 
     def get_by_email(self, data):
         _db = self.db.get_db()
@@ -103,7 +100,7 @@ class PostgresRepository(Repository):
                 "email": users[0][1],
                 "password": users[0][2],
                 "username": users[0][3],
-                "verified": users[0][4]
+                "verified": users[0][4],
             }
             return user
         return None

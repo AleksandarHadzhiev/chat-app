@@ -1,6 +1,6 @@
-from src.users.dtos.fields.email_field import EmailField
-from src.users.dtos.fields.code_field import CodeField
 from src.users.dtos.base import BaseDTO
+from src.users.dtos.fields.code_field import CodeField
+from src.users.dtos.fields.email_field import EmailField
 
 
 class CodeDTO(BaseDTO):
@@ -10,14 +10,14 @@ class CodeDTO(BaseDTO):
         self.set_email(data=data)
         self.set_code(data=data)
 
-
     def set_email(self, data):
-        response = EmailField(data=data["email"], settings=self.settings).validate_data()
+        response = EmailField(
+            data=data["email"], settings=self.settings
+        ).validate_data()
         if type(response) == str:
             self.errors.append(response)
         else:
             self.email = response["email"]
-
 
     def set_code(self, data):
         response = CodeField(data=data["code"], settings=self.settings).validate_data()
@@ -26,11 +26,7 @@ class CodeDTO(BaseDTO):
         else:
             self.code = response["code"]
 
-
     def validate_data(self):
         if len(self.errors) > 0:
             return {"fail": self.errors}
-        return {
-            "email": self.email,
-            "code": self.code
-        }
+        return {"email": self.email, "code": self.code}

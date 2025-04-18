@@ -1,4 +1,5 @@
 import smtplib
+
 from src.emails.base_smtp import BaseSMTP
 
 
@@ -6,8 +7,7 @@ class SMTPServer(BaseSMTP):
     def __init__(self):
         self.server = smtplib.SMTP("127.0.0.1", 1025)
         self.email = "alekshadzhiev01@gmail.com"
-        self.server.login('username', "password")
-
+        self.server.login("username", "password")
 
     def send_email(self, code, email):
         from_address = self.email

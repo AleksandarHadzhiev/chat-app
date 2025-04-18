@@ -1,4 +1,5 @@
-from src.languages.languages.base import Language 
+from src.languages.languages.base import Language
+
 
 class English(Language):
     def __init__(self):

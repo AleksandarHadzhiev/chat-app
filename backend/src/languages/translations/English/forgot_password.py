@@ -1,5 +1,6 @@
 from src.languages.translations.base import Base
 
+
 class ForgotPasswordTranslations(Base):
     def __init__(self):
         self.translations = {
@@ -8,9 +9,8 @@ class ForgotPasswordTranslations(Base):
             "exampple": "example@gmail.com",
             "button": "Submit",
             "account": "You don't have an account?",
-            "signup": "Sing up"
+            "signup": "Sing up",
         }
-        
 
     def get_translations(self) -> dict:
         return self.translations

@@ -1,18 +1,18 @@
 import random
 import string
-from src.users.repositories.factory import RepositoryFactory
-from src.users.dtos.factory import DTOFactory
+
 from src.emails.mailhog_smtp import SMTPServer
+from src.users.dtos.factory import DTOFactory
+from src.users.repositories.factory import RepositoryFactory
 
 
-class UsersService():
+class UsersService:
     def __init__(self, db, settings):
         self.settings = settings
         self.db = db
         self.repository = RepositoryFactory(db=db).get_db()
         self.code_length = settings.CODE_LENGTH
         self.verifications = {}
-
 
     def login(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings)
@@ -24,8 +24,7 @@ class UsersService():
         if response:
             print(response)
             return response
-        return {"error":"wrong-credentials"}
-
+        return {"error": "wrong-credentials"}
 
     def register(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings)
@@ -37,7 +36,6 @@ class UsersService():
         self._email_flow(data)
         return {"message": "success"}
 
-
     def _email_flow(self, data):
         email = data["email"]
         code = self._generate_code(email=email)
@@ -45,16 +43,14 @@ class UsersService():
         smtp.send_email(code=code, email=email)
         return code
 
-
     def _generate_code(self, email):
         code = ""
         index = 0
         while index < self.code_length:
-            index+=1
+            index += 1
             code += random.choice(string.ascii_letters)
         self.verifications[email] = code
         return code
-
 
     def verify(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings)
@@ -69,7 +65,6 @@ class UsersService():
             return {"message": "success"}
         return {"error": "unverified"}
 
-
     def forgot_password(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings)
         dto = factory.get_dto()
@@ -79,10 +74,11 @@ class UsersService():
             return {"fail": "User does not exist or is not verified."}
         self._email_flow(data=data)
 
-
     def reset_password(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings)
         dto = factory.get_dto()
         data = dto.validate_data()
         self.repository.reset_password(data=data)
-        return {"message": "Your password has been reset. Login again to complete the process."}
+        return {
+            "message": "Your password has been reset. Login again to complete the process."
+        }

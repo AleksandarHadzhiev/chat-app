@@ -6,7 +6,6 @@ class PasswordField(BaseDTO):
         self.password = data
         self.settings = settings
 
-
     def validate_data(self):
         if self.password.replace(" ", "") == "":
             return "empty-password"

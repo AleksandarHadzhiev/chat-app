@@ -15,32 +15,25 @@ class PostgresSQL(Database):
         self._connect()
         # TODO:
         # With the introduction of real modules, replace the code with the actual modules
-        create_users_table = (
-            """CREATE TABLE users 
+        create_users_table = """CREATE TABLE users 
                 (id SERIAL, 
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL, 
                 username VARCHAR(255), 
                 verified BOOLEAN DEFAULT FALSE)
             """
-            )
-        create_groups_table = (
-            """CREATE TABLE groups 
+        create_groups_table = """CREATE TABLE groups 
                     (id SERIAL,
                     title VARCHAR(255) NOT NULL,
                     admin_id integer NOT NULL)
             """
-        )
-        create_connection_between_users_and_groups_table = (
-            """CREATE TABLE members 
+        create_connection_between_users_and_groups_table = """CREATE TABLE members 
                 (
                     group_id integer NOT NULL,
                     user_id integer NOT NULL
                 )
             """
-        )
-        create_messages_table = (
-            """CREATE TABLE messages 
+        create_messages_table = """CREATE TABLE messages 
                 (
                     id SERIAL, 
                     author VARCHAR(255) NOT NULL, 
@@ -49,13 +42,10 @@ class PostgresSQL(Database):
                     group_id integer NOT NULL
                 )
             """
-        )
-        create_general_group = (
-            """INSERT INTO groups
+        create_general_group = """INSERT INTO groups
                 (title, admin_id) VALUES
                 ('General Group Chat', 0)
             """
-        )
         self.cursor = self.connection.cursor()
         self.cursor.execute(create_users_table)
         self.cursor.execute(create_groups_table)
@@ -76,4 +66,3 @@ class PostgresSQL(Database):
     def get_db(self):
         """Get the created database."""
         return self.connection
-

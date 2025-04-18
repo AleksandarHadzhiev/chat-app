@@ -20,6 +20,5 @@ class DutchLoginTranlsations(Base):
             "wrong-credentials": "Het e-mailadres of wachtwoord is onjuist",
         }
 
-
     def get_translations(self) -> dict:
         return self.translations

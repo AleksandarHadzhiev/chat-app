@@ -7,7 +7,7 @@ class RegistrationTranslations(Base):
             "stepOne": "User Data",
             "stepTwo": "Verification",
             "stepThree": "Confirmation",
-            "email":"Email",
+            "email": "Email",
             "exampple": "example@gmail.com",
             "password": "Password",
             "username": "Username",
@@ -25,9 +25,8 @@ class RegistrationTranslations(Base):
             "empty-username": "Empty username",
             "empty-code": "Empty code",
             "invalid-code": "Invalid code",
-            "unverified": "The provided email or code is unverified"
+            "unverified": "The provided email or code is unverified",
         }
-
 
     def get_translations(self) -> dict:
         return self.translations

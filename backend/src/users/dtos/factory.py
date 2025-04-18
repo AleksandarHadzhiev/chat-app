@@ -1,9 +1,10 @@
 from src.users.dtos.base import BaseDTO
-from src.users.dtos.user_dto import UserDTO
 from src.users.dtos.code import CodeDTO
-from src.users.dtos.login_dto import LoginDTO
 from src.users.dtos.forgot_password import ForgotPasswordDTO
+from src.users.dtos.login_dto import LoginDTO
 from src.users.dtos.reset_password_dto import ResetPasswordDTO
+from src.users.dtos.user_dto import UserDTO
+
 
 class DTOFactory:
     def __init__(self, data, settings):
@@ -16,7 +17,6 @@ class DTOFactory:
             [{"email": ""}, ForgotPasswordDTO()],
             [{"code": "", "email": "", "password": ""}, ResetPasswordDTO()],
         ]
-
 
     def get_dto(self) -> BaseDTO:
         for dto in self.supported_formats:

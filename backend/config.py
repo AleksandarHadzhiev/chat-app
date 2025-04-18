@@ -3,6 +3,7 @@
 
 class Config:
     """Base config."""
+
     DATABASE_URL = ""
     FRONTEND_URL = ""
     FRONTEND_URL = ""
