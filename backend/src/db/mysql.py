@@ -1,14 +1,13 @@
 import mysql.connector
 
-from src.db.db import DB
+from src.db.db import Database
 
 
-class MySQL(DB):
+class MySQL(Database):
 
     def set(self, settings):
         super().set(settings)
         self.settings = settings
-
 
     def create_db_and_tables(self):
         self._connect()
@@ -18,7 +17,7 @@ class MySQL(DB):
         self.cursor.execute(
             "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))"
         )
-
+        self.connection.commit()
 
     def _connect(self):
         self.connection = mysql.connector.connect(
@@ -28,6 +27,5 @@ class MySQL(DB):
             password=self.settings.DATABASE_PASSWORD,
         )
 
-
     def get_db(self):
-        return self.cursor
+        return self.connection

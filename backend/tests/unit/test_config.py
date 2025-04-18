@@ -1,5 +1,6 @@
 from config import ConfigFactory
 
+
 def test_create_dev_config():
     env = "dev"
     config = ConfigFactory(type=env).get_config()

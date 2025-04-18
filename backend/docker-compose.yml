@@ -1,5 +1,19 @@
-version: '3.8'
 services:
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'mailhog'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: acc@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
   postgres:
     image: postgres
     restart: unless-stopped
