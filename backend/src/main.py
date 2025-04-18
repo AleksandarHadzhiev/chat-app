@@ -1,5 +1,6 @@
 import json
 import threading
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,9 +19,21 @@ def create_app(server="dev"):
 
     config = ConfigFactory(type=server).get_config()
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
-    app = FastAPI()
+
     origins = ["http://localhost:3000"]
 
+    connection_manager = ConnectionManager()
+    users = UsersRouter(db=db, settings=config)
+    languages = LanguagesRouter(db=db, settings=config)
+    groups = GroupsRouter(db=db, settings=config)
+    messages = MessagesRouter(db=db, settings=config)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        db.create_db_and_tables()
+        yield
+
+    app = FastAPI(lifespan=lifespan)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
@@ -28,20 +41,10 @@ def create_app(server="dev"):
         allow_methods="*",
         allow_headers="*",
     )
-
-    connection_manager = ConnectionManager()
-    users = UsersRouter(db=db, settings=config)
-    languages = LanguagesRouter(db=db, settings=config)
-    groups = GroupsRouter(db=db, settings=config)
-    messages = MessagesRouter(db=db, settings=config)
     app.include_router(users.router)
     app.include_router(languages.router)
     app.include_router(groups.router)
     app.include_router(messages.router)
-
-    @app.on_event("startup")
-    def bootup():
-        db.create_db_and_tables()
 
     @app.websocket("/ws/{id}/{username}")
     async def websocket_server(websocket: WebSocket, id: str, username: str):
