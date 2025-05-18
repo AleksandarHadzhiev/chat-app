@@ -1,17 +1,15 @@
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function Panel({ socket, group, displayMessage }) {
-
-
+export default function Panel({ socket, group, displayMessage, messages }) {
     const _socket: WebSocket = socket
     _socket.onmessage = (event) => {
-        const text = String(event.data)
         console.log(event.data)
-        const index = text.indexOf(":")
-        console.log(text)
-        const messageWithoutAuthor = text.replace(text.substring(0, index + 2), "")
-        const author = text.replace(text.substring(index, text.length), "")
-        displayMessage(author, messageWithoutAuthor)
+        const data = JSON.parse(event.data)
+        console.log(data)
+        // // insert message into the list of messages for the group
+        displayMessage(data)
+        messages.push(event.data)
+        console.log(messages)
     }
 
     return (

@@ -1,49 +1,35 @@
+"use client"
+
+import axios from "axios"
 import { ChangeEvent, MouseEvent, useState } from "react"
+
 //@ts-expect-error
 // Providing a function and can not specify the type
-export function SendMessage({ socket, user, group }) {
+export default function RefactorMessageContent({ code, setEditMessage, message }) {
 
-    const [message, setMessage] = useState<{
-        content: String,
-        group_id: Number,
-        author: String,
-        user_id: Number,
-        code: String,
-        created_at: String,
-    }>()
-
-    function send(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
-        e.preventDefault()
-        setTimeout(() => {
-            console.log(message)
-            console.log("CODE: " + message?.code)
-            if (message && message.code) {
-                message.code = generateSpecialCode()
-                message.created_at = new Date().toISOString()
-                socket.send(JSON.stringify(message))
-            }
-        }, 500)
-    }
+    const [content, setContent] = useState(message)
 
     function updateMessage(e: ChangeEvent<HTMLInputElement>) {
         e.preventDefault()
-        setMessage({
-            content: e.target.value,
-            group_id: group.id,
-            author: user.username,
-            user_id: user.id,
-            code: "1",
-            created_at: "",
-        })
+        setContent(e.target.value)
     }
 
-    function generateSpecialCode() {
-        const date = new Date()
-        const spesialElement = date.toISOString().replace(":", "-")
+    function send(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+        e.preventDefault()
+        const requestBody = {
+            content: content,
+            code: code
+        }
+        axios.put(`http://localhost:8000/messages/`, requestBody).then((res) => {
+            console.log(res)
+            setEditMessage(false)
+            const message = document.getElementById(`${code}`)
+            if (message)
+                message.textContent = content
 
-        const customeCode = `${user.id}-${group.id}-${spesialElement}`
-        console.log(customeCode)
-        return customeCode
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     return (
@@ -57,6 +43,7 @@ export function SendMessage({ socket, user, group }) {
                 id="msg-input"
                 className="w-28/30 h-full pl-2 focus:outline-none"
                 placeholder="Write a message..."
+                value={content}
                 onChange={(e) => { updateMessage(e) }}
             />
             <button
@@ -69,4 +56,3 @@ export function SendMessage({ socket, user, group }) {
         </div >
     )
 }
-

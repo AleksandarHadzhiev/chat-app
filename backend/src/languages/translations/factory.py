@@ -13,7 +13,8 @@ from src.languages.translations.English.registration import \
     RegistrationTranslations
 from src.languages.translations.English.reset_password import \
     ResetPasswordTranslations
-
+from src.languages.translations.English.groups import GroupsEnglishTranlsations 
+from src.languages.translations.Dutch.groups import GroupsDutchTranlsations
 
 class TranslationsFactory:
     def __init__(self, data):
@@ -25,6 +26,9 @@ class TranslationsFactory:
             [
                 {"language": "EN", "file": "forgot_password"},
                 ForgotPasswordTranslations(),
+            ],            [
+                {"language": "EN", "file": "groups"},
+                GroupsEnglishTranlsations(),
             ],
             [{"language": "NL", "file": "login"}, DutchLoginTranlsations()],
             [
@@ -38,6 +42,10 @@ class TranslationsFactory:
             [
                 {"language": "NL", "file": "reset_password"},
                 DutchResetPasswordTranslations(),
+            ],
+                        [
+                {"language": "NL", "file": "groups"},
+                GroupsDutchTranlsations(),
             ],
         ]
 

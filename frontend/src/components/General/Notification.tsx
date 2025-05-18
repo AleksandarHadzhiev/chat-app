@@ -1,6 +1,7 @@
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function Notification({ notification, response }) {
+
     return (
         <div className={response == "" ? "hidden" : `w-fill h-[5%] flex flex-col bg-white border-2 ${response == "success" ? "border-green-700" : "border-red-700"} absolute top-20 right-5 drop-shadow-md transition duration-2000`}>
             <div className="h-full w-full flex">

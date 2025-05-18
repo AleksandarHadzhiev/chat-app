@@ -14,7 +14,7 @@ TO BE ADDED
 
 The backed will be split in a few separate major endpoints - users, groups, messages. And each of them will have their own subendpoint, for example: `users/login`, `groups/all`, `messages/{group_id}`.
 
-The websocket server will be running in the backend as well. The websocker server will communicate directly with both the client and utillize backend functionalities - store the message (backend), send the message (to the frontend).
+The websocket server will be running in the backend as well. The websocket server will communicate directly with both the client and utillize backend functionalities - store the message (backend), send the message (to the frontend).
 
 ## Frontend
 

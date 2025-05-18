@@ -13,6 +13,10 @@ class GroupsController:
         data = await requet.json()
         print(data)
         response = self.service.create(incoming_data=data)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
         return Response(
             content=json.dumps(response), status_code=status.HTTP_201_CREATED
         )
@@ -31,19 +35,67 @@ class GroupsController:
 
     async def join(self, account, group):
         response = self.service.join(account, group)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
         return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
-    async def leave(self, request: Request):
-        print(request)
+    async def leave(self, account, group):
+        data = {
+            "user_id": account,
+            "group_id": group
+        }
+        response = await self.service.leave(incoming_data=data)
+        print(response)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
-    async def kick_member_out(self, request: Request):
-        print(request)
+    async def kick_member_out(self, id, member, admin):
+        data = {}
+        data["user_id"] = admin
+        data["group_id"] = id
+        data["member_id"] = member
+        response = await self.service.kick_member_out(incoming_data=data)
+        print(response)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
-    async def delete(self, request: Request):
-        print(request)
+    async def delete(self, id, admin):
+        data = {
+            "group_id":id,
+            "user_id":admin
+        }
+        response = await self.service.delete(incoming_data=data)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
-    async def edit(self, request: Request):
-        print(request)
+    async def edit(self, id, request: Request):
+        data = await request.json()
+        data["group_id"] = id
+        print(data)
+        response = await self.service.edit(incoming_data=data)
+        print(response)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
     async def get_group(self, request: Request):
-        print(request)
+        data = await request.json()
+        response = self.service.get_group(incoming_data=data)
+        if "fail" in response:
+            return Response(
+                content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)

@@ -1,18 +1,15 @@
-import axios from "axios"
-import { group } from "console"
+import GroupsHandler from "@/ApiCalls/GroupsHandler"
 import { Key, useEffect, useState } from "react"
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function Sidebar({ isvisible, setIsVisible, id, setGroup, displayMessages, group }) {
-
+    const handler = new GroupsHandler()
     const [groups, setGroups] = useState([])
     useEffect(() => {
-        function getAllGroupsForUser(id: Number) {
-            axios.get("http://localhost:8000/groups/user/" + id).then((response) => {
-                setGroups(response.data.groups)
-            }).catch((error) => {
-                console.log(error)
-            })
+        async function getAllGroupsForUser(id: Number) {
+            const url = `http://localhost:8000/groups/user/${id}`
+            const groups = await handler.getGroupsWhereUserIsAMember(url)
+            setGroups(groups)
         }
         getAllGroupsForUser(id)
     }, [id, groups.length])

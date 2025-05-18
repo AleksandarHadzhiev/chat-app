@@ -1,3 +1,4 @@
+import datetime
 import threading
 
 from fastapi import WebSocket
@@ -9,30 +10,34 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections = {}
 
-    async def connect(self, ws: WebSocket, id: int, username: str, db, config):
+    async def connect(self, ws: WebSocket, id: int, username: str, db, config, admin_id: int):
         await ws.accept()
         if id not in self.active_connections:
             self.active_connections[id] = ws
             text = f"{username} joined the server"
-
-            message = {"userId": id, "author": "GGC", "content": text, "groupId": 1}
+            print(text)
+            message = {
+                "user_id": int(admin_id), 
+                "author": "GGC", 
+                "content": text, 
+                "group_id": 1, 
+                "code": f"1-1-{self.generate_special_code()}",
+                "created_at": f"{str(datetime.datetime.now())}"
+            }
             MessagesService(db=db, settings=config).create(data=message)
         else:
             self.active_connections[id] = ws
 
+    def generate_special_code(self):
+        initial_state = str(datetime.datetime.now())
+        without_space = initial_state.replace(" ", "-")
+        without_column = without_space.replace(":","-")
+        return without_column
+
     async def disconnect(self, id):
         self.active_connections.pop(id)
 
-    async def broadcast(self, id, message):
-        # ws: WebSocket = self.active_connections[id]
+    async def broadcast(self, message):
         for connection in self.active_connections:
-            json = f"""
-                {
-                   "author": "{message["author"]}",
-                   "content": "{message["content"]}",
-                   "group_id": "{message["group_id"]}",
-                }
-            """
-            text = f"{message["author"]}: {message["content"]}"
             _socket: WebSocket = self.active_connections[connection]
-            await _socket.send_text(text)
+            await _socket.send_json(message)

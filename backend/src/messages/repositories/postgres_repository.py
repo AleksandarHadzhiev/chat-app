@@ -1,4 +1,3 @@
-import json
 import logging
 
 from src.users.repositories.repository import Repository
@@ -10,8 +9,8 @@ class PostgresRepository(Repository):
 
     def create(self, data):
         try:
-            user_id = data["userId"]
-            group_id = data["groupId"]
+            user_id = data["user_id"]
+            group_id = data["group_id"]
             is_part_of_group = self._is_part_of_group(
                 user_id=user_id, group_id=group_id
             )
@@ -20,13 +19,15 @@ class PostgresRepository(Repository):
                 cursor = _db.cursor()
                 create_message = f"""
                     INSERT INTO messages
-                    (author, user_id, content, group_id)
+                    (author, user_id, content, group_id, code, created_at)
                     VALUES
                     (
                         '{data['author']}', 
                         {user_id}, 
                         '{data['content']}', 
-                        {group_id}
+                        {group_id},
+                        '{data["code"]}',
+                        '{data["created_at"]}'
                     );"""
                 cursor.execute(create_message)
                 _db.commit()
@@ -47,7 +48,6 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
-        print(groups)
         if len(groups) > 0:
             return True
         return False
@@ -57,7 +57,8 @@ class PostgresRepository(Repository):
         cursor = _db.cursor()
         get_messages = f"""
             SELECT * FROM messages
-            WHERE messages.group_id = {group_id};
+            WHERE messages.group_id = {group_id}
+            ORDER BY messages.created_at;
         """
         cursor.execute(get_messages)
         messages = cursor.fetchall()
@@ -74,12 +75,43 @@ class PostgresRepository(Repository):
                 "user_id": message[2],
                 "content": message[3],
                 "group_id": message[4],
+                "code": message[5],
+                "created_at": message[6],
             }
             formatted_messages.append(formatted_message)
         return formatted_messages
 
     def edit(self, data):
-        pass
+        try:
+            print(data)
+            _db = self.db.get_db()
+            cursor = _db.cursor()
+            edit_message = f"""
+                UPDATE messages
+                SET content = '{data["content"]}'
+                WHERE code = '{data["code"]}';
+            """
+            cursor.execute(edit_message)
+            _db.commit()
+            print(data)
+            return {"message": "Success"}
+        except Exception as e:
+            print("EXCEPTION: ")
+            print(e)
+            return {"fail": e}
 
-    def delete(self, message_id):
-        pass
+
+    def delete(self, code):
+        try:
+            _db = self.db.get_db()
+            cursor = _db.cursor()
+            delete_message = f"""
+                DELETE FROM messages
+                WHERE messages.code = '{code}';
+            """
+            cursor.execute(delete_message)
+            _db.commit() 
+            return {"message": "Success"}
+        except Exception as e:
+            print(e.args)
+            return {"fail": e} 

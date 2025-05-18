@@ -11,5 +11,5 @@ class Repository:
     def edit(self, data):
         pass
 
-    def delete(self, message_id):
+    def delete(self, code):
         pass

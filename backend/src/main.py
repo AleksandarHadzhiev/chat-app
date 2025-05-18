@@ -46,16 +46,17 @@ def create_app(server="dev"):
     app.include_router(groups.router)
     app.include_router(messages.router)
 
-    @app.websocket("/ws/{id}/{username}")
-    async def websocket_server(websocket: WebSocket, id: str, username: str):
+    @app.websocket("/ws/{id}/{username}/{admin_id}")
+    async def websocket_server(websocket: WebSocket, id: str, username: str, admin_id: str):
         await connection_manager.connect(
-            ws=websocket, id=id, username=username, db=db, config=config
+            ws=websocket, id=id, username=username, db=db, config=config, admin_id=admin_id
         )
         try:
             while True:
                 data = await websocket.receive_text()
+                print(data)
                 message = json.loads(data)
-                await connection_manager.broadcast(id=id, message=message)
+                await connection_manager.broadcast(message=message)
                 thread = threading.Thread(
                     target=MessagesService(db=db, settings=config).create,
                     args=(message,),

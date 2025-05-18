@@ -39,19 +39,39 @@ class PostgresSQL(Database):
                     author VARCHAR(255) NOT NULL, 
                     user_id integer NOT NULL, 
                     content VARCHAR, 
-                    group_id integer NOT NULL
+                    group_id integer NOT NULL,
+                    code VARCHAR(255) NOT NULL,
+                    created_at VARCHAR(255) NOT NULL
                 )
             """
         create_general_group = """INSERT INTO groups
                 (title, admin_id) VALUES
-                ('General Group Chat', 0)
+                ('General Group Chat', 1)
             """
+        created_admin_user_for_developers = """
+            INSERT INTO users
+            (email, username, password, verified)
+            VALUES
+            (
+                'aleks_01_@gmail.com',
+                'administrator',
+                'admin',
+                TRUE
+            )
+        """
+        add_admin_to_general_chat = """
+            INSERT INTO members
+            (user_id, group_id)
+            VALUES (1,1)
+        """
         self.cursor = self.connection.cursor()
         self.cursor.execute(create_users_table)
         self.cursor.execute(create_groups_table)
         self.cursor.execute(create_connection_between_users_and_groups_table)
         self.cursor.execute(create_messages_table)
         self.cursor.execute(create_general_group)
+        self.cursor.execute(created_admin_user_for_developers)
+        self.cursor.execute(add_admin_to_general_chat)
         self.connection.commit()
 
     def _connect(self):
