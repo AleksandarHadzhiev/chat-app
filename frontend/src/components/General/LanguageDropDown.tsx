@@ -17,7 +17,6 @@ export default function LanguageDropDown({ setLn, setLanguage }) {
         async function load() {
             const response = await getLanguages()
             const incoming_data = JSON.parse(response.data)
-            console.log(incoming_data)
             setIsFetched(true)
             setLanguages(incoming_data.languages)
             setLn(incoming_data.languages[0])

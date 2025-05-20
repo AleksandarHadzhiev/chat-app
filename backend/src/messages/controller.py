@@ -33,3 +33,14 @@ class MessagesController:
         if "fail" in response:
             return Response(content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST)
         return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
+
+    async def get_last_message(self, group_id):
+        message = self.service.get_last_message(group_id=group_id)
+        if message:
+            return Response(
+                content=json.dumps({"message": message}),
+                status_code=status.HTTP_200_OK,
+            )
+        return Response(
+            content=json.dumps({"messages": []}), status_code=status.HTTP_204_NO_CONTENT
+        )

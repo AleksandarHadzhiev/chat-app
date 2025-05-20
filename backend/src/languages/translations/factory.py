@@ -15,6 +15,10 @@ from src.languages.translations.English.reset_password import \
     ResetPasswordTranslations
 from src.languages.translations.English.groups import GroupsEnglishTranlsations 
 from src.languages.translations.Dutch.groups import GroupsDutchTranlsations
+from src.languages.translations.English.navigation import NavigationEnglishTranlsations
+from src.languages.translations.Dutch.navigation import NavigationDutchTranlsations
+from src.languages.translations.English.messages import MessagesEnglishTranlsations
+from src.languages.translations.Dutch.messages import MessagesDutchTranlsations
 
 class TranslationsFactory:
     def __init__(self, data):
@@ -29,6 +33,12 @@ class TranslationsFactory:
             ],            [
                 {"language": "EN", "file": "groups"},
                 GroupsEnglishTranlsations(),
+            ],[
+                {"language": "EN", "file": "navigation"},
+                NavigationEnglishTranlsations(),
+            ],[
+                {"language": "EN", "file": "messages"},
+                MessagesEnglishTranlsations(),
             ],
             [{"language": "NL", "file": "login"}, DutchLoginTranlsations()],
             [
@@ -43,9 +53,17 @@ class TranslationsFactory:
                 {"language": "NL", "file": "reset_password"},
                 DutchResetPasswordTranslations(),
             ],
-                        [
+            [
                 {"language": "NL", "file": "groups"},
                 GroupsDutchTranlsations(),
+            ],
+            [
+                {"language": "NL", "file": "navigation"},
+                NavigationDutchTranlsations(),
+            ],
+            [
+                {"language": "NL", "file": "messages"},
+                MessagesDutchTranlsations(),
             ],
         ]
 

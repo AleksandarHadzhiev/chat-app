@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import { Chat } from '@/components/Chat/ChatPage';
+import { ChatPage } from '@/components/Chat/ChatPage';
 import { useRouter } from 'next/navigation';
 export default function Home() {
   const router = useRouter()
@@ -9,7 +9,7 @@ export default function Home() {
     router.push("/login")
   }
   return (
-    <Chat />
+    <ChatPage />
   );
 }
 

@@ -5,7 +5,7 @@ import MembersDialog from "./Members"
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function AdminMenu({ group, user, getAllGroups, setOpenMenu, translations, setNotificaiton, setResponse }) {
+export default function AdminMenu({ group, user, getAllGroups, translations, setNotificaiton, setResponse }) {
     const handler = new GroupsHandler()
     const [editDialog, setOpenEditDialog] = useState(false)
     const [membersDialog, setOpenMembersDialog] = useState(false)
@@ -16,17 +16,30 @@ export default function AdminMenu({ group, user, getAllGroups, setOpenMenu, tran
 
     function closeEditDialog() {
         setOpenEditDialog(false)
+        const adminMenu = document.getElementById(`${group.id}`)
+        if (adminMenu) adminMenu.className = "hidden"
+    }
+
+    function closeMembersDialog() {
+        setOpenMembersDialog(false)
+        const adminMenu = document.getElementById(`${group.id}`)
+        if (adminMenu) adminMenu.className = "hidden"
     }
 
     async function deleteGroup() {
         const url = `http://localhost:8000/groups/${group.id}/${user.id}`
-        await handler.deleteGroup(url)
+        const response = await handler.deleteGroup(url, translations)
+        if ("tag" in response) {
+            setNotificaiton(response.message)
+            setResponse(response.tag)
+        }
         await getAllGroups()
-        setOpenMenu(false)
+        const adminMenu = document.getElementById(`${group.id}`)
+        if (adminMenu) adminMenu.className = "hidden"
     }
 
     return (
-        <div className="absolute ml-45 border-solid border-2 border-black w-42 h-26 text-black space-y-3">
+        <div className="w-full h-full flex flex-col space-y-3">
             <div onClick={() => { setOpenMembersDialog(!membersDialog) }} className="flex flex-row w-full hover:text-orange-600 space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 ml-1">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
@@ -57,7 +70,7 @@ export default function AdminMenu({ group, user, getAllGroups, setOpenMenu, tran
                     onClick={() => { setOpenMembersDialog(false) }}
                     className="absolute top-0 w-screen h-screen transition-opacity flex items-center justify-center">
                 </div>
-                <MembersDialog group={group} user={user} getAllGroups={getAllGroups} closeDialog={setOpenMembersDialog} translations={translations} />
+                <MembersDialog setNotificaiton={setNotificaiton} setResponse={setResponse} group={group} user={user} getAllGroups={getAllGroups} closeDialog={closeMembersDialog} translations={translations} />
             </div>
         </div>
     )

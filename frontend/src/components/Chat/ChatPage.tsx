@@ -8,8 +8,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import UpdateMessage from "./UpdateMessage";
-export function Chat() {
+import TranslationLoader from "@/tools/TranslationLoader";
+import MessagesHandler from "@/ApiCalls/MessagesHandler";
+import { WebSocketManager } from "@/ApiCalls/WSManager";
+export function ChatPage() {
+    const handler = new MessagesHandler()
+    const LEGNTH_ROW_FOR_READABLE_MESSAGE = 20
+    const [touchStart, setTouchStart] = useState(0)
     const router = useRouter()
+    const [triggerGettingLastMessage, setTriggerGettingLastMessage] = useState(false)
     const [group, setGroup] = useState({ id: Number(1), title: String("General Group Chat"), admin_id: Number(1) })
     const [socket, setSocket] = useState<WebSocket>()
     const [actionsOpened, setActionsOpened] = useState(false)
@@ -17,6 +24,16 @@ export function Chat() {
     const [content, setContent] = useState("")
     const [editMessageIsOpen, setEditMessage] = useState(false)
     const [messages, setMessages] = useState([])
+    const { language, isVisible, widthType } = useContext(ChildContext)
+    const [isWriting, setIsWriting] = useState(false)
+    const [translations, setTranslations] = useState({
+        search: "Search ...",
+        write: "Write a message ...",
+        writing: "is/are writing",
+        refactor: "Edit message",
+        delete: "Delete",
+        edit: "Edit"
+    })
     const [user, setUser] = useState({
         id: Number(),
         email: String(),
@@ -25,11 +42,17 @@ export function Chat() {
         verified: Boolean(),
     })
 
+    async function loadTranslations() {
+        const translationsLoader = new TranslationLoader(language, "messages")
+        const response = await translationsLoader.getTranslatiosn()
+        const data = JSON.parse(response.data)
+        setTranslations(data.translations)
+    }
+
     function getMessages(id: any) {
-        console.log(id)
-        axios.get(`http://localhost:8000/messages/${id}`).then((respnse) => {
-            displayMessages(respnse.data.messages)
-            setMessages(respnse.data.messages)
+        axios.get(`http://localhost:8000/messages/${id}`).then((response) => {
+            displayMessages(response.data.messages)
+            setMessages(response.data.messages)
         }).catch((error) => {
             console.log(error)
         })
@@ -37,7 +60,6 @@ export function Chat() {
 
     function displayMessages(messages: [{ id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }]) {
         const panel = document.getElementById("panel")
-        console.log(messages)
         if (panel?.firstChild)
             panel?.replaceChildren()
         for (let index = 0; index < messages.length; index++) {
@@ -54,33 +76,28 @@ export function Chat() {
         container.className = "flex flex-col w-28 bg-white border-2 border-gray-600 mt-1 space-x-3 ml-15 rounded-md"
         const edit = document.createElement('div')
         const remove = document.createElement('div')
-        const btnsClass = "w-full space-x-2 space-y-1 flex bg-white hover:border-orange-600 hover:text-orange-600 text-black rounded-md mt-1"
+        const btnsClass = `w-full space-x-2 space-y-1 flex bg-white hover:border-orange-600 hover:text-orange-600 text-black rounded-md mt-1`
         remove.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6 ml-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
             </svg>
-            <p className="mt-2">Delete</p>
+            <p className="mt-2">${translations.delete}</p>
         `
         edit.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6 ml-1">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
             </svg>
-            <p className="mt-2">Edit</p>
+            <p className="mt-2">${translations.edit}</p>
         `
         remove.addEventListener('mousedown', () => {
-            console.log("MEOW")
-            deleteMessage(code)
+            deleteMessage(data.code)
         })
         edit.addEventListener('mousedown', () => {
-            console.log("MEOW")
             editMessage(`${data.code}`, `${data.content}`)
         })
         remove.className = btnsClass
         edit.className = btnsClass
-        console.log(data.user_id)
-        console.log(user.id)
         if (data.user_id == user.id) {
-            console.log("OPEN")
             container.appendChild(edit)
             container.appendChild(remove)
             message?.appendChild(container)
@@ -98,18 +115,16 @@ export function Chat() {
         setEditMessage(true)
         setContent(content)
         setCode(_code)
-        console.log(editMessageIsOpen)
     }
 
-    function deleteMessage(_code: String) {
+    async function deleteMessage(_code: String) {
         // Delete message in DB
-        axios.delete(`http://localhost:8000/messages/${_code}`).then((res) => {
-            console.log(res)
+        const url = `http://localhost:8000/messages/${_code}`
+        const response = await handler.deleteAMessage(url, translations)
+        if ("tag" in response && response.tag == "success") {
             const message = document.getElementById(`loaded-message-${_code}`)
             message?.remove()
-        }).catch((err) => {
-            console.log(err)
-        })
+        }
     }
 
     function removeActions() {
@@ -121,7 +136,6 @@ export function Chat() {
     }
 
     function displayMessage(data: { id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }) {
-        console.log(data)
         const panel = document.getElementById(`panel`)
         const container = document.createElement('div')
         container.setAttribute("id", `loaded-message-${data.code}`)
@@ -133,11 +147,24 @@ export function Chat() {
                 displayPossibleActions(data)
             }
         }
+        container.ontouchstart = function (event: TouchEvent) {
+            setTouchStart(Date.now())
+        }
+
+        container.ontouchend = function (event: TouchEvent) {
+            const ms = Date.now() - touchStart
+            const difference = Math.floor(ms / 1000)
+            if (difference > 1) {
+                setActionsOpened(true)
+                displayPossibleActions(data)
+            }
+        }
+
         container.oncontextmenu = function (event: MouseEvent) {
             event.preventDefault()
         }
         const isOwnMessage = data.author == user.username
-        container.className = `flex flex-col w-full pb-2 ${isOwnMessage ? "justify-end pr-2" : "pl-2"}`
+        container.className = `overflow-hidden flex flex-col w-full pb-2 ${isOwnMessage ? "justify-end pr-2" : "pl-2"}`
         const fullFormatMessage = document.createElement('div')
         fullFormatMessage.className = "flex w-full"
         const author = document.createElement('div')
@@ -147,8 +174,8 @@ export function Chat() {
         authorName.textContent = data.author.charAt(0)
         const content = document.createElement('p')
         content.id = `${data.code}`
-        content.className = `flex rounded-2xl w-[400px] bg-oragne-300 text-black p-3 mt-2 ${isOwnMessage ? "bg-orange-600 text-white" : "bg-orange-300 text-black"}`
-        content.textContent = `${data.content}`
+        content.className = `${widthType == "mobile" ? "text-2xl" : ""} overflow-hidden h-auto flex rounded-2xl w-[400px] bg-oragne-300 text-black p-3 mt-2 ${isOwnMessage ? "bg-orange-600 text-white" : "bg-orange-300 text-black"}`
+        content.innerHTML = displayReadableMessage(data.content)
         author.appendChild(authorName)
         fullFormatMessage.appendChild(author)
         fullFormatMessage.appendChild(content)
@@ -156,13 +183,33 @@ export function Chat() {
         panel?.appendChild(container)
     }
 
-    const { language, isVisible } = useContext(ChildContext)
+    function displayReadableMessage(content: String) {
+        if (content.length > LEGNTH_ROW_FOR_READABLE_MESSAGE && !content.includes(" ")) {
+            const breakingPoints = Math.round(content.length / LEGNTH_ROW_FOR_READABLE_MESSAGE)
+            let message = ``
+            for (let index = 1; index <= breakingPoints; index++) {
+                if (index == 1) {
+                    message += `${content.substring(0, LEGNTH_ROW_FOR_READABLE_MESSAGE)}<br/>`
+                }
+                else if (index == breakingPoints) {
+                    message += `${content.substring(LEGNTH_ROW_FOR_READABLE_MESSAGE * (index - 1), LEGNTH_ROW_FOR_READABLE_MESSAGE * index)}<br/`
+                }
+                else {
+                    message += `${content.substring(LEGNTH_ROW_FOR_READABLE_MESSAGE * index, LEGNTH_ROW_FOR_READABLE_MESSAGE * Number(index + 1))}<br/>`
+                }
+            }
+            return message
+
+        } else return `${content}`
+    }
+
     const [groupsAreVisible, setIsVisible] = useState(true)
 
     useEffect(() => {
-        console.log(group.id)
+        loadTranslations()
         getMessages(group.id)
         if (localStorage) {
+
             const userStringed = localStorage.getItem("user")
             if (userStringed)
                 setUser(JSON.parse(userStringed))
@@ -170,26 +217,70 @@ export function Chat() {
                 router.push("/login")
             }
             if (user.username != '') {
-                if (socket == undefined)
-                    setSocket(new WebSocket(`ws:/127.0.0.1:8000/ws/${user.id}/${user.username}/${group.admin_id}`))
+                if (socket == undefined) {
+                    const wsManager = WebSocketManager.getInstance(user, group)
+                    const ws = wsManager.getSocket()
+                    if (ws != null)
+                        setSocket(ws)
+                }
             }
         }
-    }, [user.id, group])
+
+    }, [user.id, group, language])
 
     socket?.addEventListener('open', (event) => {
-        console.log(event)
     })
 
     socket?.addEventListener('close', (event) => {
-        console.log(event.reason)
     })
+
+    function setPanelStyleBasedOnDevice() {
+        if (widthType == "mobile" && groupsAreVisible) return 'hidden'
+        else return `flex flex-col ${isVisible ? "w-full" : groupsAreVisible == false ? "w-full" : " w-5/6"} h-full`
+    }
 
     return (
         <div className="w-full h-full flex">
-            {isVisible ? null : <Sidebar setIsVisible={setIsVisible} isvisible={groupsAreVisible} id={user.id} setGroup={setGroup} displayMessages={displayMessages} group={group} />}
-            {socket ? (<div className={`flex flex-col ${isVisible ? "w-full" : groupsAreVisible == false ? "w-full" : " w-5/6"} h-full`}>
-                <Panel messages={messages} socket={socket} group={group} displayMessage={displayMessage} />
-                {editMessageIsOpen ? <UpdateMessage setEditMessage={setEditMessage} code={code} content={content} /> : <SendMessage socket={socket} user={user} group={group} />}
+            {isVisible ? null : <Sidebar
+                widthType={widthType}
+                translations={translations}
+                triggerLastMessage={triggerGettingLastMessage}
+                setIsVisible={setIsVisible} isVisible={groupsAreVisible}
+                id={user.id}
+                setGroup={setGroup}
+                displayMessages={displayMessages}
+                group={group} />}
+            {socket ? (<div
+                className={setPanelStyleBasedOnDevice()}>
+                <Panel
+                    setIsVisible={setIsVisible}
+                    widthType={widthType}
+                    translations={translations}
+                    trigger={triggerGettingLastMessage}
+                    setTriggerOff={setTriggerGettingLastMessage}
+                    messages={messages}
+                    socket={socket}
+                    group={group}
+                    displayMessage={displayMessage}
+                    isWriting={isWriting}
+                    setIsWriting={setIsWriting} />
+                {editMessageIsOpen ? <UpdateMessage
+                    widthType={widthType}
+                    translations={translations}
+                    socket={socket}
+                    trigger={triggerGettingLastMessage}
+                    setTriggerOff={setTriggerGettingLastMessage}
+                    setEditMessage={setEditMessage}
+                    code={code}
+                    content={content} /> : <SendMessage
+                    widthType={widthType}
+                    translations={translations}
+                    trigger={triggerGettingLastMessage}
+                    setTriggerOff={setTriggerGettingLastMessage}
+                    socket={socket}
+                    user={user}
+                    group={group}
+                    setIsWriting={setIsWriting} />}
             </div>) : <p>Loading...</p>}
         </div>
     )

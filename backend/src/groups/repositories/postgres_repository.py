@@ -132,7 +132,7 @@ class PostgresRepository(Repository):
         cursor = _db.cursor()
         is_member = self._check_if_already_a_member(data=data)
         if is_member:
-            return {"message": "Already a member"}
+            return {"fail": "already a member"}
         join_group = f"""
             INSERT INTO members
             (group_id, user_id)
@@ -141,7 +141,7 @@ class PostgresRepository(Repository):
         """
         cursor.execute(join_group)
         _db.commit()
-        return {"message": "Joined group"}
+        return {"message": "joined"}
 
 
     def _check_if_already_a_member(self, data):

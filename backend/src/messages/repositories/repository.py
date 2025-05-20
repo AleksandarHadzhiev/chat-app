@@ -13,3 +13,6 @@ class Repository:
 
     def delete(self, code):
         pass
+
+    def get_last_message(self, group_id):
+        pass

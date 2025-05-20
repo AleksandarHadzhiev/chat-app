@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
-import { GeneralGroupDTO } from "@/ApiCalls/DTOs/Group/GeneralGroupDTO"
+import { GeneralGroupDTO } from "@/ApiCalls/DTOs/Other/GeneralGroupDTO"
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
 //@ts-expect-error
 // Providing a function and can not specify the type
@@ -11,7 +11,6 @@ export default function CreateGroup({ closeDialog, getAllGroups, translations, s
     const handler = new GroupsHandler()
     async function create(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-
         const userStringed = localStorage.getItem("user")
         if (userStringed) {
             const user = JSON.parse(userStringed)

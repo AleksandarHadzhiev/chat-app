@@ -1,16 +1,23 @@
+import GroupsHandler from "@/ApiCalls/GroupsHandler"
 import axios from "axios"
-import { FormEvent, Key, MouseEvent } from "react"
+import { Key, MouseEvent } from "react"
 
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function MembersDialog({ closeDialog, getAllGroups, group, user, translations }) {
-
-    function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: Number) {
+export default function MembersDialog({ closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
+    const handler = new GroupsHandler()
+    async function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: Number) {
         e.preventDefault()
-        axios.delete(`http://localhost:8000/groups/${group.id}/kick/${member}/${user.id}`)
-            .then((res) => { console.log(res.status); getAllGroups(); })
-            .catch((error) => { console.log(error) })
+        const url = `http://localhost:8000/groups/${group.id}/kick/${member}/${user.id}`
+        const response = await handler.kickMemberFromGroup(url, translations)
+        if ("tag" in response) {
+            setNotificaiton(response.message)
+            setResponse(response.tag)
+        }
+        await getAllGroups()
         closeDialog()
+        const adminMenu = document.getElementById(`${group.id}`)
+        if (adminMenu) adminMenu.className = "hidden"
     }
 
     function disaplyRole(adminId: Number, memberId: Number) {
@@ -20,9 +27,14 @@ export default function MembersDialog({ closeDialog, getAllGroups, group, user, 
     }
 
     return (
-        <div className="z-999 relative overflow-x-auto border-2 border-black">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                <thead className="text-xs text-orange-600 uppercase bg-white">
+        <div className="flex flex-col z-999 relative overflow-x-auto border-2 border-black bg-white">
+            <div onClick={() => { closeDialog() }} id="close-button" className="w-full h-6 flex justify-end text-red-600 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 border-l-2 border-black">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead className="text-xs text-orange-600 uppercase bg-white border-t-2 border-black">
                     <tr>
                         <th scope="col" className="px-6 py-3 border-r-2 border-gray-500 border-b-2">
                             Nr.

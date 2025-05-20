@@ -12,6 +12,8 @@ class MessagesService:
     def create(self, data):
         self.rep.create(data=data)
 
+    def get_last_message(self, group_id):
+        return self.rep.get_last_message(group_id=group_id)
 
     def edit(self, data):
         if "content" not in data or "code" not in data:

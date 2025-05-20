@@ -66,20 +66,41 @@ class PostgresRepository(Repository):
             return self._format_messages(messages=messages)
         return []
 
-    def _format_messages(self, messages):
+    def get_last_message(self, group_id):
+        _db = self.db.get_db()
+        cursor = _db.cursor()
+        get_messages = f"""
+            SELECT * FROM messages
+            WHERE messages.group_id = {group_id}
+            ORDER BY messages.created_at
+            DESC
+            LIMIT 1;
+        """
+        cursor.execute(get_messages)
+        messages = cursor.fetchall()
+        if len(messages) > 0:
+            return self._format_messages(messages=messages, is_last_message=True)
+        return []
+
+    def _format_messages(self, messages, is_last_message=False):
         formatted_messages = []
         for message in messages:
             formatted_message = {
                 "id": message[0],
                 "author": message[1],
                 "user_id": message[2],
-                "content": message[3],
+                "content": self._break_down_long_messages(message[3], is_last_message),
                 "group_id": message[4],
                 "code": message[5],
                 "created_at": message[6],
             }
             formatted_messages.append(formatted_message)
         return formatted_messages
+
+    def _break_down_long_messages(self, message: str, is_last_message=False):
+        if len(message) > 50 and is_last_message:
+            return message[:49] + "..."
+        return message
 
     def edit(self, data):
         try:
@@ -94,7 +115,7 @@ class PostgresRepository(Repository):
             cursor.execute(edit_message)
             _db.commit()
             print(data)
-            return {"message": "Success"}
+            return {"message": "success"}
         except Exception as e:
             print("EXCEPTION: ")
             print(e)
@@ -111,7 +132,7 @@ class PostgresRepository(Repository):
             """
             cursor.execute(delete_message)
             _db.commit() 
-            return {"message": "Success"}
+            return {"message": "success"}
         except Exception as e:
             print(e.args)
             return {"fail": e} 

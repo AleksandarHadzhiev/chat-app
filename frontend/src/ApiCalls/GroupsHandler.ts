@@ -1,5 +1,5 @@
 import RoutersHandler from "./RouterHandler";
-import { GeneralGroupDTO } from "./DTOs/Group/GeneralGroupDTO";
+import { GeneralGroupDTO } from "./DTOs/Other/GeneralGroupDTO";
 
 export default class GroupsHandler {
     async createGroup(url: string, data: GeneralGroupDTO, translations: any) {
@@ -8,10 +8,10 @@ export default class GroupsHandler {
         return this.notificationHandler(response, translations)
     }
 
-    async deleteGroup(url: string) {
+    async deleteGroup(url: string, translations: any) {
         const handler = new RoutersHandler()
         const response = await handler.delete(url)
-        console.log(response)
+        return this.notificationHandler(response, translations)
     }
 
     async editGroup(url: string, data: GeneralGroupDTO, translations: any) {
@@ -33,29 +33,31 @@ export default class GroupsHandler {
     }
 
     private handleGetResponse(response: any) {
-        console.log(response)
         if ("groups" in response) return response.groups
         else return []
     }
 
-    async joinGroup(url: string) {
+    async joinGroup(url: string, translations: any) {
         const handler = new RoutersHandler()
         const response = await handler.post(url, null)
-        console.log(response)
+        return this.notificationHandler(response, translations)
+
     }
 
     async leaveGroup(url: string, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, translations)
+        const response = await handler.post(url, null)
         return this.notificationHandler(response, translations)
     }
 
-    kickMemberFromGroup() { }
+    async kickMemberFromGroup(url: string, tranlations: any) {
+        const handler = new RoutersHandler()
+        const response = await handler.delete(url)
+        return this.notificationHandler(response, tranlations)
+    }
 
     private notificationHandler(response: any, translations: any) {
-        console.log(response)
         if ("message" in response) {
-            console.log(response.message)
             const message = translations[response.message]
             return {
                 tag: "success",
@@ -63,8 +65,13 @@ export default class GroupsHandler {
             }
         } else if ("fail" in response) {
             let errorMessage = translations.fail
-            const errrors = response.fail
-            errrors.forEach((error: string) => {
+            const errors = response.fail
+            if (typeof errors === "string")
+                return {
+                    tag: "fail",
+                    message: translations[errors]
+                }
+            errors.forEach((error: string) => {
                 errorMessage += `${translations[error]}, `
             });
             return {

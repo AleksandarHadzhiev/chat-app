@@ -54,14 +54,15 @@ def create_app(server="dev"):
         try:
             while True:
                 data = await websocket.receive_text()
-                print(data)
                 message = json.loads(data)
+                print(message)
                 await connection_manager.broadcast(message=message)
-                thread = threading.Thread(
-                    target=MessagesService(db=db, settings=config).create,
-                    args=(message,),
-                )
-                thread.start()
+                if (message["type"] == "message"):
+                    thread = threading.Thread(
+                        target=MessagesService(db=db, settings=config).create,
+                        args=(message['data'],),
+                    )
+                    thread.start()
         except WebSocketDisconnect:
             connection_manager.disconnect(id=id)
             disconnect_message = f"Client #{id} left the chat"

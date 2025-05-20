@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react"
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
-import { GeneralGroupDTO } from "@/ApiCalls/DTOs/Group/GeneralGroupDTO"
+import { GeneralGroupDTO } from "@/ApiCalls/DTOs/Other/GeneralGroupDTO"
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function EditGroup({ closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
@@ -21,6 +21,8 @@ export default function EditGroup({ closeDialog, getAllGroups, group, user, tran
         }
         await getAllGroups();
         closeDialog()
+        const adminMenu = document.getElementById(`${group.id}`)
+        if (adminMenu) adminMenu.className = "hidden"
     }
 
     return (
