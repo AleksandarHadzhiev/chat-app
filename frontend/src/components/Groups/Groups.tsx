@@ -3,15 +3,27 @@ import { Key, useEffect, useState, useContext } from "react"
 import CreateGroup from "./CreateGroup"
 import ChildContext from "../General/Context"
 import Search from "./Search"
-import AdminMenu from "./AdminMenu"
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
 import TranslationLoader from "@/tools/TranslationLoader"
 import Notification from "../General/Notification"
+import GroupBox from "./GroupBox"
+import ButtonToOpenAddGroupDialog from "./ButtonToOpenAddGroupDialog"
 
+//@ts-expect-error
+// Providing a function and can not specify the type
+export default function Groups({ socket }) {
+    const _socket: WebSocket = socket
+    const [switcher, setSwitcher] = useState(false)
+    _socket.onmessage = (event) => {
+        const json = JSON.parse(event.data)
+        const data = json.data
+        if (json.type == "notification" && data.action == "groups") {
+            setSwitcher(!switcher)
+        }
 
-export default function Groups() {
-    const { language } = useContext(ChildContext)
+    }
 
+    const { language, widthType } = useContext(ChildContext)
     const handler = new GroupsHandler()
     const [translations, setTranslations] = useState({
         "join": "Join",

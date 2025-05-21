@@ -5,7 +5,7 @@ import MembersDialog from "./Members"
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function AdminMenu({ group, user, getAllGroups, translations, setNotificaiton, setResponse }) {
+export default function AdminMenu({ widthType, trigerUpdate, group, user, getAllGroups, translations, setNotificaiton, setResponse }) {
     const handler = new GroupsHandler()
     const [editDialog, setOpenEditDialog] = useState(false)
     const [membersDialog, setOpenMembersDialog] = useState(false)
@@ -32,6 +32,7 @@ export default function AdminMenu({ group, user, getAllGroups, translations, set
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)
+            trigerUpdate(group.id)
         }
         await getAllGroups()
         const adminMenu = document.getElementById(`${group.id}`)
@@ -39,14 +40,14 @@ export default function AdminMenu({ group, user, getAllGroups, translations, set
     }
 
     return (
-        <div className="w-full h-full flex flex-col space-y-3">
-            <div onClick={() => { setOpenMembersDialog(!membersDialog) }} className="flex flex-row w-full hover:text-orange-600 space-x-2">
+        <div className="w-full h-full flex flex-col space-y-2">
+            <div onClick={() => { setOpenMembersDialog(!membersDialog) }} className={`${widthType == "mobile" ? "border-b-2 border-white" : ''} flex flex-row w-full hover:text-orange-600 space-x-2`}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 ml-1">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                 </svg>
                 <p>{translations.kick}</p>
             </div>
-            <div onClick={() => { openEditDialog() }} className="flex flex-row w-full hover:text-orange-600 space-x-2">
+            <div onClick={() => { openEditDialog() }} className={`${widthType == "mobile" ? "border-b-2 border-white" : ''} flex flex-row w-full hover:text-orange-600 space-x-2`}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 ml-1">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                 </svg>
@@ -63,14 +64,14 @@ export default function AdminMenu({ group, user, getAllGroups, translations, set
                     onClick={() => { closeEditDialog() }}
                     className="absolute top-0 w-screen h-screen transition-opacity flex items-center justify-center">
                 </div>
-                <EditGroup setNotificaiton={setNotificaiton} setResponse={setResponse} group={group} user={user} getAllGroups={getAllGroups} closeDialog={closeEditDialog} translations={translations} />
+                <EditGroup trigerUpdate={trigerUpdate} setNotificaiton={setNotificaiton} setResponse={setResponse} group={group} user={user} getAllGroups={getAllGroups} closeDialog={closeEditDialog} translations={translations} />
             </div>
             <div className={`${membersDialog ? 'z-998 fixed flex items-center justify-center inset-0 bg-gray-500/75 ' : "hidden"} `}>
                 <div
                     onClick={() => { setOpenMembersDialog(false) }}
                     className="absolute top-0 w-screen h-screen transition-opacity flex items-center justify-center">
                 </div>
-                <MembersDialog setNotificaiton={setNotificaiton} setResponse={setResponse} group={group} user={user} getAllGroups={getAllGroups} closeDialog={closeMembersDialog} translations={translations} />
+                <MembersDialog trigerUpdate={trigerUpdate} setNotificaiton={setNotificaiton} setResponse={setResponse} group={group} user={user} getAllGroups={getAllGroups} closeDialog={closeMembersDialog} translations={translations} />
             </div>
         </div>
     )

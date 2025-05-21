@@ -3,7 +3,7 @@ import GroupsHandler from "@/ApiCalls/GroupsHandler"
 import { GeneralGroupDTO } from "@/ApiCalls/DTOs/Other/GeneralGroupDTO"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function EditGroup({ closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
+export default function EditGroup({ trigerUpdate, closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
     const [title, setTitle] = useState(group.title)
     const handler = new GroupsHandler()
     const editGroupDTO: GeneralGroupDTO = {
@@ -17,7 +17,7 @@ export default function EditGroup({ closeDialog, getAllGroups, group, user, tran
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)
-
+            trigerUpdate(group.id)
         }
         await getAllGroups();
         closeDialog()
