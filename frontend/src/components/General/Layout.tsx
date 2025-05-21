@@ -13,9 +13,9 @@ import Dropdown from "./Navigation/Dropdown";
 export function Layout({ children }) {
 
     const [isVisible, setIsVisible] = useState(false)
+    const [trigered, setTrigered] = useState(false)
     const [widthType, setWidthType] = useState("desktop")
     const [ln, setLanguage] = useState('NL')
-    const [socket, setSocket] = useState<WebSocket | null>()
 
     useEffect(() => {
 
@@ -45,7 +45,7 @@ export function Layout({ children }) {
                 widthType == "desktop" ? (
                     <div className="w-full h-9/10 flex flex-col items-center justify-center text-black">
                         {
-                            <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType, socket: socket }}>
+                            <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType, trigered, setTrigered }}>
                                 {children}
                             </ChildContext.Provider>
                         }
@@ -56,7 +56,7 @@ export function Layout({ children }) {
                             <Dropdown _language={ln} setIsVisible={setIsVisible} />
                         </div>
                         <div className={isVisible ? "w-2/3 h-full " : "w-full h-full text-black"}>
-                            <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType }}>
+                            <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType, trigered, setTrigered }}>
                                 {children}
                             </ChildContext.Provider>
                         </div>
@@ -68,7 +68,7 @@ export function Layout({ children }) {
                                 <Dropdown _language={ln} setIsVisible={setIsVisible} />
                             </div>
                             <div className={isVisible ? "hidden " : "w-full h-full text-black"}>
-                                <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType }}>
+                                <ChildContext.Provider value={{ language: ln, isVisible: isVisible, widthType: widthType, trigered, setTrigered }}>
                                     {children}
                                 </ChildContext.Provider>
                             </div>
