@@ -15,7 +15,6 @@ class ConnectionManager:
         if id not in self.active_connections:
             self.active_connections[id] = ws
             text = f"{username} joined the server"
-            print(text)
             message = {
                 "user_id": int(admin_id), 
                 "author": "GGC", 
