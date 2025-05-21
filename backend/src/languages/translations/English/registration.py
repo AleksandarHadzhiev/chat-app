@@ -26,6 +26,7 @@ class RegistrationTranslations(Base):
             "empty-code": "Empty code",
             "invalid-code": "Invalid code",
             "unverified": "The provided email or code is unverified",
+            "offensive-speech": "The provided username is deemed offensive. Please choose different username.",
         }
 
     def get_translations(self) -> dict:
