@@ -1,10 +1,9 @@
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
-import axios from "axios"
 import { Key, MouseEvent } from "react"
 
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function MembersDialog({ closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
+export default function MembersDialog({ trigerUpdate, closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
     const handler = new GroupsHandler()
     async function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: Number) {
         e.preventDefault()
@@ -13,6 +12,8 @@ export default function MembersDialog({ closeDialog, getAllGroups, group, user, 
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)
+            trigerUpdate(group.id)
+
         }
         await getAllGroups()
         closeDialog()
