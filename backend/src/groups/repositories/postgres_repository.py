@@ -34,9 +34,7 @@ class PostgresRepository(Repository):
         cursor.execute(get_created_group_to_join)
         groups = cursor.fetchall()
         if len(groups) > 0:
-            print(groups)
             for group in groups:
-                print(group)
                 id = group[0]
                 join_data = {"group_id": id, "user_id": data["admin"]}
                 self.join(join_data)
@@ -71,7 +69,6 @@ class PostgresRepository(Repository):
     def get_all_for_user(self, user_id):
         _db = self.db.get_db()
         cursor = _db.cursor()
-        print(user_id)
         get_all = f"""
             SELECT groups.id, groups.admin_id, groups.title, members.user_id, users.username FROM groups
             INNER JOIN members ON members.group_id = groups.id
@@ -122,7 +119,6 @@ class PostgresRepository(Repository):
                 members.append(member)
                 formatted_group["members"] = members
             if formatted_group not in formatted_groups:
-                print(formatted_group)
                 formatted_groups.append(formatted_group)
         return formatted_groups
 
@@ -177,7 +173,6 @@ class PostgresRepository(Repository):
             _db.commit() 
             return {"message": "left"}
         except Exception as e:
-            print("ERROR IS HERE")
             return {"fail": e}       
 
 
@@ -206,7 +201,6 @@ class PostgresRepository(Repository):
     def get_group(self, data):
         _db = self.db.get_db() 
         cursor = _db.cursor()
-        print(data)
         get_all = f"""
             SELECT * FROM groups
             WHERE groups.admin_id = {data["user_id"]}
@@ -214,7 +208,6 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
-        print(groups)
         if len(groups) > 0:
             return self._format_groups_data(groups=groups)
         return []

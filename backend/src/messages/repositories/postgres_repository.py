@@ -104,7 +104,6 @@ class PostgresRepository(Repository):
 
     def edit(self, data):
         try:
-            print(data)
             _db = self.db.get_db()
             cursor = _db.cursor()
             edit_message = f"""
@@ -114,11 +113,8 @@ class PostgresRepository(Repository):
             """
             cursor.execute(edit_message)
             _db.commit()
-            print(data)
             return {"message": "success"}
         except Exception as e:
-            print("EXCEPTION: ")
-            print(e)
             return {"fail": e}
 
 
@@ -134,5 +130,4 @@ class PostgresRepository(Repository):
             _db.commit() 
             return {"message": "success"}
         except Exception as e:
-            print(e.args)
             return {"fail": e} 

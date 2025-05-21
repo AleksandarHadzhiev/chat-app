@@ -22,7 +22,6 @@ class UsersService:
             return data
         response = self.repository.login(data=data)
         if response:
-            print(response)
             return response
         return {"error": "wrong-credentials"}
 

@@ -17,10 +17,8 @@ class MessagesService:
 
     def edit(self, data):
         if "content" not in data or "code" not in data:
-            print("MISSING DATA")
             return {"fail": "Missing data"}
         elif data["content"] == "" or data["content"] is None or data["code"] is None or data["code"] == "":
-            print("INCORRECT FORMAT")
             return {"fail": "Incorrect format"}
         return self.rep.edit(data=data)
 

@@ -22,7 +22,6 @@ class MessagesController:
 
     async def edit(self, request: Request):
         data = await request.json()
-        print(data)
         response = self.service.edit(data=data)
         if "fail" in response:
             return Response(content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST)

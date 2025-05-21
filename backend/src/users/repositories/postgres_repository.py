@@ -33,7 +33,6 @@ class PostgresRepository(Repository):
             logging.exception("User does not exist")
 
     def _get_user(self, data, cursor):
-        print(data)
         get_user = "SELECT * FROM users"
         get_user += f" WHERE email = '{data["email"]}'"
         get_user += f" AND password = '{data["password"]}';"

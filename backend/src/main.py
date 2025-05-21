@@ -55,7 +55,6 @@ def create_app(server="dev"):
             while True:
                 data = await websocket.receive_text()
                 message = json.loads(data)
-                print(message)
                 await connection_manager.broadcast(message=message)
                 if (message["type"] == "message"):
                     thread = threading.Thread(

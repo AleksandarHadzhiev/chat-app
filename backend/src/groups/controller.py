@@ -11,7 +11,6 @@ class GroupsController:
 
     async def create(self, requet: Request):
         data = await requet.json()
-        print(data)
         response = self.service.create(incoming_data=data)
         if "fail" in response:
             return Response(
@@ -43,11 +42,10 @@ class GroupsController:
 
     async def leave(self, account, group):
         data = {
-            "user_id": account,
-            "group_id": group
+            "group_id": group,
+            "user_id": account
         }
         response = await self.service.leave(incoming_data=data)
-        print(response)
         if "fail" in response:
             return Response(
                 content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
@@ -60,7 +58,6 @@ class GroupsController:
         data["group_id"] = id
         data["member_id"] = member
         response = await self.service.kick_member_out(incoming_data=data)
-        print(response)
         if "fail" in response:
             return Response(
                 content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
@@ -82,9 +79,7 @@ class GroupsController:
     async def edit(self, id, request: Request):
         data = await request.json()
         data["group_id"] = id
-        print(data)
         response = await self.service.edit(incoming_data=data)
-        print(response)
         if "fail" in response:
             return Response(
                 content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST
