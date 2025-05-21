@@ -8,6 +8,7 @@ export default function Panel({ setIsVisible, widthType, socket, group, displayM
     const _socket: WebSocket = socket
     let writingUsers: any[] = []
     const [writers, setWrites] = useState("")
+
     _socket.onmessage = (event) => {
         const json = JSON.parse(event.data)
         const data = json.data
@@ -78,10 +79,10 @@ export default function Panel({ setIsVisible, widthType, socket, group, displayM
                             </svg>
                         </div>) : null}
                     <div className="pl-2 flex flex-col w-full h-8/10 pt-1">
-                        <h1 className="text-2xl">{group.title}</h1>
+                        <h1 className={widthType == "mobile" ? "text-2xl" : ""}>{group.title}</h1>
                     </div>
                 </div>
-                {isWriting ? (<p className="pl-2 text-orange-600 text-xl">{writers} {translations.writing} <span className="text-xl">...</span></p>) : null}
+                {isWriting ? (<p className={`pl-2 text-orange-600 ${widthType == "mobile" ? "text-xl" : ""}`}>{writers} {translations.writing} <span className={widthType == "mobile" ? "text-xl" : ""}>...</span></p>) : null}
             </div>
             <div id={"panel"} className="w-full h-9/10 overflow-y-auto"></div>
         </div >

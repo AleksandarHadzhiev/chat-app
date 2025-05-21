@@ -72,7 +72,7 @@ export function SendMessage({ widthType, socket, user, group, setIsWriting, setT
             </div>
             <textarea
                 id="msg-input"
-                className={`w-[90%] h-full pt-6 pl-3 focus:outline-none`}
+                className={`resize-none w-[90%] h-full pt-6 pl-3 focus:outline-none`}
                 placeholder={translations.write}
                 onFocus={() => { notifyChatMembersThatSomeoneIsWriting() }} // Change to initiate a message via WS -> notify the users that someone is writing in the chat.
                 onBlur={() => { notifyChatMembersThatSomeoneStoppedWriting() }} // Change to initiate a message via WS -> notify the users that someone stopped writing

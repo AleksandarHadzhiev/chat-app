@@ -10,7 +10,6 @@ import axios from "axios";
 import UpdateMessage from "./UpdateMessage";
 import TranslationLoader from "@/tools/TranslationLoader";
 import MessagesHandler from "@/ApiCalls/MessagesHandler";
-import { WebSocketManager } from "@/ApiCalls/WSManager";
 export function ChatPage() {
     const handler = new MessagesHandler()
     const LEGNTH_ROW_FOR_READABLE_MESSAGE = 20
@@ -218,10 +217,11 @@ export function ChatPage() {
             }
             if (user.username != '') {
                 if (socket == undefined) {
-                    const wsManager = WebSocketManager.getInstance(user, group)
-                    const ws = wsManager.getSocket()
-                    if (ws != null)
-                        setSocket(ws)
+                    const url = `http://localhost:8000/ws/${user.id}/${user.username}/${group.admin_id}`
+                    localStorage.setItem("ws", url)
+                    const socket = new WebSocket(url)
+                    console.log(socket)
+                    setSocket(socket)
                 }
             }
         }
