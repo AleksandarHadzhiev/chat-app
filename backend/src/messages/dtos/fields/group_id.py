@@ -6,4 +6,6 @@ class GroupIdField(BaseField):
         self.settings = settings
 
     def validate_data(self):
-        if 
+        if type(self.group_id) is int and self.group_id > 0:
+            return {"group_id": self.group_id}
+        return "undefined-group"
