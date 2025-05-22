@@ -11,6 +11,9 @@ class UsersRouter:
             "/register", self.controller.register, methods=["POST"]
         )
         self.router.add_api_route(
+            "/{code}/{email}", self.controller.is_allowed_action, methods=["GET"]
+        )
+        self.router.add_api_route(
             "/verification", self.controller.verify, methods=["POST"]
         )
         self.router.add_api_route("/login", self.controller.login, methods=["POST"])

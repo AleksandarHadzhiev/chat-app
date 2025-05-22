@@ -5,6 +5,8 @@ import { RegisterDTO } from "./DTOs/User/RegisterDTO";
 import { VerifyDTO } from "./DTOs/User/VerifyDTO";
 import { MessageDTO } from "./DTOs/Other/MessageDTO";
 import { EditMessageDTO } from "./DTOs/Other/EditMessageDTO";
+import { ForgotPasswordDTO } from "./DTOs/User/ForgotPasswordDTO";
+import { ResetPasswordDTO } from "./DTOs/User/ResetPassword";
 export default class RoutersHandler {
 
     async get(url: string) {
@@ -24,7 +26,7 @@ export default class RoutersHandler {
         }
     }
 
-    async post(url: string, data: LoginDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
+    async post(url: string, data: LoginDTO | ResetPasswordDTO | ForgotPasswordDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
         try {
             const response = await axios.post(url, data)
             if (response.status == 201) {

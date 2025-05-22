@@ -86,7 +86,16 @@ class PostgresRepository(Repository):
         cursor.execute(verify_user)
         _db.commit()
 
-    def get_by_email(self, data):
+    async def update_user(self, data):
+        _db = self.db.get_db()
+        cursor = _db.cursor()
+        update_user = f"UPDATE users SET password = '{data["password"]}', "
+        update_user += f"username = '{data["username"]}'"
+        update_user += f" WHERE id = {data["id"]}"
+        cursor.execute(update_user)
+        _db.commit()
+
+    async def get_by_email(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
         get_user = "SELECT * FROM users"

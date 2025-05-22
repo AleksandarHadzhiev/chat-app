@@ -8,7 +8,10 @@ class Repository:
     def login(self, data):
         pass
 
-    def get_by_email(self, data):
+    async def get_by_email(self, data):
+        pass
+
+    async def update_user(self, data):
         pass
 
     def reset_password(self, data):
