@@ -55,7 +55,7 @@ export default function Register() {
             <Notification notification={notification} response={response} />
             <RegistrationSteps step={step} translations={data} widthType={widthType} />
             {
-                step === 1 ? < ProvdeUserData registration={registration} translations={data} /> :
+                step === 1 ? < ProvdeUserData language={language} registration={registration} translations={data} /> :
                     step === 2 ? <ProvdeCode registration={registration} translations={data} /> : <Confirmation translations={data} />
             }
         </div>

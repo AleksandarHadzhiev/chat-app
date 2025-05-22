@@ -1,9 +1,10 @@
 import { FormEvent, useState } from "react"
 import UsersHandler from "@/ApiCalls/UsersHandler"
 import Link from "next/link"
+import { RegisterDTO } from "@/ApiCalls/DTOs/User/RegisterDTO"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function ProvdeUserData({ registration, translations }) {
+export default function ProvdeUserData({ language, registration, translations }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [username, setUsername] = useState("")
@@ -12,12 +13,13 @@ export default function ProvdeUserData({ registration, translations }) {
     async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
         localStorage.setItem("email", email)
-        const data = {
+        const data: RegisterDTO = {
             email: email,
             password: password,
-            username: username
+            username: username,
+            language: language
         }
-        const response = await usersAPI.register("http://localhost:8000/register", data, translations)
+        const response = await usersAPI.register(`http://localhost:8000/register`, data, translations)
         registration(e, response.tag, response.message)
     }
 
