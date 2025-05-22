@@ -19,12 +19,15 @@ from src.languages.translations.English.navigation import NavigationEnglishTranl
 from src.languages.translations.Dutch.navigation import NavigationDutchTranlsations
 from src.languages.translations.English.messages import MessagesEnglishTranlsations
 from src.languages.translations.Dutch.messages import MessagesDutchTranlsations
+from src.languages.translations.English.emails import EnglishEmailsTranslations
+from src.languages.translations.Dutch.emails import DutchEmailsTranslations
 
 class TranslationsFactory:
     def __init__(self, data):
         self.data = data
         self.translations = [
             [{"language": "EN", "file": "login"}, LoginTranlsations()],
+            [{"language": "EN", "file": "emails"}, EnglishEmailsTranslations()],
             [{"language": "EN", "file": "registration"}, RegistrationTranslations()],
             [{"language": "EN", "file": "reset_password"}, ResetPasswordTranslations()],
             [
@@ -41,6 +44,7 @@ class TranslationsFactory:
                 MessagesEnglishTranlsations(),
             ],
             [{"language": "NL", "file": "login"}, DutchLoginTranlsations()],
+            [{"language": "NL", "file": "emails"}, DutchEmailsTranslations()],
             [
                 {"language": "NL", "file": "registration"},
                 DutchRegistrationTranslations(),
