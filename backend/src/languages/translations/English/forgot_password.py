@@ -5,11 +5,16 @@ class ForgotPasswordTranslations(Base):
     def __init__(self):
         self.translations = {
             "header": "Forgot Password",
+            "fail": "Failed due to: ",
             "email": "Email",
-            "exampple": "example@gmail.com",
+            "example": "example@gmail.com",
             "button": "Submit",
             "account": "You don't have an account?",
             "signup": "Sing up",
+            "empty-email": "The email is empty",
+            "invalid-email": "The email format is invalid",
+            "user-not-found": "User does not exist.",
+            "unverified": "User is not verified.",
         }
 
     def get_translations(self) -> dict:
