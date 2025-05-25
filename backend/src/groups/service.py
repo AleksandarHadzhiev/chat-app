@@ -20,8 +20,10 @@ class GroupsService:
             return {"message": "created group"}
         return {"fail": "unsupported"}
 
-    def get_all_for_user(self, user_id):
-        if int(user_id) < MINIMUM_REQUIRED_ELEMENTS_FOR_A_LIST_TO_NOT_BE_EMPTY:
+    def get_all_for_user(self, user_id: str):
+        if user_id.isnumeric() is False:
+            return {"fail": "invalid"}
+        elif int(user_id) < MINIMUM_REQUIRED_ELEMENTS_FOR_A_LIST_TO_NOT_BE_EMPTY:
             return []
         return self.rep.get_all_for_user(user_id=user_id)
 

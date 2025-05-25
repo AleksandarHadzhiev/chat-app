@@ -1,11 +1,13 @@
 from src.groups.dtos.base import BaseDTO
 from src.groups.dtos.fields.group_id import GroupIdField
 from src.groups.dtos.fields.user_id import UserIdField
+from src.groups.repositories.repository import Repository
 
 class JoinGroupDTO(BaseDTO):
-    def set(self, data, settings):
+    def set(self, data, settings, rep: Repository):
         self.settings = settings
         self.errors = []
+        self.rep = rep
         self.set_group_id(data=data)
         self.set_user_id(data=data)
 

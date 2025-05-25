@@ -22,6 +22,10 @@ class GroupsController:
 
     async def get_all_for_user(self, user_id):
         groups = self.service.get_all_for_user(user_id=user_id)
+        if "fail" in groups:
+            return Response(
+                content=json.dumps(groups), status_code=status.HTTP_400_BAD_REQUEST
+            )
         return Response(
             content=json.dumps({"groups": groups}), status_code=status.HTTP_200_OK
         )

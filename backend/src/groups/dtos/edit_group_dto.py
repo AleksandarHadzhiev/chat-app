@@ -2,11 +2,13 @@ from src.groups.dtos.base import BaseDTO
 from src.groups.dtos.fields.admin import AdminField
 from src.groups.dtos.fields.title import TitleField
 from src.groups.dtos.fields.group_id import GroupIdField
+from src.groups.repositories.repository import Repository
 
 class EditGroupDTO(BaseDTO):
-    def set(self, data, settings):
+    def set(self, data, settings, rep: Repository):
         self.settings = settings
         self.errors = []
+        self.rep = rep
         self.set_title(data=data)
         self.set_admin(data=data)
         self.set_group_id(data=data)

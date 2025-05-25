@@ -1,10 +1,8 @@
 import json
-import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.groups.route import GroupsRouter
@@ -28,12 +26,9 @@ def create_app(server="dev"):
     groups = GroupsRouter(db=db, settings=config)
     messages = MessagesRouter(db=db, settings=config)
 
-    @asynccontextmanager
-    async def lifespan(app: FastAPI):
-        db.create_db_and_tables()
-        yield
+    db.connect()
 
-    app = FastAPI(lifespan=lifespan)
+    app = FastAPI()
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
