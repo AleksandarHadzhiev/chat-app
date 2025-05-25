@@ -21,8 +21,10 @@ class UsersController:
             content=json.dumps(response), status_code=status.HTTP_201_CREATED
         )
 
-    async def is_allowed_action(self, code: str, email: str):
-        response = await self.service.is_allowed_action(code=code, email=email)
+    async def is_allowed_action(self, request: Request):
+        data: dict = await request.json()
+        
+        response = await self.service.is_allowed_action(data=data)
         if "fail" in response:
             return Response(
                 content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST

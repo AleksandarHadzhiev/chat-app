@@ -11,13 +11,9 @@ class PostgresRepository(Repository):
         try:
             user_id = data["user_id"]
             group_id = data["group_id"]
-            is_part_of_group = self._is_part_of_group(
-                user_id=user_id, group_id=group_id
-            )
-            if is_part_of_group:
-                _db = self.db.get_db()
-                cursor = _db.cursor()
-                create_message = f"""
+            _db = self.db.get_db()
+            cursor = _db.cursor()
+            create_message = f"""
                     INSERT INTO messages
                     (author, user_id, content, group_id, code, created_at)
                     VALUES
@@ -29,15 +25,13 @@ class PostgresRepository(Repository):
                         '{data["code"]}',
                         '{data["created_at"]}'
                     );"""
-                cursor.execute(create_message)
-                _db.commit()
-                logging.info("Message created")
-            else:
-                logging.info("Not part of group")
+            cursor.execute(create_message)
+            _db.commit()
+            logging.info("Message created")
         except Exception as e:
             logging.exception(e)
 
-    def _is_part_of_group(self, user_id, group_id):
+    async def is_part_of_group(self, user_id, group_id):
         _db = self.db.get_db()
         cursor = _db.cursor()
         get_all = f"""
@@ -45,6 +39,20 @@ class PostgresRepository(Repository):
             INNER JOIN members ON members.group_id = groups.id
             WHERE members.user_id = {user_id}
             AND members.group_id = {group_id}
+        """
+        cursor.execute(get_all)
+        groups = cursor.fetchall()
+        if len(groups) > 0:
+            return True
+        return False
+
+    async def is_author(self, user_id, code):
+        _db = self.db.get_db()
+        cursor = _db.cursor()
+        get_all = f"""
+            SELECT * FROM messages
+            WHERE messages.user_id = {user_id}
+            AND messages.code = '{code}'
         """
         cursor.execute(get_all)
         groups = cursor.fetchall()
@@ -118,16 +126,19 @@ class PostgresRepository(Repository):
             return {"fail": e}
 
 
-    def delete(self, code):
+    def delete(self, code, group_id, user_id):
         try:
             _db = self.db.get_db()
             cursor = _db.cursor()
             delete_message = f"""
                 DELETE FROM messages
-                WHERE messages.code = '{code}';
+                WHERE messages.code = '{code}'
+                AND messages.user_id = {user_id}
+                AND messages.group_id = {group_id};
             """
             cursor.execute(delete_message)
             _db.commit() 
             return {"message": "success"}
         except Exception as e:
+            print(e.args)
             return {"fail": e} 

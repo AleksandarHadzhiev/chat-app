@@ -18,5 +18,5 @@ class MessagesRouter:
             "/", self.controller.edit, methods=["PUT"]
         )
         self.router.add_api_route(
-            "/{code}", self.controller.delete, methods=["DELETE"]
+            "", self.controller.delete, methods=["DELETE"]
         )

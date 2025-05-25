@@ -4,3 +4,6 @@ class BaseDTO:
 
     def validate_data(self) -> dict:
         pass
+
+    async def execute_validation(self) -> dict:
+        pass

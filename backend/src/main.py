@@ -13,11 +13,9 @@ from src.users.routers import UsersRouter
 from src.websocket.ws_server import ConnectionManager
 
 
-def create_app(server="dev"):
-
+def create_app(server="test"):
     config = ConfigFactory(type=server).get_config()
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
-
     origins = ["http://localhost:3000"]
 
     connection_manager = ConnectionManager()
@@ -43,23 +41,24 @@ def create_app(server="dev"):
 
     @app.websocket("/ws/{id}/{username}/{admin_id}")
     async def websocket_server(websocket: WebSocket, id: str, username: str, admin_id: str):
-        await connection_manager.connect(
+        response = await connection_manager.connect(
             ws=websocket, id=id, username=username, db=db, config=config, admin_id=admin_id
         )
-        try:
-            while True:
-                data = await websocket.receive_text()
-                message = json.loads(data)
-                await connection_manager.broadcast(message=message)
-                if (message["type"] == "message"):
-                    thread = threading.Thread(
-                        target=MessagesService(db=db, settings=config).create,
-                        args=(message['data'],),
-                    )
-                    thread.start()
-        except WebSocketDisconnect:
-            connection_manager.disconnect(id=id)
-            disconnect_message = f"Client #{id} left the chat"
-            await connection_manager.broadcast(id, disconnect_message)
+        if "message" in response:
+            try:
+                while True:
+                    data = await websocket.receive_text()
+                    message = json.loads(data)
+                    if (message["type"] == "message"):
+                        service =MessagesService(db=db, settings=config)
+                        response = await service.create(message["data"])
+                        if "fail" in response:
+                            await connection_manager.broadcast(message={"type": "fail", "data": response["fail"]})
+                        else: await connection_manager.broadcast(message=message)
 
+            except WebSocketDisconnect:
+                connection_manager.disconnect(id=id)
+                disconnect_message = f"Client #{id} left the chat"
+                await connection_manager.broadcast(id, disconnect_message)
+        else: websocket.send_json({"type": "fail", "data": response["fail"]})
     return app

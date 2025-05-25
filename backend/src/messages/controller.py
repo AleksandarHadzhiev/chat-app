@@ -22,13 +22,17 @@ class MessagesController:
 
     async def edit(self, request: Request):
         data = await request.json()
-        response = self.service.edit(data=data)
+        response = await self.service.edit(data=data)
         if "fail" in response:
             return Response(content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST)
         return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
 
-    async def delete(self, code):
-        response = self.service.delete(code)
+    async def delete(self, request: Request):
+        queries = request.query_params
+        code = queries.get("code")
+        group_id = queries.get("group_id")
+        user_Id = queries.get("user_id")
+        response = self.service.delete(code, group_id, user_Id)
         if "fail" in response:
             return Response(content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST)
         return Response(content=json.dumps(response), status_code=status.HTTP_200_OK)
