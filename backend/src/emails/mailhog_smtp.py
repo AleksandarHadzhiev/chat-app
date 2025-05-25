@@ -18,7 +18,7 @@ class SMTPServer(BaseSMTP):
         message = f"""\
             Subject: {self.translations[self.subject+"_subject"]}
             
-            {self.translations[self.subject+"_body"]}: {data}.
+            {self.translations[self.subject+"_body"]}: {data}
             {self.translations["warning"]}
             """
         self.server.sendmail(from_addr=from_address, to_addrs=to_address, msg=message)
