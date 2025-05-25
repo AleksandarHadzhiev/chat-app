@@ -17,15 +17,21 @@ class UsersService:
     async def login(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings, rep=self.repository)
         dto = factory.get_dto()
+        
+        if dto is None:
+            return {"fail": "unsupported-format"}
+        
         data = await dto.execute_validation()
         if "fail" in data:
             return data
         response = self.repository.login(data=data)
         if response:
             return response
-        return {"error": "wrong-credentials"}
+        return {"fail": "wrong-credentials"}
 
-    async def is_allowed_action(self, code: str, email: str):
+    async def is_allowed_action(self, data):        
+        code = data["code"]
+        email = data["email"]
         if code is None or code.replace(" ", "") == "":
             return {"fail": "missing-code"}
         elif email is None or email.replace(" ", "") == "":
@@ -38,8 +44,9 @@ class UsersService:
     async def register(self, incoming_data, language: str):
         factory = DTOFactory(data=incoming_data, settings=self.settings, rep=self.repository)
         dto = factory.get_dto()
+        if dto is None:
+            return {"fail": "unsupported-format"}
         data = await dto.execute_validation()
-        print(data)
         if "fail" in data:
             return data
         email = data["email"]
@@ -70,21 +77,31 @@ class UsersService:
         return code
 
     async def verify(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings)
+        factory = DTOFactory(data=incoming_data, settings=self.settings, rep=self.repository)
         dto = factory.get_dto()
+        
+        if dto is None:
+            return {"fail": "unsupported-format"}
+        
         data = await dto.execute_validation()
-        code = data["code"]
-        email = data["email"]
+
         if "fail" in data:
             return data
-        if self.verifications[email] == code:
+
+        code = data["code"]
+        email = data["email"]
+
+        if data["email"] in self.verifications and self.verifications[email] == code:
             self.repository.verify(email=email)
             return {"message": "success"}
-        return {"error": "unverified"}
+        return {"fail": "unverified"}
 
     async def forgot_password(self, incoming_data, language: str):
         factory = DTOFactory(data=incoming_data, settings=self.settings, rep=self.repository)
         dto = factory.get_dto()
+        if dto is None:
+            return {"fail": "unsupported-format"}
+        
         data = await dto.execute_validation()
 
         if "fail" in data:
@@ -104,10 +121,14 @@ class UsersService:
     async def reset_password(self, incoming_data):
         factory = DTOFactory(data=incoming_data, settings=self.settings, rep=self.repository)
         dto = factory.get_dto()
+        
+        if dto is None:
+            return {"fail": "unsupported-format"}
+        
         data = await dto.execute_validation()
         if "fail" in data:
             return data
-        if self.verifications[data["email"]] == data["code"]:
+        elif data["email"] in self.verifications and self.verifications[data["email"]] == data["code"]:
             self.repository.reset_password(data=data)
             return {"message": "success"}
-        return {"error": "unverified"}
+        return {"fail": "unverified"}

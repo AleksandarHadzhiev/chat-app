@@ -23,9 +23,13 @@ class ConnectionManager:
                 "code": f"1-1-{self.generate_special_code()}",
                 "created_at": f"{str(datetime.datetime.now())}"
             }
-            MessagesService(db=db, settings=config).create(data=message)
+            response = await MessagesService(db=db, settings=config).create(data=message)
+            if "fail" in response:
+                return response
+            return {"message": "success"}
         else:
             self.active_connections[id] = ws
+            return {"message": "success"}
 
     def generate_special_code(self):
         initial_state = str(datetime.datetime.now())

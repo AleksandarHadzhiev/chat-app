@@ -1,18 +1,12 @@
-from src.db.mysql import MySQL
 from src.db.postgres import PostgresSQL
-from src.db.sqlite import SQLite
-from src.users.repositories.mysql_repository import MySQLRepository
 from src.users.repositories.postgres_repository import PostgresRepository
 from src.users.repositories.repository import Repository
-from src.users.repositories.sqlite_repository import SQLiteRepository
 
 
 class RepositoryFactory:
     def __init__(self, db):
         self.db = db
         self.databases = {
-            type(MySQL()): MySQLRepository(db=db),
-            type(SQLite()): SQLiteRepository(db=db),
             type(PostgresSQL()): PostgresRepository(db=db),
         }
 

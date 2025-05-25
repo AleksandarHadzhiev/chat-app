@@ -14,7 +14,6 @@ class ForgotPasswordDTO(BaseDTO):
         response = EmailField(
             data=self.data["email"], settings=self.settings
         ).validate_data()
-        print(response)
         if type(response) == str:
             self.errors.append(response)
         else: await self._user_exists()    
@@ -22,7 +21,7 @@ class ForgotPasswordDTO(BaseDTO):
     async def _user_exists(self):
         email = {"email": self.data["email"]}
         user = await self.rep.get_by_email(data=email)
-        if user is None:
+        if "user" in user:
             self.errors.append("user-not-found")
         elif user["verified"] != True:
             self.errors.append("unverified")

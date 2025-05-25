@@ -23,8 +23,7 @@ class LoginDTO(BaseDTO):
     async def _check_if_user_exists(self):
         email = {"email": self.data["email"]}
         user = await self.rep.get_by_email(data=email)
-        print(user)
-        if user is None:
+        if "user" in user:
             self.errors.append("user-not-found")
         elif user["verified"] is not True:
             self.errors.append("unverified")

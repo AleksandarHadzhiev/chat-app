@@ -15,7 +15,6 @@ class UserDTO(BaseDTO):
         self.data = data
 
     async def set_email(self):
-        print("RUNNING SET EMAIL")
         response = EmailField(
             data=self.data["email"], settings=self.settings
         ).validate_data()
@@ -25,7 +24,6 @@ class UserDTO(BaseDTO):
             await self._user_validation()
 
     async def set_username(self):
-        print("RUNNING SET USERNAME")
         response = UsernameField(
             data=self.data["username"], settings=self.settings
         ).validate_data()
@@ -35,16 +33,13 @@ class UserDTO(BaseDTO):
             self.username = response["username"]
 
     async def _user_validation(self):
-        print("RUNNING _user_validation")
         email = {"email": self.data["email"]}
         user = await self.rep.get_by_email(email)
-        print("FINISHED GET USER FROM DB")
-        if user is None:
+        if "user" in user:
             self.email = self.data["email"]
         else: await self._is_already_verified(user)
 
     async def _is_already_verified(self, user):
-        print("RUNNING _is_already_verified")
         if user["verified"] is True:
             self.errors.append("user-exists")
         else:
@@ -52,7 +47,6 @@ class UserDTO(BaseDTO):
             self.email = self.data["email"]
 
     async def set_password(self):
-        print("RUNNING set_password")
         response = PasswordField(
             data=self.data["password"], settings=self.settings
         ).validate_data()
@@ -62,7 +56,6 @@ class UserDTO(BaseDTO):
             self.password = response["password"]
 
     async def validate_data(self):
-        print("RUNNING validate_data")
         await asyncio.gather(self.set_email(), self.set_password(), self.set_username())
         if len(self.errors) > 0:
             return {"fail": self.errors}

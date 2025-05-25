@@ -19,3 +19,6 @@ class Repository:
 
     def verify(self, email):
         pass
+
+    async def get_by_id(self, user_id):
+        pass

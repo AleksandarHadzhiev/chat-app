@@ -72,10 +72,10 @@ class PostgresRepository(Repository):
     def reset_password(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
-        verify_user = f"UPDATE users SET password = '{data["password"]}"
-        verify_user += f" WHERE email = '{data["email"]}'"
-        verify_user += f" WHERE verified = true;"
-        cursor.execute(verify_user)
+        reset_password = f"UPDATE users SET password = '{data["password"]}'"
+        reset_password += f" WHERE email = '{data["email"]}'"
+        reset_password += f" AND verified = true;"
+        cursor.execute(reset_password)
         _db.commit()
 
     def verify(self, email):
@@ -111,4 +111,22 @@ class PostgresRepository(Repository):
                 "verified": users[0][4],
             }
             return user
-        return None
+        return {"user": "no"}
+
+    async def get_by_id(self, user_id):
+        _db = self.db.get_db()
+        cursor = _db.cursor()
+        get_user = "SELECT * FROM users"
+        get_user += f" WHERE id = {user_id};"
+        cursor.execute(get_user)
+        users = cursor.fetchall()
+        if len(users) > 0:
+            user = {
+                "id": users[0][0],
+                "email": users[0][1],
+                "password": users[0][2],
+                "username": users[0][3],
+                "verified": users[0][4],
+            }
+            return user
+        return {"user": "no"}
