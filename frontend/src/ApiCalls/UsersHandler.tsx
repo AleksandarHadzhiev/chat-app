@@ -13,9 +13,9 @@ export default class UsersHandler {
         return this.notificationHandler(response, translations)
     }
 
-    async checkIfAuthorized(url: string, translations: any) {
+    async checkIfAuthorized(url: string, data: VerifyDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.get(url)
+        const response = await handler.post(url, data)
         return this.notificationHandler(response, translations)
     }
 

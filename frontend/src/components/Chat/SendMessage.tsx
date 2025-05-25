@@ -27,10 +27,10 @@ export function SendMessage({ widthType, socket, user, group, setIsWriting, setT
         setMessage({
             type: "message",
             data: {
+                user_id: user.id,
+                author: user.username,
                 content: e.target.value,
                 group_id: group.id,
-                author: user.username,
-                user_id: user.id,
                 code: "1",
                 created_at: "",
             }

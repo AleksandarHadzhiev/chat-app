@@ -118,7 +118,7 @@ export function ChatPage() {
 
     async function deleteMessage(_code: String) {
         // Delete message in DB
-        const url = `http://localhost:8000/messages/${_code}`
+        const url = `http://localhost:8000/messages?code=${_code}&user_id=${user.id}&group_id=${group.id}`
         const response = await handler.deleteAMessage(url, translations)
         if ("tag" in response && response.tag == "success") {
             const message = document.getElementById(`loaded-message-${_code}`)
@@ -268,6 +268,8 @@ export function ChatPage() {
                     widthType={widthType}
                     translations={translations}
                     socket={socket}
+                    user={user}
+                    group={group}
                     trigger={triggerGettingLastMessage}
                     setTriggerOff={setTriggerGettingLastMessage}
                     setEditMessage={setEditMessage}

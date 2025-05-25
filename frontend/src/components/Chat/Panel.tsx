@@ -12,6 +12,7 @@ export default function Panel({ setIsVisible, widthType, socket, group, displayM
     _socket.onmessage = (event) => {
         const json = JSON.parse(event.data)
         const data = json.data
+        console.log(json)
         if (json.type == "message") {
             handleMessage(data)
             setTriggerOff(!trigger)
@@ -21,6 +22,10 @@ export default function Panel({ setIsVisible, widthType, socket, group, displayM
         }
         else if (json.type == "notification" && data.group == group.id) {
             handleNotification(data)
+        }
+        else if (json.type == "fail") {
+            console.log(json.data)
+            alert(json.data)
         }
     }
     function handleMessage(data: any) {

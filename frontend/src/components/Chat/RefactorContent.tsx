@@ -4,7 +4,7 @@ import { ChangeEvent, MouseEvent, useState } from "react"
 import MessagesHandler from "@/ApiCalls/MessagesHandler"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function RefactorMessageContent({ code, setEditMessage, message, setTriggerOff, trigger, socket, translations, widthType }) {
+export default function RefactorMessageContent({ user, group, code, setEditMessage, message, setTriggerOff, trigger, socket, translations, widthType }) {
 
     const [content, setContent] = useState(message)
     const handler = new MessagesHandler()
@@ -17,7 +17,9 @@ export default function RefactorMessageContent({ code, setEditMessage, message, 
         e.preventDefault()
         const requestBody = {
             content: content,
-            code: code
+            code: code,
+            user_id: user.id,
+            group_id: group.id,
         }
         const url = `http://localhost:8000/messages/`
         const response = await handler.editAMessage(url, requestBody, translations)
@@ -35,6 +37,9 @@ export default function RefactorMessageContent({ code, setEditMessage, message, 
                 }
             }
             socket.send(JSON.stringify(notification))
+        }
+        else if ("tag" in response && response.tag == "fail") {
+            alert(response.message)
         }
     }
 

@@ -4,7 +4,7 @@ import RefactorMessageContent from "./RefactorContent"
 
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function UpdateMessage({ widthType, code, content, setEditMessage, setTriggerOff, trigger, socket, translations }) {
+export default function UpdateMessage({ user, group, widthType, code, content, setEditMessage, setTriggerOff, trigger, socket, translations }) {
 
     function setStyleBasedOnDevice() {
         // 
@@ -42,7 +42,9 @@ export default function UpdateMessage({ widthType, code, content, setEditMessage
                 setTriggerOff={setTriggerOff}
                 setEditMessage={setEditMessage}
                 code={code}
-                message={content} />
+                message={content}
+                user={user}
+                group={group} />
         </>
     )
 }

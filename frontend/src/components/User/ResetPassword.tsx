@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ResetPasswordDTO } from "@/ApiCalls/DTOs/User/ResetPassword"
+import { VerifyDTO } from "@/ApiCalls/DTOs/User/VerifyDTO"
 
 export default function ResetPassword() {
     const params = useSearchParams()
@@ -40,11 +41,20 @@ export default function ResetPassword() {
         }
 
         async function checkIfAuthorized() {
-            const url = `http://localhost:8000/${code}/${email}`
-            const response = await usersAPI.checkIfAuthorized(url, translations)
-            if ("tag" in response) {
-                setResponse(response.tag)
-                setNotificaiton(response.message)
+            const url = `http://localhost:8000/authorize`
+            if (code && email) {
+                const data: VerifyDTO = {
+                    email: email,
+                    code: code,
+                }
+                const response = await usersAPI.checkIfAuthorized(url, data, translations)
+                if ("tag" in response) {
+                    setResponse(response.tag)
+                    setNotificaiton(response.message)
+                }
+                else {
+                    router.push('/login')
+                }
             }
             else {
                 router.push('/login')
@@ -68,9 +78,7 @@ export default function ResetPassword() {
             setResponse(response.tag)
             setNotificaiton(response.message)
         }
-        else {
-            router.push('/login')
-        }
+        router.push('/login')
     }
     return (
         <div className="bg-white w-full h-full flex flex-col items-center justify-center text-black">
