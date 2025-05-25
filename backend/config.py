@@ -40,7 +40,6 @@ class DevConfig(Config):
     HOST = "localhost"
     DATABASE_PORT = "5432"
     DATABASE_DB = "users"
-    ENVIRONMENT = "dev"
     FRONTEND_URL = "https://localhost:3000"
 
 
@@ -50,7 +49,11 @@ class TestConfig(Config):
     ENVIRONMENT = "test"
 
     FRONTEND_URL = "https://localhost:3000"
-    DATABASE_URL = f"sqlite:///"
+    USERNAME = "test"
+    PASSWORD = "test"
+    HOST = "localhost"
+    DATABASE_PORT = "5432"
+    DATABASE_DB = "test"
 
 
 class DockerConfig(Config):
@@ -58,11 +61,10 @@ class DockerConfig(Config):
 
     ENVIRONMENT = "docker"
 
+    USERNAME = "docker"
+    PASSWORD = "docker"
     HOST = "database"
-    FRONTEND_URL = (
-        "https://localhost:3000"  # When the dockerization is complete will be changed
-    )
-    DATABASE_NAME = "employees"
-    DATABASE_USER = "user"
-    DATABASE_PASSWORD = "password"
-    PORT_NUMBER = 3306
+    DATABASE_PORT = "5432"
+    DATABASE_DB = "docker"
+    FRONTEND_URL = "https://localhost:3000"
+
