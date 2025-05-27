@@ -32,7 +32,7 @@ class GroupsService:
 
     def join(self, user_id, group_id):
         incoming_data = {"group_id": group_id, "user_id": user_id}
-        factory = DTOFactory(data=incoming_data, settings=self.settings)
+        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
@@ -42,7 +42,7 @@ class GroupsService:
         return {"fail": "unsupported"}
 
     async def leave(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings)
+        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
@@ -52,7 +52,7 @@ class GroupsService:
         return {"fail": "unsupported"}
 
     async def kick_member_out(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings)
+        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
