@@ -11,7 +11,7 @@ class GroupsController:
 
     async def create(self, requet: Request):
         data = await requet.json()
-        response = self.service.create(incoming_data=data)
+        response =  await self.service.create(incoming_data=data)
         if "fail" in response:
             return Response(
                 content=json.dumps(response), status_code=status.HTTP_400_BAD_REQUEST

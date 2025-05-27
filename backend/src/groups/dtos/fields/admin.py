@@ -6,6 +6,8 @@ class AdminField(BaseField):
         self.settings = settings
 
     def validate_data(self):
+        if (str(self.admin).replace(" ", "") == ""):
+            return "empty-admin"
         if int(self.admin) == 0 or self.admin is None:
             return "invalid-admin"
         return {"admin": self.admin}

@@ -9,6 +9,7 @@ test_data = [
     ("/groups/user/s", {"status": 400, "json":{'fail': 'invalid'}}),
 ]
 
+@pytest.mark.order(1)
 @pytest.mark.parametrize("url, outcome", test_data)
 def test_groups(api, url, outcome):
     response = api.get(url)

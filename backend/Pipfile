@@ -31,6 +31,7 @@ pytest-asyncio = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
 mailhog = "*"
+pytest-order = "*"
 
 [dev-packages]
 
