@@ -72,7 +72,7 @@ class GroupsService:
         return {"fail": "unsupported"}
 
     async def edit(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings)
+        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
