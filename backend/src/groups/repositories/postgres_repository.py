@@ -144,14 +144,14 @@ class PostgresRepository(Repository):
         _db = self.db.get_db()
         cursor = _db.cursor()
         get_all = f"""
-            SELECT * FROM groups
-            INNER JOIN members ON members.group_id = groups.id
+            SELECT * FROM members
             WHERE members.user_id = {data["user_id"]}
             AND members.group_id = {data["group_id"]}
         """
         cursor.execute(get_all)
-        groups = cursor.fetchall()
-        if len(groups) > 0:
+        members = cursor.fetchall()
+        print(members)
+        if len(members) > 0:
             return True
         return False
 
@@ -160,18 +160,21 @@ class PostgresRepository(Repository):
         try:
             _db = self.db.get_db()
             cursor = _db.cursor()
-            admin_in_group = self.get_group(data=data)
-            if admin_in_group:
-                self.delete(data=data)
-            else:
-                leave_group = f"""
-                DELETE FROM members
-                WHERE members.user_id = {data["user_id"]}
-                AND members.group_id = {data["group_id"]};
-                """
-                cursor.execute(leave_group)
-            _db.commit() 
-            return {"message": "left"}
+            is_member = self._check_if_already_a_member(data=data)
+            if is_member:
+                admin_in_group = self.get_group(data=data)
+                if admin_in_group:
+                    self.delete(data=data)
+                else:
+                    leave_group = f"""
+                    DELETE FROM members
+                    WHERE members.user_id = {data["user_id"]}
+                    AND members.group_id = {data["group_id"]};
+                    """
+                    cursor.execute(leave_group)
+                _db.commit() 
+                return {"message": "left"}
+            else: return {"fail": "not-member"}
         except Exception as e:
             return {"fail": e}       
 
@@ -182,17 +185,22 @@ class PostgresRepository(Repository):
             cursor = _db.cursor()
             group = self.get_group(data=data)
             if group:
-                if (data["member_id"] == data["user_id"]):
-                    self.delete(data)
-                else:
-                    kick_from_group = f"""
-                        DELETE FROM members
-                        WHERE members.user_id = {data["member_id"]}
-                        AND members.group_id = {data["group_id"]};
-                    """
-                    cursor.execute(kick_from_group)
-                    _db.commit() 
-                return {"message": "kicked"}
+                is_member = self._check_if_already_a_member(data={"group_id": data["group_id"], "user_id": data["member_id"]})
+                print(data)
+                print(is_member)
+                if is_member:
+                    if (data["member_id"] == data["user_id"]):
+                        self.delete(data)
+                    else:
+                        kick_from_group = f"""
+                            DELETE FROM members
+                            WHERE members.user_id = {data["member_id"]}
+                            AND members.group_id = {data["group_id"]};
+                        """
+                        cursor.execute(kick_from_group)
+                        _db.commit() 
+                    return {"message": "kicked"}
+                else: return {"fail": "not-member"}
             return {"fail": "Unauthorized to remove member from group"}
         except Exception as e:
             return {"fail": e}    
