@@ -1,6 +1,7 @@
 import json
 import pytest
 from tests.global_fixtures.boot_up import client as api
+from freezegun import freeze_time
 
 test_data = [
     ({"title": "", "admin": ""}, {"status": 400, "json":{'fail': ['empty-admin', 'empty-title']}}),
@@ -12,6 +13,7 @@ test_data = [
 
 
 @pytest.mark.order(2)
+@freeze_time("2023-01-01 12:00:00")
 @pytest.mark.parametrize("data, outcome", test_data)
 def test_create_groups(api, data, outcome):
     response = api.post("/groups", content=json.dumps(data))
