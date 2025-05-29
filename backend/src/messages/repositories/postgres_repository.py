@@ -2,6 +2,10 @@ import logging
 
 from src.users.repositories.repository import Repository
 
+def break_down_long_messages(message: str, is_last_message=False):
+        if len(message) > 50 and is_last_message:
+            return message[:49] + "..."
+        return message
 
 class PostgresRepository(Repository):
     def __init__(self, db):
@@ -97,18 +101,13 @@ class PostgresRepository(Repository):
                 "id": message[0],
                 "author": message[1],
                 "user_id": message[2],
-                "content": self._break_down_long_messages(message[3], is_last_message),
+                "content": break_down_long_messages(message[3], is_last_message),
                 "group_id": message[4],
                 "code": message[5],
                 "created_at": message[6],
             }
             formatted_messages.append(formatted_message)
         return formatted_messages
-
-    def _break_down_long_messages(self, message: str, is_last_message=False):
-        if len(message) > 50 and is_last_message:
-            return message[:49] + "..."
-        return message
 
     def edit(self, data):
         try:

@@ -12,8 +12,11 @@ class MessagesController:
     def get_all(self, group_id):
         messages = self.service.get_all(group_id=group_id)
         if messages != []:
-            return Response(
-                content=json.dumps({"messages": messages}),
+            if "fail" in messages:
+                return Response(content=json.dumps(messages), status_code=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(
+                content=json.dumps({"message": messages}),
                 status_code=status.HTTP_200_OK,
             )
         return Response(
@@ -40,7 +43,10 @@ class MessagesController:
     async def get_last_message(self, group_id):
         message = self.service.get_last_message(group_id=group_id)
         if message:
-            return Response(
+            if "fail" in message:
+                return Response(content=json.dumps(message), status_code=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(
                 content=json.dumps({"message": message}),
                 status_code=status.HTTP_200_OK,
             )

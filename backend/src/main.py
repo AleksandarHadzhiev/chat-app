@@ -53,12 +53,14 @@ def create_app(server="test"):
                         service =MessagesService(db=db, settings=config)
                         response = await service.create(message["data"])
                         if "fail" in response:
-                            await connection_manager.broadcast(message={"type": "fail", "data": response["fail"]})
+                            data = {"type": "fail", "data": response["fail"]}
+                            await connection_manager.broadcast(message=data)
                         else: await connection_manager.broadcast(message=message)
 
             except WebSocketDisconnect:
-                connection_manager.disconnect(id=id)
+                await connection_manager.disconnect(id=id)
                 disconnect_message = f"Client #{id} left the chat"
-                await connection_manager.broadcast(id, disconnect_message)
+                await connection_manager.broadcast(disconnect_message)
         else: websocket.send_json({"type": "fail", "data": response["fail"]})
+    
     return app

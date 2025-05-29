@@ -41,7 +41,7 @@ class EditMessageDTO(BaseDTO):
 
     async def check_if_author(self):
         await asyncio.gather(self.set_user_id(), self.set_code())
-        if (self.user_id and self.code):
+        if ("empty-code" not in self.errors or "undefined-user" not in self.errors):
             is_author = await self.rep.is_author(self.user_id, self.code)
             if is_author is False:
                 self.errors.append("is-not-author")
@@ -57,7 +57,7 @@ class EditMessageDTO(BaseDTO):
         
     async def check_if_is_member(self):
         await asyncio.gather(self.set_group_id(), self.set_user_id())
-        if (self.user_id and self.group_id):
+        if "undefined-group" not in self.errors or "undefined-user" not in self.errors:
             is_part = await self.rep.is_part_of_group(self.user_id, self.group_id)
             if is_part is False:
                 self.errors.append("is-not-member")
