@@ -9,6 +9,7 @@ docker = "uvicorn app:app --host 0.0.0.0 --port 8000"
 test =  "pytest -n auto -vv --cov --cov-report=html"
 test-4 =  "pytest -n 4 -vv --cov --cov-report=html"
 test-no-workers =  "pytest  -vv --cov --cov-report=lcov"
+test-no-workers-html=  "pytest  -vv --cov --cov-report=html"
 
 [[source]]
 url = "https://pypi.org/simple"
@@ -32,6 +33,7 @@ pytest-cov = "*"
 pytest-xdist = "*"
 mailhog = "*"
 pytest-order = "*"
+freezegun = "*"
 
 [dev-packages]
 
