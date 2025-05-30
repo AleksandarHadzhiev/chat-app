@@ -31,6 +31,6 @@ test_data = [
 @pytest.mark.order(9)
 @pytest.mark.parametrize("data, outcome", test_data)
 def test_edit_message(api, message, data, outcome):
-    response = api.put("/messages/", content=json.dumps(data))
+    response = api.put("/messages", content=json.dumps(data))
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

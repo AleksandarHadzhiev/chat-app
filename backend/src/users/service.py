@@ -4,7 +4,7 @@ import string
 from src.emails.mailhog_smtp import SMTPServer
 from src.users.dtos.factory import DTOFactory
 from src.users.repositories.factory import RepositoryFactory
-
+import hashlib
 
 class UsersService:
     def __init__(self, db, settings):
@@ -24,6 +24,8 @@ class UsersService:
         data = await dto.execute_validation()
         if "fail" in data:
             return data
+        self._encrypt_password(data=data)
+        print(data)
         response = self.repository.login(data=data)
         if response:
             return response
@@ -50,6 +52,8 @@ class UsersService:
         if "fail" in data:
             return data
         email = data["email"]
+        self._encrypt_password(data=data)
+        print(data)
         code = self._generate_code(email=email)
         email_data = {
             "body": code,
@@ -63,8 +67,15 @@ class UsersService:
             self._email_flow(data=email_data, language=language)
         return {"message": "success"}
 
+    def _encrypt_password(self, data: dict):
+        password = str(data["password"])
+        hash = hashlib.sha256()
+        hash.update(password.encode())
+        hashed_password = hash.hexdigest()
+        data["password"] = hashed_password
+
     def _email_flow(self, data, language="EN", subject="verification"):
-        smtp = SMTPServer(language=language, subject=subject)
+        smtp = SMTPServer(language=language, subject=subject, settings=self.settings)
         smtp.send_email(data=data["body"], email=data["receiver"])
 
     def _generate_code(self, email):
