@@ -15,7 +15,7 @@ class MessagesRouter:
             "/{group_id}/last-message", self.controller.get_last_message, methods=["GET"]
         )
         self.router.add_api_route(
-            "/", self.controller.edit, methods=["PUT"]
+            "", self.controller.edit, methods=["PUT"]
         )
         self.router.add_api_route(
             "", self.controller.delete, methods=["DELETE"]

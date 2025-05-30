@@ -13,8 +13,9 @@ from src.users.routers import UsersRouter
 from src.websocket.ws_server import ConnectionManager
 
 
-def create_app(server="test"):
+def create_app(server="test", secret="secret-key-placeholder"):
     config = ConfigFactory(type=server).get_config()
+    config.set_secret_key(key=secret)
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
     origins = ["http://localhost:3000"]
 
@@ -38,6 +39,10 @@ def create_app(server="test"):
     app.include_router(languages.router)
     app.include_router(groups.router)
     app.include_router(messages.router)
+
+    @app.get("")
+    def app_is_running():
+        return {"message": "App is running"}
 
     @app.websocket("/ws/{id}/{username}/{admin_id}")
     async def websocket_server(websocket: WebSocket, id: str, username: str, admin_id: str):
@@ -63,4 +68,4 @@ def create_app(server="test"):
                 await connection_manager.broadcast(disconnect_message)
         else: websocket.send_json({"type": "fail", "data": response["fail"]})
     
-    return app
+    return {"app": app, "config": config}

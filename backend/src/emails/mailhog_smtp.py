@@ -1,12 +1,14 @@
 import smtplib
 
 from src.emails.base_smtp import BaseSMTP
+from config import Config
 from src.languages.translations.factory import TranslationsFactory
 
 class SMTPServer(BaseSMTP):
-    def __init__(self, language="EN", subject="verification"):
+    def __init__(self, language="EN", subject="verification", settings: Config=None):
         self.subject=subject
-        self.server = smtplib.SMTP("127.0.0.1", 1025)
+        self.settigns = settings
+        self.server = smtplib.SMTP(host=self.settigns.SMTP_SERVER, port=self.settigns.SMTP_PORT)
         self.factory = TranslationsFactory(data={"language": language, "file": "emails"})
         self.translations = self.factory.get_translations().get_translations()
         self.email = "alekshadzhiev01@gmail.com"

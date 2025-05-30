@@ -16,7 +16,7 @@ class MessagesController:
                 return Response(content=json.dumps(messages), status_code=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(
-                content=json.dumps({"message": messages}),
+                content=json.dumps({"messages": messages}),
                 status_code=status.HTTP_200_OK,
             )
         return Response(
