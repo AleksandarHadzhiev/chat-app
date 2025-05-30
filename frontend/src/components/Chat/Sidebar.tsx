@@ -8,8 +8,7 @@ export default function Sidebar({ isVisible, setIsVisible, id, setGroup, display
     const [groups, setGroups] = useState([])
     useEffect(() => {
         async function getAllGroupsForUser(id: Number) {
-            const url = `http://localhost:8000/groups/user/${id}`
-            const groups = await handler.getGroupsWhereUserIsAMember(url)
+            const groups = await handler.getGroupsWhereUserIsAMember(id)
             console.log(groups)
             setGroups(groups)
         }

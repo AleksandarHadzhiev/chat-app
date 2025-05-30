@@ -84,8 +84,7 @@ export default function Groups({ socket }) {
     }
 
     async function getAllGroups() {
-        const url = "http://localhost:8000/groups/"
-        const groups = await handler.getAllGroups(url)
+        const groups = await handler.getAllGroups()
         setGroups(groups)
     }
 

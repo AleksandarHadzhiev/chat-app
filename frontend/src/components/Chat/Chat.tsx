@@ -9,21 +9,11 @@ export default function Chat({ widthType, _group, changeChat, isVisible, trigger
     const [date, setDate] = useState("")
     const handler = new MessagesHandler()
     async function getLastMessage() {
-        const url = `http://localhost:8000/messages/${_group.id}/last-message`
-        const message = await handler.getLastMessage(url)
+        const message = await handler.getLastMessage(_group.id)
         if (message && message.length > 0) {
             setFormatForDate(message[0].created_at)
             setLastMesage(message[0])
         }
-
-        // axios.get(`http://localhost:8000/messages/${_group.id}/last-message`)
-        //     .then((res) => {
-        //         const message = res.data.message
-        //         setFormatForDate(message[0].created_at)
-        //         setLastMesage(message[0])
-        //     }).catch((err) => {
-        //         console.log(err)
-        //     })
     }
 
     function setFormatForDate(unformatedDate: string) {

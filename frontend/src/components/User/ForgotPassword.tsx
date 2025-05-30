@@ -26,7 +26,6 @@ export default function ForgotPassword() {
     const [response, setResponse] = useState()
     const [notification, setNotificaiton] = useState()
     const handler = new UsersHandler()
-    const router = useRouter()
     const { language } = useContext(ChildContext)
 
     useEffect(() => {
@@ -45,8 +44,8 @@ export default function ForgotPassword() {
             email: email,
             language: language
         }
-        const url = "http://localhost:8000/forgot-password"
-        const response = await handler.forgotPassowrd(url, data, translations)
+
+        const response = await handler.forgotPassowrd(data, translations)
         console.log(response)
         if ("tag" in response) {
             setResponse(response.tag)

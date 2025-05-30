@@ -5,11 +5,6 @@ import RefactorMessageContent from "./RefactorContent"
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function UpdateMessage({ user, group, widthType, code, content, setEditMessage, setTriggerOff, trigger, socket, translations }) {
-
-    function setStyleBasedOnDevice() {
-        // 
-    }
-
     return (
         <>
             <div className={`${widthType == "mobile" ? "text-2xl" : ""} flex w-full h-1/10 drop-shadow-md border-t-2 border-gray-200`}>

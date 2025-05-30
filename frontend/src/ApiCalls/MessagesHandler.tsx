@@ -25,28 +25,34 @@ export default class MessagesHandler {
         return customeCode
     }
 
-    async editAMessage(url: string, data: EditMessageDTO, translations: any) {
+    async editAMessage(data: EditMessageDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.put(url, data)
+        const endpoint = `messages`
+        const response = await handler.put(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async deleteAMessage(url: string, translations: any) {
+    async deleteAMessage(code: string, userId: any, groupId: any, translations: any) {
+
         const handler = new RoutersHandler()
-        const response = await handler.delete(url)
+        const endpoint = `messages?code=${code}&user_id=${userId}&group_id=${groupId}`
+        const response = await handler.delete(endpoint)
         return this.notificationHandler(response, translations)
     }
 
-    async getAllMessages(url: string) {
+    async getAllMessages(groupId: any) {
+        const endpoint = `messages/${groupId}`
         const handler = new RoutersHandler()
-        const response = await handler.get(url)
+        const response = await handler.get(endpoint)
+        console.log(response)
         if ("messages" in response) return response.messages
         else return []
     }
 
-    async getLastMessage(url: string) {
+    async getLastMessage(groupId: any) {
         const handler = new RoutersHandler()
-        const response = await handler.get(url)
+        const endpoint = `messages/${groupId}/last-message`
+        const response = await handler.get(endpoint)
         if ("message" in response) return response.message
         else return []
     }

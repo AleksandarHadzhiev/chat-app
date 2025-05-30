@@ -7,39 +7,45 @@ import { ResetPasswordDTO } from "./DTOs/User/ResetPassword";
 
 export default class UsersHandler {
 
-    async register(url: string, data: RegisterDTO, translations: any) {
+    async register(data: RegisterDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "register"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async checkIfAuthorized(url: string, data: VerifyDTO, translations: any) {
+    async checkIfAuthorized(data: VerifyDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "authorize"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async resetPassword(url: string, data: ResetPasswordDTO, translations: any) {
+    async resetPassword(data: ResetPasswordDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "reset-password"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async verify(url: string, data: VerifyDTO, translations: any) {
+    async verify(data: VerifyDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "verification"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async login(url: string, data: LoginDTO, translations: any) {
+    async login(data: LoginDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "login"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async forgotPassowrd(url: string, data: ForgotPasswordDTO, translations: any) {
+    async forgotPassowrd(data: ForgotPasswordDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "forgot-password"
+        const response = await handler.post(endpoint, data)
         console.log(response)
         return this.notificationHandler(response, translations)
     }

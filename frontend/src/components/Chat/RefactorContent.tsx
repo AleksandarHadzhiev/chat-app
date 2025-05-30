@@ -21,8 +21,7 @@ export default function RefactorMessageContent({ user, group, code, setEditMessa
             user_id: user.id,
             group_id: group.id,
         }
-        const url = `http://localhost:8000/messages/`
-        const response = await handler.editAMessage(url, requestBody, translations)
+        const response = await handler.editAMessage(requestBody, translations)
         if ("tag" in response && response.tag == "success") {
             setEditMessage(false)
             const message = document.getElementById(`${code}`)

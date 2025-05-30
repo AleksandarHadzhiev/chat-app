@@ -12,8 +12,7 @@ export default function EditGroup({ trigerUpdate, closeDialog, getAllGroups, gro
     }
     async function edit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        const url = `http://localhost:8000/groups/${group.id}`
-        const response = await handler.editGroup(url, editGroupDTO, translations)
+        const response = await handler.editGroup(group.id, editGroupDTO, translations)
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)

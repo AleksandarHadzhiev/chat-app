@@ -19,7 +19,7 @@ export default function ProvdeUserData({ language, registration, translations })
             username: username,
             language: language
         }
-        const response = await usersAPI.register(`http://localhost:8000/register`, data, translations)
+        const response = await usersAPI.register(data, translations)
         registration(e, response.tag, response.message)
     }
 

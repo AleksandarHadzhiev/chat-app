@@ -41,13 +41,12 @@ export default function ResetPassword() {
         }
 
         async function checkIfAuthorized() {
-            const url = `http://localhost:8000/authorize`
             if (code && email) {
                 const data: VerifyDTO = {
                     email: email,
                     code: code,
                 }
-                const response = await usersAPI.checkIfAuthorized(url, data, translations)
+                const response = await usersAPI.checkIfAuthorized(data, translations)
                 if ("tag" in response) {
                     setResponse(response.tag)
                     setNotificaiton(response.message)
@@ -72,8 +71,7 @@ export default function ResetPassword() {
             password: password,
 
         }
-        const url = "http://localhost:8000/reset-password"
-        const response = await usersAPI.resetPassword(url, data, translations)
+        const response = await usersAPI.resetPassword(data, translations)
         if ("tag" in response) {
             setResponse(response.tag)
             setNotificaiton(response.message)

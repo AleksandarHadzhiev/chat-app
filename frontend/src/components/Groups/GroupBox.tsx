@@ -30,8 +30,7 @@ export default function GroupBox({ widthType, groups, user, group, translations,
     }
 
     async function joinGroup(group_id: Number) {
-        const url = `http://localhost:8000/groups/${user.id}/join/${group_id}`
-        const response = await handler.joinGroup(url, translations)
+        const response = await handler.joinGroup(user.id, group.id, translations)
         triggerUpdate(group_id)
 
         if ("tag" in response) {
@@ -42,8 +41,7 @@ export default function GroupBox({ widthType, groups, user, group, translations,
     }
 
     async function leaveGroup(group: any) {
-        const url = `http://localhost:8000/groups/${user.id}/leave/${group.id}`
-        const response = await handler.leaveGroup(url, translations)
+        const response = await handler.leaveGroup(user.id, group.id, translations)
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)

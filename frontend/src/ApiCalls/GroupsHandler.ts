@@ -2,33 +2,38 @@ import RoutersHandler from "./RouterHandler";
 import { GeneralGroupDTO } from "./DTOs/Other/GeneralGroupDTO";
 
 export default class GroupsHandler {
-    async createGroup(url: string, data: GeneralGroupDTO, translations: any) {
+    async createGroup(data: GeneralGroupDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, data)
+        const endpoint = "groups"
+        const response = await handler.post(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async deleteGroup(url: string, translations: any) {
+    async deleteGroup(id: any, admin: any, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.delete(url)
+        const endpoint = `groups/${id}/${admin}`
+        const response = await handler.delete(endpoint)
         return this.notificationHandler(response, translations)
     }
 
-    async editGroup(url: string, data: GeneralGroupDTO, translations: any) {
+    async editGroup(id: any, data: GeneralGroupDTO, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.put(url, data)
+        const endpoint = `groups/${id}`
+        const response = await handler.put(endpoint, data)
         return this.notificationHandler(response, translations)
     }
 
-    async getAllGroups(url: string) {
+    async getAllGroups() {
         const handler = new RoutersHandler()
-        const response = await handler.get(url)
+        const endpoint = "groups"
+        const response = await handler.get(endpoint)
         return this.handleGetResponse(response)
     }
 
-    async getGroupsWhereUserIsAMember(url: string) {
+    async getGroupsWhereUserIsAMember(id: any) {
+        const endpoint = `groups/user/${id}`
         const handler = new RoutersHandler()
-        const response = await handler.get(url)
+        const response = await handler.get(endpoint)
         return this.handleGetResponse(response)
     }
 
@@ -37,22 +42,27 @@ export default class GroupsHandler {
         else return []
     }
 
-    async joinGroup(url: string, translations: any) {
+    async joinGroup(account: any, group: any, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, null)
+        const endpoint = `groups/${account}/join/${group}`
+        const response = await handler.post(endpoint, null)
         return this.notificationHandler(response, translations)
 
     }
 
-    async leaveGroup(url: string, translations: any) {
+    async leaveGroup(account: any, group: any, translations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.post(url, null)
+        const endpoint = `groups/${account}/join/${group}`
+
+        const response = await handler.post(endpoint, null)
         return this.notificationHandler(response, translations)
     }
 
-    async kickMemberFromGroup(url: string, tranlations: any) {
+    async kickMemberFromGroup(id: any, admin: any, member: any, tranlations: any) {
         const handler = new RoutersHandler()
-        const response = await handler.delete(url)
+        const endpoint = `groups/${id}/kick/${member}/${admin}`
+
+        const response = await handler.delete(endpoint)
         return this.notificationHandler(response, tranlations)
     }
 

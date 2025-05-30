@@ -48,13 +48,10 @@ export function ChatPage() {
         setTranslations(data.translations)
     }
 
-    function getMessages(id: any) {
-        axios.get(`http://localhost:8000/messages/${id}`).then((response) => {
-            displayMessages(response.data.messages)
-            setMessages(response.data.messages)
-        }).catch((error) => {
-            console.log(error)
-        })
+    async function getMessages(id: any) {
+        const _messages = await handler.getAllMessages(id)
+        setMessages(_messages)
+        displayMessages(_messages)
     }
 
     function displayMessages(messages: [{ id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }]) {
@@ -118,8 +115,7 @@ export function ChatPage() {
 
     async function deleteMessage(_code: String) {
         // Delete message in DB
-        const url = `http://localhost:8000/messages?code=${_code}&user_id=${user.id}&group_id=${group.id}`
-        const response = await handler.deleteAMessage(url, translations)
+        const response = await handler.deleteAMessage(_code, user.id, group.id, translations)
         if ("tag" in response && response.tag == "success") {
             const message = document.getElementById(`loaded-message-${_code}`)
             message?.remove()

@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useState } from "react"
 import EditGroup from "./EditGroup"
 import MembersDialog from "./Members"
@@ -27,8 +26,7 @@ export default function AdminMenu({ widthType, trigerUpdate, group, user, getAll
     }
 
     async function deleteGroup() {
-        const url = `http://localhost:8000/groups/${group.id}/${user.id}`
-        const response = await handler.deleteGroup(url, translations)
+        const response = await handler.deleteGroup(group.id, user.id, translations)
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)

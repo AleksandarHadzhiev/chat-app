@@ -18,8 +18,7 @@ export default function CreateGroup({ triggerUpdate, closeDialog, getAllGroups, 
                 title: title,
                 admin: user.id
             }
-            const url = "http://localhost:8000/groups/"
-            const response = await handler.createGroup(url, createGroupDTO, translations)
+            const response = await handler.createGroup(createGroupDTO, translations)
             if ("tag" in response) {
                 setNotificaiton(response.message)
                 setResponse(response.tag)

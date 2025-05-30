@@ -7,8 +7,7 @@ export default function MembersDialog({ trigerUpdate, closeDialog, getAllGroups,
     const handler = new GroupsHandler()
     async function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: Number) {
         e.preventDefault()
-        const url = `http://localhost:8000/groups/${group.id}/kick/${member}/${user.id}`
-        const response = await handler.kickMemberFromGroup(url, translations)
+        const response = await handler.kickMemberFromGroup(group.id, user.id, member, translations)
         if ("tag" in response) {
             setNotificaiton(response.message)
             setResponse(response.tag)

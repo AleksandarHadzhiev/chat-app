@@ -38,7 +38,7 @@ export default function ProvdeCode({ registration, translations }) {
                 email: email,
                 code: code
             }
-            const response = await usersAPI.verify("http://localhost:8000/verification", data, translations)
+            const response = await usersAPI.verify(data, translations)
             registration(e, response.tag, response.message)
         }
     }

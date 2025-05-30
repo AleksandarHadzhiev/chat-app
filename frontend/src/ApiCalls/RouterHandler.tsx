@@ -3,15 +3,14 @@ import { GeneralGroupDTO } from "./DTOs/Other/GeneralGroupDTO";
 import { LoginDTO } from "./DTOs/User/LoginDTO";
 import { RegisterDTO } from "./DTOs/User/RegisterDTO";
 import { VerifyDTO } from "./DTOs/User/VerifyDTO";
-import { MessageDTO } from "./DTOs/Other/MessageDTO";
 import { EditMessageDTO } from "./DTOs/Other/EditMessageDTO";
 import { ForgotPasswordDTO } from "./DTOs/User/ForgotPasswordDTO";
 import { ResetPasswordDTO } from "./DTOs/User/ResetPassword";
 export default class RoutersHandler {
-
-    async get(url: string) {
+    url = process.env.NEXT_PUBLIC_BACKEND_URL
+    async get(endpoint: string) {
         try {
-            const response = await axios.get(url)
+            const response = await axios.get(`${this.url}/${endpoint}`)
             if (response.status == 200) return response.data
             else if (response.data == 204) return response.data
             else return { "fail": "Unknown reason" }
@@ -26,9 +25,10 @@ export default class RoutersHandler {
         }
     }
 
-    async post(url: string, data: LoginDTO | ResetPasswordDTO | ForgotPasswordDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
+    async post(endpoint: string, data: LoginDTO | ResetPasswordDTO | ForgotPasswordDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
+        console.log(this.url)
         try {
-            const response = await axios.post(url, data)
+            const response = await axios.post(`${this.url}/${endpoint}`, data)
             if (response.status == 201) {
                 return response.data
             }
@@ -47,9 +47,9 @@ export default class RoutersHandler {
 
     }
 
-    async put(url: string, data: GeneralGroupDTO | EditMessageDTO | null) {
+    async put(endpoint: string, data: GeneralGroupDTO | EditMessageDTO | null) {
         try {
-            const response = await axios.put(url, data)
+            const response = await axios.put(`${this.url}/${endpoint}`, data)
             if (response.status == 201) {
                 return response.data
             }
@@ -67,9 +67,9 @@ export default class RoutersHandler {
         }
     }
 
-    async delete(url: string) {
+    async delete(endpoint: string) {
         try {
-            const response = await axios.delete(url)
+            const response = await axios.delete(`${this.url}/${endpoint}`)
             if (response.status == 200) return response.data
             else {
                 return {
