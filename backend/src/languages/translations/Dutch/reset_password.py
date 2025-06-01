@@ -10,19 +10,19 @@ class DutchResetPasswordTranslations(Base):
             "example": "example@email.com",
             "account": "Heb je nog geen account?",
             "signup": "Zing mee",
-            "missing-code":"Code niet verstrekt",
-            "missing-email":"E-mailadres niet opgegeven",
-            "unauthorized":"Je hebt geen toegang tot deze pagina.",
-            "authorized":"",
-            "user-not-found":"Gebruiker bestaat niet.",
+            "missing-code": "Code niet verstrekt",
+            "missing-email": "E-mailadres niet opgegeven",
+            "unauthorized": "Je hebt geen toegang tot deze pagina.",
+            "authorized": "",
+            "user-not-found": "Gebruiker bestaat niet.",
             "unverified": "Het opgegeven e-mailadres of de code is niet geverifieerd.",
             "empty-password": "Leeg wachtwoord",
             "empty-email": "Lege e-mail",
-            "invalid-email":"Ongeldig e-mailadres",
+            "invalid-email": "Ongeldig e-mailadres",
             "empty-code": "Lege code",
             "invalid-code": "Ongeldige code",
             "fail": "Mislukt vanwege:",
-            "success":"Uw wachtwoord is gereset."
+            "success": "Uw wachtwoord is gereset.",
         }
 
     def get_translations(self) -> dict:

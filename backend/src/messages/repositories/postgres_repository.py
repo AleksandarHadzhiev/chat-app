@@ -2,10 +2,12 @@ import logging
 
 from src.users.repositories.repository import Repository
 
+
 def break_down_long_messages(message: str, is_last_message=False):
-        if len(message) > 50 and is_last_message:
-            return message[:49] + "..."
-        return message
+    if len(message) > 50 and is_last_message:
+        return message[:49] + "..."
+    return message
+
 
 class PostgresRepository(Repository):
     def __init__(self, db):
@@ -124,7 +126,6 @@ class PostgresRepository(Repository):
         except Exception as e:
             return {"fail": e}
 
-
     def delete(self, code, group_id, user_id):
         try:
             _db = self.db.get_db()
@@ -136,8 +137,8 @@ class PostgresRepository(Repository):
                 AND messages.group_id = {group_id};
             """
             cursor.execute(delete_message)
-            _db.commit() 
+            _db.commit()
             return {"message": "success"}
         except Exception as e:
             logging.error(e.args)
-            return {"fail": e} 
+            return {"fail": e}

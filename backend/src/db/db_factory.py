@@ -6,8 +6,8 @@ class DBFactory:
         self.env: str = env
         self.settings = settings
         self.databases = {
-            "docker": PostgresSQL(), # just switch the database by adding new module of database.
-            "test": PostgresSQL(), 
+            "docker": PostgresSQL(),  # just switch the database by adding new module of database.
+            "test": PostgresSQL(),
             "dev": PostgresSQL(),
         }
 

@@ -1,5 +1,6 @@
 from src.groups.dtos.fields.base import BaseField
 
+
 class TitleField(BaseField):
     def __init__(self, data, settings):
         self.title = data

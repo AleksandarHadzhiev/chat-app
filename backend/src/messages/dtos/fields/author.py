@@ -1,4 +1,6 @@
 from src.messages.dtos.fields.base import BaseField
+
+
 class AuthorField(BaseField):
     def __init__(self, data, settings):
         self.author = data

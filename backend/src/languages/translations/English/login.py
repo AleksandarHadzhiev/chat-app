@@ -19,7 +19,7 @@ class LoginTranlsations(Base):
             "empty-password": "Empty password",
             "wrong-credentials": "Either email or password is incorrect",
             "user-not-found": "The user doesn't exist.",
-            "unverified": "The user is not verified."
+            "unverified": "The user is not verified.",
         }
 
     def get_translations(self) -> dict:

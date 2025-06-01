@@ -15,8 +15,7 @@ class DutchForgotPasswordTranslations(Base):
             "invalid-email": "Het e-mailformaat is ongeldig",
             "user-not-found": "Gebruiker bestaat niet.",
             "unverified": "Gebruiker is niet geverifieerd.",
-            "success":"Je hebt een e-mail ontvangen. Controleer deze om verder te gaan."
-            
+            "success": "Je hebt een e-mail ontvangen. Controleer deze om verder te gaan.",
         }
 
     def get_translations(self) -> dict:

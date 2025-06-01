@@ -8,7 +8,7 @@ class DutchEmailsTranslations(Base):
             "verification_body": "Bedankt voor uw registratie. Dit is uw verificatiecode",
             "warning": "Als u dat niet was, of als de actie niet langer nodig is, negeer dan dit bericht.",
             "reset_subject": "Wachtwoord opnieuw instellen",
-            "reset_body": "Hier is de link om uw wachtwoord opnieuw in te stellen"
+            "reset_body": "Hier is de link om uw wachtwoord opnieuw in te stellen",
         }
 
     def get_translations(self) -> dict:

@@ -1,11 +1,12 @@
 """Starting point of the application"""
 
 import logging
-import uvicorn
-from src.main import create_app
 import sys
-from src.utils.rsa_generator import RSAGenerator
 
+import uvicorn
+
+from src.main import create_app
+from src.utils.rsa_generator import RSAGenerator
 
 n = len(sys.argv)
 environments = ["docker", "dev", "test"]

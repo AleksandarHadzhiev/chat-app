@@ -5,7 +5,7 @@ class UsernameField(BaseDTO):
     def __init__(self, data, settings):
         self.username = data
         self.settings = settings
-        self.forbitten_names = [ 
+        self.forbitten_names = [
             "offensive_name",
             "offensive name",
             "offensive Name",

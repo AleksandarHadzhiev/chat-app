@@ -3,6 +3,7 @@
 
 class Config:
     """Base config."""
+
     SMTP_SERVER = ""
     SECRET_KEY = ""
     PUBLIC_KEY = ""
@@ -18,10 +19,10 @@ class Config:
     DATABASE_DB = ""
     FRONTEND_URL = ""
     CODE_LENGTH = 4
-    
+
     def set_secret_key(self, key):
         self.SECRET_KEY = key
-    
+
     def set_public_key(self, key):
         self.PUBLIC_KEY = key
 
@@ -47,6 +48,7 @@ class ConfigFactory:
 
 class DevConfig(Config):
     """Development config."""
+
     SECRET_KEY = "secret-key-placeholder"
     PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "127.0.0.1"
@@ -63,6 +65,7 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     """Test config."""
+
     SECRET_KEY = "secret-key-placeholder"
     PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "127.0.0.1"
@@ -79,6 +82,7 @@ class TestConfig(Config):
 
 class DockerConfig(Config):
     """Docker config."""
+
     SECRET_KEY = "secret-key-placeholder"
     PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "mailhog"
@@ -91,4 +95,3 @@ class DockerConfig(Config):
     DATABASE_PORT = "5432"
     DATABASE_DB = "docker"
     FRONTEND_URL = "https://localhost:3000"
-

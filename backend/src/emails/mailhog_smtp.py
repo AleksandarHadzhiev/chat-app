@@ -1,15 +1,20 @@
 import smtplib
 
-from src.emails.base_smtp import BaseSMTP
 from config import Config
+from src.emails.base_smtp import BaseSMTP
 from src.languages.translations.factory import TranslationsFactory
 
+
 class SMTPServer(BaseSMTP):
-    def __init__(self, language="EN", subject="verification", settings: Config=None):
-        self.subject=subject
+    def __init__(self, language="EN", subject="verification", settings: Config = None):
+        self.subject = subject
         self.settigns = settings
-        self.server = smtplib.SMTP(host=self.settigns.SMTP_SERVER, port=self.settigns.SMTP_PORT)
-        self.factory = TranslationsFactory(data={"language": language, "file": "emails"})
+        self.server = smtplib.SMTP(
+            host=self.settigns.SMTP_SERVER, port=self.settigns.SMTP_PORT
+        )
+        self.factory = TranslationsFactory(
+            data={"language": language, "file": "emails"}
+        )
         self.translations = self.factory.get_translations().get_translations()
         self.email = "alekshadzhiev01@gmail.com"
         self.server.login("username", "password")
@@ -25,4 +30,3 @@ class SMTPServer(BaseSMTP):
             """
         self.server.sendmail(from_addr=from_address, to_addrs=to_address, msg=message)
         self.server.quit()
-

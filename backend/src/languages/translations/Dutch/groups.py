@@ -23,9 +23,9 @@ class GroupsDutchTranlsations(Base):
             "edited": "Je hebt de naam van de groep gewijzigd.",
             "deleted": "Je hebt de groep verwijderd.",
             "left": "Je hebt de groep verlaten",
-            "kicked": "Je hebt het lid uit de groep gezet." ,
+            "kicked": "Je hebt het lid uit de groep gezet.",
             "joined": "Je bent lid geworden van een groep.",
-            "already a member": "Je bent al lid van de groep."   
+            "already a member": "Je bent al lid van de groep.",
         }
 
     def get_translations(self) -> dict:

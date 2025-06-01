@@ -1,8 +1,9 @@
 from src.groups.dtos.base import BaseDTO
 from src.groups.dtos.fields.admin import AdminField
-from src.groups.dtos.fields.title import TitleField
 from src.groups.dtos.fields.group_id import GroupIdField
+from src.groups.dtos.fields.title import TitleField
 from src.groups.repositories.repository import Repository
+
 
 class EditGroupDTO(BaseDTO):
     def set(self, data, settings, rep: Repository):
@@ -43,8 +44,4 @@ class EditGroupDTO(BaseDTO):
     def validate_data(self):
         if len(self.errors) > 0:
             return {"fail": self.errors}
-        return {
-            "title": self.title,
-            "admin": self.admin,
-            "group_id": self.group_id
-        }
+        return {"title": self.title, "admin": self.admin, "group_id": self.group_id}

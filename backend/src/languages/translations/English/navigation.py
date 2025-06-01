@@ -7,7 +7,7 @@ class NavigationEnglishTranlsations(Base):
             "login": "Login",
             "home": "Home",
             "account": "Account",
-            "groups": "Groups"
+            "groups": "Groups",
         }
 
     def get_translations(self) -> dict:

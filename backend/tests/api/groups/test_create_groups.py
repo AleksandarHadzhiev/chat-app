@@ -1,14 +1,32 @@
 import json
+
 import pytest
-from tests.global_fixtures.boot_up import client as api
 from freezegun import freeze_time
 
+from tests.global_fixtures.boot_up import client as api
+
 test_data = [
-    ({"title": "", "admin": ""}, {"status": 400, "json":{'fail': ['empty-admin', 'empty-title']}}),
-    ({"title": "ss", "admin": ""}, {"status": 400, "json":{'fail': ['empty-admin']}}),
-    ({"title": "", "admin": "1"}, {"status": 400, "json":{'fail': ['empty-title']}}),
-    ({"title": "INVALID-ADMIN", "admin": "0"}, {"status": 400, "json":{'fail': ['invalid-admin',]}}),
-    ({"title": "VALUD-ADMIN", "admin": "2"}, {"status": 201, "json": {'message': 'created group'}}),
+    (
+        {"title": "", "admin": ""},
+        {"status": 400, "json": {"fail": ["empty-admin", "empty-title"]}},
+    ),
+    ({"title": "ss", "admin": ""}, {"status": 400, "json": {"fail": ["empty-admin"]}}),
+    ({"title": "", "admin": "1"}, {"status": 400, "json": {"fail": ["empty-title"]}}),
+    (
+        {"title": "INVALID-ADMIN", "admin": "0"},
+        {
+            "status": 400,
+            "json": {
+                "fail": [
+                    "invalid-admin",
+                ]
+            },
+        },
+    ),
+    (
+        {"title": "VALUD-ADMIN", "admin": "2"},
+        {"status": 201, "json": {"message": "created group"}},
+    ),
 ]
 
 

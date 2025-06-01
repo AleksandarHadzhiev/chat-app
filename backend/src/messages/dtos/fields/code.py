@@ -1,4 +1,6 @@
 from src.messages.dtos.fields.base import BaseField
+
+
 class CodeField(BaseField):
     def __init__(self, data, settings):
         self.code = data

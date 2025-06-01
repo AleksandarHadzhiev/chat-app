@@ -1,9 +1,10 @@
 from src.groups.dtos.base import BaseDTO
 from src.groups.dtos.create_group_dto import CreateGroupDTO
+from src.groups.dtos.edit_group_dto import EditGroupDTO
 from src.groups.dtos.join_group_dto import JoinGroupDTO
 from src.groups.dtos.kick_member_out_dto import KickMemberOutDTO
-from src.groups.dtos.edit_group_dto import EditGroupDTO
 from src.groups.repositories.repository import Repository
+
 
 class DTOFactory:
     def __init__(self, data, settings, repository: Repository):
@@ -14,7 +15,7 @@ class DTOFactory:
             [{"title": "", "admin": ""}, CreateGroupDTO()],
             [{"group_id": "", "user_id": ""}, JoinGroupDTO()],
             [{"user_id": "", "group_id": "", "member_id": ""}, KickMemberOutDTO()],
-            [{ "admin": "", "title": "", "group_id": ""}, EditGroupDTO()]
+            [{"admin": "", "title": "", "group_id": ""}, EditGroupDTO()],
         ]
 
     def get_dto(self) -> BaseDTO:

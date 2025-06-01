@@ -15,7 +15,7 @@ class ForgotPasswordTranslations(Base):
             "invalid-email": "The email format is invalid",
             "user-not-found": "User does not exist.",
             "unverified": "User is not verified.",
-            "success":"You have received an email. Check it to continue."
+            "success": "You have received an email. Check it to continue.",
         }
 
     def get_translations(self) -> dict:

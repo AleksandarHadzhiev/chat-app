@@ -6,8 +6,9 @@ from src.users.dtos.reset_password_dto import ResetPasswordDTO
 from src.users.dtos.user_dto import UserDTO
 from src.users.repositories.repository import Repository
 
+
 class DTOFactory:
-    def __init__(self, data, settings=None, rep: Repository=None):
+    def __init__(self, data, settings=None, rep: Repository = None):
         self.rep = rep
         self.incomind_data = data
         self.settings = settings

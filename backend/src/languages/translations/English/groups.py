@@ -22,10 +22,10 @@ class GroupsEnglishTranlsations(Base):
             "created group": "You have created a group. Make it popular.",
             "edited": "You have changed the name of the group.",
             "deleted": "You have deleted the group.",
-            "left":"You have left the group",
+            "left": "You have left the group",
             "kicked": "You have kicked the member out of the group.",
             "joined": "You have joined a group.",
-            "already a member": "You are already a member of the group."
+            "already a member": "You are already a member of the group.",
         }
 
     def get_translations(self) -> dict:

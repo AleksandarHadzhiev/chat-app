@@ -1,8 +1,9 @@
 import asyncio
-from src.users.repositories.repository import Repository
+
 from src.users.dtos.base import BaseDTO
 from src.users.dtos.fields.code_field import CodeField
 from src.users.dtos.fields.email_field import EmailField
+from src.users.repositories.repository import Repository
 
 
 class CodeDTO(BaseDTO):
@@ -18,17 +19,21 @@ class CodeDTO(BaseDTO):
         ).validate_data()
         if type(response) == str:
             self.errors.append(response)
-        else: await self._check_if_user_exists()
+        else:
+            await self._check_if_user_exists()
 
     async def _check_if_user_exists(self):
         email = {"email": self.data["email"]}
         user = await self.rep.get_by_email(data=email)
         if "user" in user:
             self.errors.append("user-not-found")
-        else: self.email = email["email"]
+        else:
+            self.email = email["email"]
 
     async def set_code(self):
-        response = CodeField(data=self.data["code"], settings=self.settings).validate_data()
+        response = CodeField(
+            data=self.data["code"], settings=self.settings
+        ).validate_data()
         if type(response) == str:
             self.errors.append(response)
         else:

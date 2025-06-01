@@ -11,18 +11,18 @@ class MessagesEnglishTranlsations(Base):
             "edit": "Edit",
             "delete": "Delete",
             "missing-id": "Afzender ontbreekt",
-            "fail":"Mislukt vanwege: ",
-            "Incorrect data":"Gegevens zijn onjuist",
-            "undefined-user":"Schrijver niet gedefinieerd",
+            "fail": "Mislukt vanwege: ",
+            "Incorrect data": "Gegevens zijn onjuist",
+            "undefined-user": "Schrijver niet gedefinieerd",
             "undefined-group": "Doel niet gedefinieerd",
             "empty-author": "Auteur ontbreekt",
             "empty-content": "Inhoud ontbreekt",
             "offensive-speech": "U heeft aanstootgevende taal gebruikt.",
-            "empty-created_at":"Aanmaakdatum ontbreekt",
-            "empty-code":"Code is niet opgegeven",
-            "success":"",
+            "empty-created_at": "Aanmaakdatum ontbreekt",
+            "empty-code": "Code is niet opgegeven",
+            "success": "",
             "is-not-member": "Geen lid van de groep.",
-            "is-not-author": "Niet uw bericht."
+            "is-not-author": "Niet uw bericht.",
         }
 
     def get_translations(self) -> dict:

@@ -3,6 +3,7 @@ from src.groups.dtos.fields.group_id import GroupIdField
 from src.groups.dtos.fields.user_id import UserIdField
 from src.groups.repositories.repository import Repository
 
+
 class JoinGroupDTO(BaseDTO):
     def set(self, data, settings, rep: Repository):
         self.settings = settings
@@ -32,7 +33,4 @@ class JoinGroupDTO(BaseDTO):
     def validate_data(self):
         if len(self.errors) > 0:
             return {"fail": self.errors}
-        return {
-            "group_id": self.group_id,
-            "user_id": self.user_id
-        }
+        return {"group_id": self.group_id, "user_id": self.user_id}

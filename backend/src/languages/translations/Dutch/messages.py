@@ -11,16 +11,16 @@ class MessagesDutchTranlsations(Base):
             "edit": "Bewerking",
             "delete": "Verwijderen",
             "missing-id": "",
-            "fail":"Failed due: ",
-            "Incorrect data":"",
-            "undefined-user":"",
+            "fail": "Failed due: ",
+            "Incorrect data": "",
+            "undefined-user": "",
             "undefined-group": "",
             "empty-author": "",
             "empty-content": "",
             "offensive-speech": "",
-            "empty-created_at":"",
-            "empty-code":"",
-            "success":""
+            "empty-created_at": "",
+            "empty-code": "",
+            "success": "",
         }
 
     def get_translations(self) -> dict:

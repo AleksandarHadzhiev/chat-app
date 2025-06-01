@@ -1,7 +1,8 @@
-from src.groups.repositories.factory import RepositoryFactory
 from src.groups.dtos.factory import DTOFactory
+from src.groups.repositories.factory import RepositoryFactory
 
 MINIMUM_REQUIRED_ELEMENTS_FOR_A_LIST_TO_NOT_BE_EMPTY = 1
+
 
 class GroupsService:
     def __init__(self, db, settings):
@@ -10,11 +11,13 @@ class GroupsService:
         self.rep = self.factory.get_db()
 
     async def create(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = await dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             self.rep.create(data=incoming_data)
             return {"message": "created group"}
@@ -32,51 +35,61 @@ class GroupsService:
 
     def join(self, user_id, group_id):
         incoming_data = {"group_id": group_id, "user_id": user_id}
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.join(data=incoming_data)
         return {"fail": "unsupported"}
 
     async def leave(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.leave(data=incoming_data)
         return {"fail": "unsupported"}
 
     async def kick_member_out(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.kick_member_out(data=incoming_data)
         return {"fail": "unsupported"}
 
     async def delete(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.delete(data=incoming_data)
         return {"fail": "unsupported"}
 
     async def edit(self, incoming_data):
-        factory = DTOFactory(data=incoming_data, settings=self.settings, repository=self.rep)
+        factory = DTOFactory(
+            data=incoming_data, settings=self.settings, repository=self.rep
+        )
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.edit(data=incoming_data)
         return {"fail": "unsupported"}
@@ -86,7 +99,7 @@ class GroupsService:
         dto = factory.get_dto()
         if dto:
             response = dto.validate_data()
-            if ("fail" in response):
+            if "fail" in response:
                 return response
             return self.rep.get_group(data=incoming_data)
         return {"fail": "unsupported"}

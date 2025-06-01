@@ -1,19 +1,20 @@
 from src.messages.dtos.fields.base import BaseField
 
 #  message = {
-#                 "user_id": int(admin_id), 
-#                 "author": "GGC", 
-#                 "content": text, 
-#                 "group_id": 1, 
+#                 "user_id": int(admin_id),
+#                 "author": "GGC",
+#                 "content": text,
+#                 "group_id": 1,
 #                 "code": f"1-1-{self.generate_special_code()}",
 #                 "created_at": f"{str(datetime.datetime.now())}"
 #             }
+
 
 class ContentField(BaseField):
     def __init__(self, data, settings):
         self.content = data
         self.settings = settings
-        self.forbitten_words = [ # Not actually offensive but an example.
+        self.forbitten_words = [  # Not actually offensive but an example.
             "offensive",
             "word",
             "offensive word",

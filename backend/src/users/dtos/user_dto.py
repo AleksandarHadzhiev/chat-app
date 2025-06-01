@@ -6,10 +6,11 @@ from src.users.dtos.fields.password_field import PasswordField
 from src.users.dtos.fields.username_field import UsernameField
 from src.users.repositories.repository import Repository
 
+
 class UserDTO(BaseDTO):
-    def set(self, data, settings, rep: Repository=None):
+    def set(self, data, settings, rep: Repository = None):
         self.settings = settings
-        self.rep=rep
+        self.rep = rep
         self.verified = None
         self.errors = []
         self.data = data
@@ -37,7 +38,8 @@ class UserDTO(BaseDTO):
         user = await self.rep.get_by_email(email)
         if "user" in user:
             self.email = self.data["email"]
-        else: await self._is_already_verified(user)
+        else:
+            await self._is_already_verified(user)
 
     async def _is_already_verified(self, user):
         if user["verified"] is True:
@@ -60,12 +62,13 @@ class UserDTO(BaseDTO):
         if len(self.errors) > 0:
             return {"fail": self.errors}
         elif self.verified is not None:
-            return {"unverified": False,
-                    "id": self.verified["id"],
-                    "email": self.verified["email"],
-                    "username": self.data["username"],
-                    "password": self.data["password"],
-                    }
+            return {
+                "unverified": False,
+                "id": self.verified["id"],
+                "email": self.verified["email"],
+                "username": self.data["username"],
+                "password": self.data["password"],
+            }
         return {
             "email": self.email,
             "username": self.username,

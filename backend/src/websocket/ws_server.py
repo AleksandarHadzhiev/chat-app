@@ -6,6 +6,7 @@ from fastapi import WebSocket
 from src.messages.service import MessagesService
 from src.utils.authentication import User
 
+
 class ConnectionManager:
     def __init__(self):
         self.active_connections = {}
@@ -16,14 +17,16 @@ class ConnectionManager:
             self.active_connections[user.id] = ws
             text = f"{user.username} joined the server"
             message = {
-                "content": text, 
-                "group_id": 1, 
+                "content": text,
+                "group_id": 1,
                 "created_at": f"{str(datetime.datetime.now())}",
-                "user_id": int(admin_id), 
-                "author": "GGC", 
-                "code": self.generate_special_code()
+                "user_id": int(admin_id),
+                "author": "GGC",
+                "code": self.generate_special_code(),
             }
-            response = await MessagesService(db=db, settings=config).create(data=message)
+            response = await MessagesService(db=db, settings=config).create(
+                data=message
+            )
             if "fail" in response:
                 return response
             return {"message": "success"}
@@ -34,7 +37,7 @@ class ConnectionManager:
     def generate_special_code(self, user_id=1, group_id=1):
         initial_state = str(datetime.datetime.now())
         without_space = initial_state.replace(" ", "-")
-        without_column = without_space.replace(":","-")
+        without_column = without_space.replace(":", "-")
         final_code = f"{user_id}-{group_id}-{without_column}"
         return final_code
 

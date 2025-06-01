@@ -7,7 +7,7 @@ class NavigationDutchTranlsations(Base):
             "login": "Login",
             "home": "Startpagina",
             "account": "Rekening",
-            "groups": "Groepen"
+            "groups": "Groepen",
         }
 
     def get_translations(self) -> dict:

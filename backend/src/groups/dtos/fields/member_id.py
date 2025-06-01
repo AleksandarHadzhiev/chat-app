@@ -1,5 +1,6 @@
 from src.groups.dtos.fields.base import BaseField
 
+
 class MemberIdField(BaseField):
     def __init__(self, data, settings):
         self.member_id = data

@@ -7,9 +7,7 @@ class UsersRouter:
     def __init__(self, db, settings):
         self.router = APIRouter()
         self.controller = UsersController(db=db, settings=settings)
-        self.router.add_api_route(
-            "/me", self.controller.get_identity, methods=["GET"]
-        )
+        self.router.add_api_route("/me", self.controller.get_identity, methods=["GET"])
         self.router.add_api_route(
             "/register", self.controller.register, methods=["POST"]
         )

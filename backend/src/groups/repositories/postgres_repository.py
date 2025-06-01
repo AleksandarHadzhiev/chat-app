@@ -8,7 +8,6 @@ class PostgresRepository(Repository):
     def __init__(self, db):
         self.db = db
 
-
     def create(self, data):
         try:
             _db = self.db.get_db()
@@ -21,7 +20,6 @@ class PostgresRepository(Repository):
             logging.info("Created a group")
         except Exception as e:
             logging.exception(e)
-
 
     def _add_as_a_member(self, data):
         _db = self.db.get_db()
@@ -39,7 +37,6 @@ class PostgresRepository(Repository):
                 join_data = {"group_id": id, "user_id": data["admin"]}
                 self.join(join_data)
                 self._creeate_message_for_creating_chat(id=id, admin_id=data["admin"])
-
 
     def _creeate_message_for_creating_chat(self, id, admin_id):
         _db = self.db.get_db()
@@ -62,9 +59,8 @@ class PostgresRepository(Repository):
     def _generate_special_code(self):
         initial_state = str(datetime.datetime.now())
         without_space = initial_state.replace(" ", "-")
-        without_column = without_space.replace(":","-")
+        without_column = without_space.replace(":", "-")
         return without_column
-
 
     def get_all_for_user(self, user_id):
         _db = self.db.get_db()
@@ -80,7 +76,7 @@ class PostgresRepository(Repository):
         groups = cursor.fetchall()
         if len(groups) > 0:
             return self._format_groups_data(groups=groups)
-        return []      
+        return []
 
     def get_all(self):
         _db = self.db.get_db()
@@ -97,7 +93,6 @@ class PostgresRepository(Repository):
             return self._format_groups_data(groups=groups)
         return []
 
-
     def _format_groups_data(self, groups):
         formatted_groups = []
         group_id = 0
@@ -111,17 +106,13 @@ class PostgresRepository(Repository):
                     "title": group[2],
                     "admin_id": group[1],
                 }
-            if (len(group) >3 ):
-                member = {
-                    "id": group[3],
-                    "name": group[4]
-                }
+            if len(group) > 3:
+                member = {"id": group[3], "name": group[4]}
                 members.append(member)
                 formatted_group["members"] = members
             if formatted_group not in formatted_groups:
                 formatted_groups.append(formatted_group)
         return formatted_groups
-
 
     def join(self, data):
         _db = self.db.get_db()
@@ -139,7 +130,6 @@ class PostgresRepository(Repository):
         _db.commit()
         return {"message": "joined"}
 
-
     def _check_if_already_a_member(self, data):
         _db = self.db.get_db()
         cursor = _db.cursor()
@@ -153,7 +143,6 @@ class PostgresRepository(Repository):
         if len(members) > 0:
             return True
         return False
-
 
     def leave(self, data):
         try:
@@ -171,12 +160,12 @@ class PostgresRepository(Repository):
                     AND members.group_id = {data["group_id"]};
                     """
                     cursor.execute(leave_group)
-                _db.commit() 
+                _db.commit()
                 return {"message": "left"}
-            else: return {"fail": "not-member"}
+            else:
+                return {"fail": "not-member"}
         except Exception as e:
-            return {"fail": e}       
-
+            return {"fail": e}
 
     def kick_member_out(self, data):
         try:
@@ -184,9 +173,11 @@ class PostgresRepository(Repository):
             cursor = _db.cursor()
             group = self.get_group(data=data)
             if group:
-                is_member = self._check_if_already_a_member(data={"group_id": data["group_id"], "user_id": data["member_id"]})
+                is_member = self._check_if_already_a_member(
+                    data={"group_id": data["group_id"], "user_id": data["member_id"]}
+                )
                 if is_member:
-                    if (data["member_id"] == data["user_id"]):
+                    if data["member_id"] == data["user_id"]:
                         self.delete(data)
                     else:
                         kick_from_group = f"""
@@ -195,16 +186,16 @@ class PostgresRepository(Repository):
                             AND members.group_id = {data["group_id"]};
                         """
                         cursor.execute(kick_from_group)
-                        _db.commit() 
+                        _db.commit()
                     return {"message": "kicked"}
-                else: return {"fail": "not-member"}
+                else:
+                    return {"fail": "not-member"}
             return {"fail": "Unauthorized to remove member from group"}
         except Exception as e:
-            return {"fail": e}    
-
+            return {"fail": e}
 
     def get_group(self, data):
-        _db = self.db.get_db() 
+        _db = self.db.get_db()
         cursor = _db.cursor()
         get_all = f"""
             SELECT * FROM groups
@@ -217,7 +208,6 @@ class PostgresRepository(Repository):
             return self._format_groups_data(groups=groups)
         return []
 
-
     def edit(self, data):
         try:
             _db = self.db.get_db()
@@ -229,11 +219,10 @@ class PostgresRepository(Repository):
                 AND admin_id = {data["admin"]};
             """
             cursor.execute(edit_group)
-            _db.commit()  
+            _db.commit()
             return {"message": "edited"}
         except Exception as e:
             return {"fail": e}
-
 
     def delete(self, data):
         try:
@@ -250,7 +239,7 @@ class PostgresRepository(Repository):
                     WHERE members.group_id = {data["group_id"]};
                 """
             cursor.execute(kick_members)
-            _db.commit() 
+            _db.commit()
             return {"message": "deleted"}
         except Exception as e:
-            return {"fail": e}       
+            return {"fail": e}

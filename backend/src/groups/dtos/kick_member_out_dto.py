@@ -1,8 +1,9 @@
 from src.groups.dtos.base import BaseDTO
 from src.groups.dtos.fields.group_id import GroupIdField
-from src.groups.dtos.fields.user_id import UserIdField
 from src.groups.dtos.fields.member_id import MemberIdField
+from src.groups.dtos.fields.user_id import UserIdField
 from src.groups.repositories.repository import Repository
+
 
 class KickMemberOutDTO(BaseDTO):
     def set(self, data, settings, rep: Repository):
@@ -46,5 +47,5 @@ class KickMemberOutDTO(BaseDTO):
         return {
             "group_id": self.group_id,
             "user_id": self.user_id,
-            "member_id": self.member_id
+            "member_id": self.member_id,
         }

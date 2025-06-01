@@ -1,4 +1,5 @@
 import asyncio
+
 from src.users.dtos.base import BaseDTO
 from src.users.dtos.fields.email_field import EmailField
 from src.users.dtos.fields.password_field import PasswordField
@@ -6,7 +7,7 @@ from src.users.repositories.repository import Repository
 
 
 class LoginDTO(BaseDTO):
-    def set(self, data, settings, rep: Repository=None):
+    def set(self, data, settings, rep: Repository = None):
         self.rep = rep
         self.settings = settings
         self.errors = []
@@ -18,7 +19,8 @@ class LoginDTO(BaseDTO):
         ).validate_data()
         if type(response) == str:
             self.errors.append(response)
-        else: await self._check_if_user_exists()
+        else:
+            await self._check_if_user_exists()
 
     async def _check_if_user_exists(self):
         email = {"email": self.data["email"]}
@@ -27,7 +29,8 @@ class LoginDTO(BaseDTO):
             self.errors.append("user-not-found")
         elif user["verified"] is not True:
             self.errors.append("unverified")
-        else: self.email = email["email"]
+        else:
+            self.email = email["email"]
 
     async def set_password(self):
         response = PasswordField(
