@@ -36,6 +36,7 @@ pytest-order = "*"
 freezegun = "*"
 pyjwt = "*"
 cryptography = "*"
+pytest = "*"
 
 [dev-packages]
 
