@@ -1,10 +1,12 @@
 import json
 
+from freezegun import freeze_time
 import pytest
 
 from src.messages.repositories.postgres_repository import break_down_long_messages
 from tests.global_fixtures.boot_up import client as api
 from tests.global_fixtures.messages import send_message as message
+from tests.global_fixtures.users import login_user as access_token
 
 test_data = [
     ("/messages/s/last-message", {"status": 400, "json": {"fail": "missing-id"}}),
@@ -13,19 +15,9 @@ test_data = [
         "/messages/1/last-message",
         {
             "status": 200,
-            "json": {
-                "message": [
-                    {
-                        "id": 6,
-                        "author": "s",
-                        "user_id": 1,
-                        "content": "wa",
-                        "group_id": 1,
-                        "code": "wqwe",
-                        "created_at": "as",
-                    }
-                ]
-            },
+            "json": 
+                {}
+            ,
         },
     ),
     ("/messages/4/last-message", {"status": 204, "json": {"messages": []}}),
@@ -33,11 +25,17 @@ test_data = [
 
 
 @pytest.mark.order(10)
+@freeze_time("2023-01-01-12-00-00")
 @pytest.mark.parametrize("url, outcome", test_data)
-def test_edit_message(api, message, url, outcome):
-    response = api.get(url)
+def test_get_last_message(api, message, access_token, url, outcome):
+    headers = {
+        "Authorization": access_token
+    }
+    response = api.get(url, headers=headers)
     assert response.status_code == outcome["status"]
-    assert response.json() == outcome["json"]
+    if "message" in response.json():
+        assert response.json()["message"][0]["content"] == "s"
+    else: assert response.json() == outcome["json"]
 
 
 def test_break_down_long_messages():

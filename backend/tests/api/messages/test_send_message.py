@@ -1,108 +1,60 @@
+import json
+from freezegun import freeze_time
 import pytest
 from fastapi.testclient import TestClient
 
 from src.main import create_app
-
 test_data = [
     (
-        2,
-        "s",
         {
             "type": "message",
             "data": {
-                "user_id": int(0),
-                "author": "",
                 "content": "",
                 "group_id": int(0),
-                "code": "",
                 "created_at": "",
             },
         },
         {
             "type": "fail",
             "data": [
-                "empty-author",
-                "empty-code",
                 "empty-content",
                 "empty-created_at",
                 "undefined-group",
-                "undefined-user",
                 "is-not-member",
             ],
         },
     ),
     (
-        2,
-        "s",
         {
             "type": "message",
             "data": {
-                "user_id": int(0),
-                "author": "s",
                 "content": "s",
                 "group_id": int(0),
-                "code": "s",
                 "created_at": "s",
             },
         },
         {
             "type": "fail",
-            "data": ["undefined-group", "undefined-user", "is-not-member"],
+            "data": ["undefined-group", "is-not-member"],
         },
     ),
     (
-        2,
-        "s",
         {
             "type": "message",
             "data": {
-                "user_id": int(2),
-                "author": "s",
                 "content": "s",
                 "group_id": int(1),
-                "code": "s",
-                "created_at": "s",
-            },
-        },
-        {"type": "fail", "data": ["is-not-member"]},
-    ),
-    (
-        1,
-        "s",
-        {
-            "type": "message",
-            "data": {
-                "user_id": int(1),
-                "author": "s",
-                "content": "s",
-                "group_id": int(1),
-                "code": "wqwe",
                 "created_at": "as",
             },
         },
-        {
-            "type": "message",
-            "data": {
-                "user_id": 1,
-                "author": "s",
-                "content": "s",
-                "group_id": 1,
-                "code": "wqwe",
-                "created_at": "as",
-            },
-        },
+        {'type': 'message', 'data': {'content': 's', 'group_id': 1, 'created_at': 'as', 'user_id': 1, 'author': 'administrator', 'code': '1-1-2023-01-01-12-00-00'}}
     ),
     (
-        1,
-        "s",
         {
             "type": "message",
             "data": {
-                "user_id": int(1),
-                "author": "s",
                 "content": "word",
                 "group_id": int(1),
-                "code": "wqwe",
                 "created_at": "as",
             },
         },
@@ -111,12 +63,17 @@ test_data = [
 ]
 
 
+@freeze_time("2023-01-01 12:00:00")
 @pytest.mark.order(8)
-@pytest.mark.parametrize("id, username, data, outcome", test_data)
-def test_ws_connection(id, username, data, outcome):
-    app = create_app(server="test")
+@pytest.mark.parametrize("data, outcome", test_data)
+def test_ws_connection(data, outcome):
+    app = create_app(server="test")["app"]
     client = TestClient(app=app)
-    ws_url = f"/ws/{id}/{username}/1"
+    response = client.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    assert response.status_code == 200
+    assert  "access_token" in response.json()
+    token = response.json()["access_token"]
+    ws_url = f"/ws/{token}/1"
     with client.websocket_connect(ws_url) as websocket:
         websocket.send_json(data=data)
         message = websocket.receive_json()

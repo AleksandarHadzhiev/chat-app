@@ -50,19 +50,6 @@ test_data = [
         {"status": 400, "json": {"fail": ["unverified"]}},
     ),
     (
-        {"email": "aleks_01_@gmail.com", "password": "admin"},
-        {
-            "status": 200,
-            "json": {
-                "email": "aleks_01_@gmail.com",
-                "id": 1,
-                "password": "admin",
-                "username": "administrator",
-                "verified": True,
-            },
-        },
-    ),
-    (
         {"email": "aleks_01_@gmail.com", "password": "pesho"},
         {"status": 400, "json": {"fail": "wrong-credentials"}},
     ),
@@ -74,3 +61,10 @@ def test_login(api, data, outcome):
     response = api.post("/login", content=json.dumps(data))
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]
+
+
+def test_login_success(api):
+    response = api.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data

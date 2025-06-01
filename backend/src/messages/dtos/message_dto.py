@@ -16,6 +16,8 @@ class MessageDTO(BaseDTO):
         self.errors = []
         self.data = data
         self.rep = rep
+        self.user_id = 0
+        self.group_id = 0
 
     async def set_user_id(self):
         response = UserIdField(

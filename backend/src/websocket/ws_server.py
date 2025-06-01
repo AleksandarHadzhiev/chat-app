@@ -43,7 +43,7 @@ class ConnectionManager:
 
     async def disconnect(self, id):
         socket: WebSocket = self.active_connections[id]
-        socket.close()
+        await socket.close()
 
     async def broadcast(self, message):
         for connection in self.active_connections:

@@ -5,7 +5,7 @@ import requests
 
 from tests.global_fixtures.boot_up import create_app as api
 
-MAILHOG_API_URL = "http://localhost:8025/api/v2/messages"
+MAILHOG_API_URL = "http://127.0.0.1:8025/api/v2/messages"
 
 
 @pytest.fixture(scope="session")
@@ -21,6 +21,16 @@ def create_user_to_verify(api):
     assert response.status_code == 201
     assert response.json() == {"message": "success"}
     return mailhog(response=response, email=email, type="code")
+
+
+@pytest.fixture(scope="session")
+def login_user(api):
+    response = api.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data
+    print(data["access_token"])
+    return data["access_token"]
 
 
 @pytest.fixture(scope="session")

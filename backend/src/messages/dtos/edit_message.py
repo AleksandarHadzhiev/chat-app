@@ -62,6 +62,7 @@ class EditMessageDTO(BaseDTO):
 
     async def check_if_is_member(self):
         await asyncio.gather(self.set_group_id(), self.set_user_id())
+        print(self.errors)
         if "undefined-group" not in self.errors or "undefined-user" not in self.errors:
             is_part = await self.rep.is_part_of_group(self.user_id, self.group_id)
             if is_part is False:

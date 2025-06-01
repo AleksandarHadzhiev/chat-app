@@ -9,4 +9,4 @@ pipenv install
 
 # Run pyteest
 echo "____________________PYTEST____________________"
-pipenv run test-no-workers
+pipenv run test-4

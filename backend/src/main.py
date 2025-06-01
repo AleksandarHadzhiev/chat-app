@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.utils.rsa_generator import RSAGenerator
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.groups.route import GroupsRouter
@@ -16,10 +17,13 @@ from src.websocket.ws_server import ConnectionManager
 
 
 def create_app(
-    server="test", secret="secret-key-placeholder", public_key="key-placeholder"
+    server="test", password="secret-key-placeholder"
 ):
+    rsa_gen = RSAGenerator(password=password)
+    private_key = rsa_gen.get_private_key()
+    public_key = rsa_gen.get_public_key()
     config = ConfigFactory(type=server).get_config()
-    config.set_secret_key(key=secret)
+    config.set_secret_key(key=private_key)
     config.set_public_key(key=public_key)
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
     origins = ["http://localhost:3000"]

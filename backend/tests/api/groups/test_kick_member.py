@@ -3,6 +3,7 @@ import json
 import pytest
 
 from tests.global_fixtures.boot_up import client as api
+from tests.global_fixtures.users import login_user as access_token
 
 test_data = [
     (
@@ -69,7 +70,9 @@ test_data = [
 
 @pytest.mark.order(6)
 @pytest.mark.parametrize("id, member, admin, outcome", test_data)
-def test_kick_member_out(api, id, member, admin, outcome):
-    response = api.delete(f"/groups/{id}/kick/{member}/{admin}")
+def test_kick_member_out(api, access_token, id, member, admin, outcome):
+    access_token = access_token
+    headers={"Authorization": access_token}
+    response = api.delete(f"/groups/{id}/kick/{member}/{admin}", headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

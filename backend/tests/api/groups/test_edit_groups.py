@@ -3,6 +3,7 @@ import json
 import pytest
 
 from tests.global_fixtures.boot_up import client as api
+from tests.global_fixtures.users import login_user as access_token
 
 test_data = [
     (
@@ -74,7 +75,9 @@ test_data = [
 
 @pytest.mark.order(3)
 @pytest.mark.parametrize("id, data, outcome", test_data)
-def test_edit_groups(api, id, data, outcome):
-    response = api.put(f"/groups/{id}", content=json.dumps(data))
+def test_edit_groups(api, access_token, id, data, outcome):
+    access_token = access_token
+    headers={"Authorization": access_token}
+    response = api.put(f"/groups/{id}", content=json.dumps(data), headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]
