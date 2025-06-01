@@ -35,6 +35,7 @@ mailhog = "*"
 pytest-order = "*"
 freezegun = "*"
 pyjwt = "*"
+cryptography = "*"
 
 [dev-packages]
 

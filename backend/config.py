@@ -5,8 +5,9 @@ class Config:
     """Base config."""
     SMTP_SERVER = ""
     SECRET_KEY = ""
+    PUBLIC_KEY = ""
     SMTP_PORT = 1025
-    ALGORITHM = "HS256"
+    ALGORITHM = "RS256"
     ACCESS_TOKEN_EXPIRE_MINUTES = 30
     ENVIRONMENT = ""
     BASE_URL = ""
@@ -20,6 +21,9 @@ class Config:
     
     def set_secret_key(self, key):
         self.SECRET_KEY = key
+    
+    def set_public_key(self, key):
+        self.PUBLIC_KEY = key
 
 
 class ConfigFactory:
@@ -44,13 +48,14 @@ class ConfigFactory:
 class DevConfig(Config):
     """Development config."""
     SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "127.0.0.1"
     SMTP_PORT = 1025
     ENVIRONMENT = "dev"
     BASE_URL = "127.0.0.1"
     USERNAME = "user"
     PASSWORD = "user"
-    HOST = "localhost"
+    HOST = "127.0.0.1"
     DATABASE_PORT = "5432"
     DATABASE_DB = "users"
     FRONTEND_URL = "https://localhost:3000"
@@ -59,6 +64,7 @@ class DevConfig(Config):
 class TestConfig(Config):
     """Test config."""
     SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "127.0.0.1"
     SMTP_PORT = 1025
     ENVIRONMENT = "test"
@@ -66,7 +72,7 @@ class TestConfig(Config):
     FRONTEND_URL = "https://localhost:3000"
     USERNAME = "test"
     PASSWORD = "test"
-    HOST = "localhost"
+    HOST = "127.0.0.1"
     DATABASE_PORT = "5432"
     DATABASE_DB = "test"
 
@@ -74,6 +80,7 @@ class TestConfig(Config):
 class DockerConfig(Config):
     """Docker config."""
     SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
     SMTP_SERVER = "mailhog"
     SMTP_PORT = 1025
     ENVIRONMENT = "docker"

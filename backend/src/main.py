@@ -13,9 +13,10 @@ from src.users.routers import UsersRouter
 from src.websocket.ws_server import ConnectionManager
 
 
-def create_app(server="test", secret="secret-key-placeholder"):
+def create_app(server="test", secret="secret-key-placeholder", public_key="key-placeholder"):
     config = ConfigFactory(type=server).get_config()
     config.set_secret_key(key=secret)
+    config.set_public_key(key=public_key)
     db = DBFactory(config.ENVIRONMENT, settings=config).get_db()
     origins = ["http://localhost:3000"]
 
