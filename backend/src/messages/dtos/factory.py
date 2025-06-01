@@ -9,12 +9,14 @@ class DTOFactory:
         self.data = data
         self.settings = settings
         self.supported_formats = [
-            [{"user_id": int(0), 
-                "author": "", 
+            [{
                 "content": "", 
                 "group_id": int(0), 
-                "code": "",
-                "created_at": ""}, MessageDTO()],
+                "created_at": "",
+                "user_id": int(0), 
+                "author": "",
+                "code": ""
+                }, MessageDTO()],
             [{
                 "content": "",
                 "code": "", 

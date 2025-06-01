@@ -1,15 +1,18 @@
 import random
 import string
+import hashlib
 
 from src.emails.mailhog_smtp import SMTPServer
 from src.users.dtos.factory import DTOFactory
 from src.users.repositories.factory import RepositoryFactory
-import hashlib
+from src.utils.authentication import Authenticator
+
 
 class UsersService:
     def __init__(self, db, settings):
         self.settings = settings
         self.db = db
+        self.auth = Authenticator(config=settings, db=db)
         self.repository = RepositoryFactory(db=db).get_db()
         self.code_length = settings.CODE_LENGTH
         self.verifications = {}
@@ -25,10 +28,10 @@ class UsersService:
         if "fail" in data:
             return data
         self._encrypt_password(data=data)
-        print(data)
         response = self.repository.login(data=data)
         if response:
-            return response
+            access_token = self.auth.create_token(data={"sub":data["email"]})
+            return {"access_token": access_token}
         return {"fail": "wrong-credentials"}
 
     async def is_allowed_action(self, data):        
@@ -53,7 +56,6 @@ class UsersService:
             return data
         email = data["email"]
         self._encrypt_password(data=data)
-        print(data)
         code = self._generate_code(email=email)
         email_data = {
             "body": code,

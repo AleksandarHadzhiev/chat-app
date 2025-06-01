@@ -150,7 +150,6 @@ class PostgresRepository(Repository):
         """
         cursor.execute(get_all)
         members = cursor.fetchall()
-        print(members)
         if len(members) > 0:
             return True
         return False
@@ -186,8 +185,6 @@ class PostgresRepository(Repository):
             group = self.get_group(data=data)
             if group:
                 is_member = self._check_if_already_a_member(data={"group_id": data["group_id"], "user_id": data["member_id"]})
-                print(data)
-                print(is_member)
                 if is_member:
                     if (data["member_id"] == data["user_id"]):
                         self.delete(data)

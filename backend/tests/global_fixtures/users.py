@@ -1,5 +1,4 @@
 import json
-import time
 import pytest
 from tests.global_fixtures.boot_up import create_app as api
 import requests
@@ -42,7 +41,7 @@ def _get_mailhog_messages():
     response = requests.get(MAILHOG_API_URL)
     if response.status_code == 200:
         return response.json().get("items", [])
-    else: print(response)
+    else: return []
 
 
 def _find_message(message, receivers, email, type: str = "code"):

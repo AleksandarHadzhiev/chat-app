@@ -139,5 +139,5 @@ class PostgresRepository(Repository):
             _db.commit() 
             return {"message": "success"}
         except Exception as e:
-            print(e.args)
+            logging.error(e.args)
             return {"fail": e} 

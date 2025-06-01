@@ -3,11 +3,26 @@ import json
 from fastapi import Request, Response, status
 
 from src.users.service import UsersService
-
+from src.utils.authentication import Authenticator, User
 
 class UsersController:
     def __init__(self, db, settings):
         self.service = UsersService(db=db, settings=settings)
+        self.auth = Authenticator(config=settings, db=db)
+
+    async def get_identity(self, request: Request):
+        headers = request.headers
+        if "authorization" in headers:
+            token = headers["authorization"]
+            user: User= await self.auth.get_current_user(token=token)
+            if "fail" in user:
+                return Response(content=json.dumps({"fail": "Unauthorized"}), status_code=status.HTTP_401_UNAUTHORIZED)
+            else:
+                if user.verified == False:
+                    return Response(content=json.dumps({"fail": "Unauthorized"}), status_code=status.HTTP_401_UNAUTHORIZED)
+                data = {"email":user.email, "name": user.username, "id": user.id, "verified": user.verified}
+                return Response(content=json.dumps(data), status_code=status.HTTP_200_OK)
+        return Response(content=json.dumps({"fail": "Unauthorized"}), status_code=status.HTTP_401_UNAUTHORIZED)
 
     async def register(self, request: Request):
         data: dict = await request.json()

@@ -9,7 +9,7 @@ class GroupsRouter:
         self.controller = GroupsController(db=db, settings=settings)
         self.router.add_api_route("/", self.controller.create, methods=["POST"])
         self.router.add_api_route(
-            "/user/{user_id}", self.controller.get_all_for_user, methods=["GET"]
+            "/{user_id}", self.controller.get_all_for_user, methods=["GET"]
         )
         self.router.add_api_route("/", self.controller.get_all, methods=["GET"])
         self.router.add_api_route("/{id}", self.controller.get_group, methods=["GET"])
