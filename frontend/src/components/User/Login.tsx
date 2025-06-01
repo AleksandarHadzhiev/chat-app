@@ -48,8 +48,7 @@ export default function Login() {
             setNotificaiton(response.message)
         }
         else {
-            localStorage.setItem("user", JSON.stringify(response))
-            router.push('/')
+            router.push('/me')
         }
     }
     return (

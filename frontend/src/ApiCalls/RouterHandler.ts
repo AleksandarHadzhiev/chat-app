@@ -8,9 +8,9 @@ import { ForgotPasswordDTO } from "./DTOs/User/ForgotPasswordDTO";
 import { ResetPasswordDTO } from "./DTOs/User/ResetPassword";
 export default class RoutersHandler {
     url = process.env.NEXT_PUBLIC_BACKEND_URL
-    async get(endpoint: string) {
+    async get(endpoint: string, headers: any = null) {
         try {
-            const response = await axios.get(`${this.url}/${endpoint}`)
+            const response = await axios.get(`${this.url}/${endpoint}`, { headers: headers })
             if (response.status == 200) return response.data
             else if (response.data == 204) return response.data
             else return { "fail": "Unknown reason" }
@@ -25,10 +25,9 @@ export default class RoutersHandler {
         }
     }
 
-    async post(endpoint: string, data: LoginDTO | ResetPasswordDTO | ForgotPasswordDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
-        console.log(this.url)
+    async post(headers: any = null, endpoint: string, data: LoginDTO | ResetPasswordDTO | ForgotPasswordDTO | GeneralGroupDTO | RegisterDTO | VerifyDTO | null) {
         try {
-            const response = await axios.post(`${this.url}/${endpoint}`, data)
+            const response = await axios.post(`${this.url}/${endpoint}`, data, { headers: headers })
             if (response.status == 201) {
                 return response.data
             }
@@ -47,9 +46,9 @@ export default class RoutersHandler {
 
     }
 
-    async put(endpoint: string, data: GeneralGroupDTO | EditMessageDTO | null) {
+    async put(endpoint: string, data: GeneralGroupDTO | EditMessageDTO | null, headers: any = null) {
         try {
-            const response = await axios.put(`${this.url}/${endpoint}`, data)
+            const response = await axios.put(`${this.url}/${endpoint}`, data, { headers: headers })
             if (response.status == 201) {
                 return response.data
             }
@@ -67,9 +66,9 @@ export default class RoutersHandler {
         }
     }
 
-    async delete(endpoint: string) {
+    async delete(endpoint: string, headers: any = null) {
         try {
-            const response = await axios.delete(`${this.url}/${endpoint}`)
+            const response = await axios.delete(`${this.url}/${endpoint}`, { headers: headers })
             if (response.status == 200) return response.data
             else {
                 return {

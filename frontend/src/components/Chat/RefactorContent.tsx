@@ -2,9 +2,13 @@
 
 import { ChangeEvent, MouseEvent, useState } from "react"
 import MessagesHandler from "@/ApiCalls/MessagesHandler"
+import { useRouter } from "next/navigation";
+
+
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function RefactorMessageContent({ user, group, code, setEditMessage, message, setTriggerOff, trigger, socket, translations, widthType }) {
+    const router = useRouter()
 
     const [content, setContent] = useState(message)
     const handler = new MessagesHandler()
@@ -40,6 +44,7 @@ export default function RefactorMessageContent({ user, group, code, setEditMessa
         else if ("tag" in response && response.tag == "fail") {
             alert(response.message)
         }
+        else router.push("/login")
     }
 
     return (

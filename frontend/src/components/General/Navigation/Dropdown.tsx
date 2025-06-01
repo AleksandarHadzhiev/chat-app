@@ -15,8 +15,6 @@ export default function Dropdown({ setIsVisible, _language }) {
         login: "Login"
     })
 
-    console.log("VISIBLE")
-
     useEffect(() => {
         async function load() {
             const ln = _language

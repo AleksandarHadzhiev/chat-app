@@ -1,18 +1,22 @@
 import GroupsHandler from "@/ApiCalls/GroupsHandler"
 import { Key, useEffect, useState } from "react"
 import Chat from "./Chat"
+import { useRouter } from "next/navigation";
+
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function Sidebar({ isVisible, setIsVisible, id, setGroup, displayMessages, group, triggerLastMessage, translations, widthType }) {
     const handler = new GroupsHandler()
+    const router = useRouter()
     const [groups, setGroups] = useState([])
     useEffect(() => {
-        async function getAllGroupsForUser(id: Number) {
+        async function getAllGroupsForUser() {
             const groups = await handler.getGroupsWhereUserIsAMember(id)
-            console.log(groups)
-            setGroups(groups)
+            if ("tag" in groups)
+                router.push("/login")
+            else setGroups(groups)
         }
-        getAllGroupsForUser(id)
+        getAllGroupsForUser()
     }, [id, groups.length])
 
     function changeChat(_group: any) {
@@ -33,7 +37,6 @@ export default function Sidebar({ isVisible, setIsVisible, id, setGroup, display
     function setSidebarStyleBasedOnDevice() {
         // Ако е на мобилен, трябва в зависимост isVisible да е Sidebar цярата страница,
         if (widthType == "mobile" && isVisible) {
-            console.log("FULL SCREEN")
             return "w-full h-full"
         }
         else if (widthType == "mobile" && !isVisible)

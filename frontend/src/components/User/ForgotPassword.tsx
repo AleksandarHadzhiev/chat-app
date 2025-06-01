@@ -7,7 +7,6 @@ import UsersHandler from "@/ApiCalls/UsersHandler"
 import TranslationLoader from "@/tools/TranslationLoader"
 import Link from "next/link"
 import ChildContext from "../General/Context"
-import { useRouter } from "next/navigation"
 
 export default function ForgotPassword() {
     const [translations, setTranslations] = useState(
@@ -46,7 +45,6 @@ export default function ForgotPassword() {
         }
 
         const response = await handler.forgotPassowrd(data, translations)
-        console.log(response)
         if ("tag" in response) {
             setResponse(response.tag)
             setNotificaiton(response.message)

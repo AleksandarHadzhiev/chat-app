@@ -21,7 +21,7 @@ export default function GroupBox({ widthType, groups, user, group, translations,
 
     function isAlreadyAMember(group: any) {
         let isMember = false
-        group.members.forEach((member: { id: Number, name: String }) => {
+        group.members.forEach((member: { id: number, name: string }) => {
             if (member.id == user.id) {
                 isMember = true
             }
@@ -29,7 +29,7 @@ export default function GroupBox({ widthType, groups, user, group, translations,
         return isMember
     }
 
-    async function joinGroup(group_id: Number) {
+    async function joinGroup(group_id: number) {
         const response = await handler.joinGroup(user.id, group.id, translations)
         triggerUpdate(group_id)
 
@@ -101,9 +101,11 @@ export default function GroupBox({ widthType, groups, user, group, translations,
                 }
                 {
                     isNotAllowedToJoin(group) ? (<button
+                        id="leave"
                         onClick={() => { leaveGroup(group) }}
                         className={` ${widthType == "mobile" ? "text-xl" : " "} w-full mt-2 h-1/2 bg-orange-600 text-white rounded-md hover:bg-orange-400`}>{translations.leave}</button>) : (
                         <button
+                            id="join"
                             onClick={() => { joinGroup(group.id) }}
                             className={"w-full mt-2 h-1/2 bg-orange-600 text-white rounded-md hover:bg-orange-400"}>{translations.join}</button>
                     )

@@ -51,8 +51,7 @@ export default function Navigation({ setLanguage, isVisible, setIsVisible, width
                             <SmallNavigation
                                 setLanguage={setLanguage}
                                 setIsVisible={setIsVisible}
-                                isVisible={isVisible}
-                                translations={translations} />
+                                isVisible={isVisible} />
                         ) :
                         (
                             <MobileNavigation

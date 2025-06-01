@@ -5,7 +5,7 @@ import { Key, MouseEvent } from "react"
 // Providing a function and can not specify the type
 export default function MembersDialog({ trigerUpdate, closeDialog, getAllGroups, group, user, translations, setNotificaiton, setResponse }) {
     const handler = new GroupsHandler()
-    async function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: Number) {
+    async function kickMemberOut(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, member: number) {
         e.preventDefault()
         const response = await handler.kickMemberFromGroup(group.id, user.id, member, translations)
         if ("tag" in response) {
@@ -20,7 +20,7 @@ export default function MembersDialog({ trigerUpdate, closeDialog, getAllGroups,
         if (adminMenu) adminMenu.className = "hidden"
     }
 
-    function disaplyRole(adminId: Number, memberId: Number) {
+    function disaplyRole(adminId: number, memberId: number) {
         if (adminId == memberId)
             return "Admin"
         return "Member"

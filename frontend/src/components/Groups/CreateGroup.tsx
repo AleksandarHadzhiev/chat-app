@@ -11,9 +11,9 @@ export default function CreateGroup({ triggerUpdate, closeDialog, getAllGroups, 
     const handler = new GroupsHandler()
     async function create(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        const userStringed = localStorage.getItem("user")
-        if (userStringed) {
-            const user = JSON.parse(userStringed)
+        const userstringed = localStorage.getItem("user")
+        if (userstringed) {
+            const user = JSON.parse(userstringed)
             const createGroupDTO: GeneralGroupDTO = {
                 title: title,
                 admin: user.id

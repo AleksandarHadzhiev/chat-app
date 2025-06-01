@@ -6,15 +6,19 @@ import { SendMessage } from "./SendMessage";
 import Sidebar from "./Sidebar";
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import UpdateMessage from "./UpdateMessage";
 import TranslationLoader from "@/tools/TranslationLoader";
 import MessagesHandler from "@/ApiCalls/MessagesHandler";
 export function ChatPage() {
+    const router = useRouter()
+
+    if (localStorage.getItem("access_token") == null) {
+        router.push("/login")
+    }
+
     const handler = new MessagesHandler()
     const LEGNTH_ROW_FOR_READABLE_MESSAGE = 20
     const [touchStart, setTouchStart] = useState(0)
-    const router = useRouter()
     const [triggerGettingLastMessage, setTriggerGettingLastMessage] = useState(false)
     const [group, setGroup] = useState({ id: Number(1), title: String("General Group Chat"), admin_id: Number(1) })
     const [socket, setSocket] = useState<WebSocket>()
@@ -36,8 +40,7 @@ export function ChatPage() {
     const [user, setUser] = useState({
         id: Number(),
         email: String(),
-        password: String(),
-        username: String(),
+        name: String(),
         verified: Boolean(),
     })
 
@@ -50,11 +53,14 @@ export function ChatPage() {
 
     async function getMessages(id: any) {
         const _messages = await handler.getAllMessages(id)
+        if ("tag" in _messages) {
+            router.push("/login")
+        }
         setMessages(_messages)
         displayMessages(_messages)
     }
 
-    function displayMessages(messages: [{ id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }]) {
+    function displayMessages(messages: [{ id: number, content: string, author: string, group_id: number, user_id: number, code: string }]) {
         const panel = document.getElementById("panel")
         if (panel?.firstChild)
             panel?.replaceChildren()
@@ -64,7 +70,7 @@ export function ChatPage() {
         }
     }
 
-    function displayPossibleActions(data: { id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }) {
+    function displayPossibleActions(data: { id: number, content: string, author: string, group_id: number, user_id: number, code: string }) {
         removeActions()
         const message = document.getElementById(`loaded-message-${data.code}`)
         const container = document.createElement('div')
@@ -113,13 +119,15 @@ export function ChatPage() {
         setCode(_code)
     }
 
-    async function deleteMessage(_code: String) {
+    async function deleteMessage(_code: string) {
         // Delete message in DB
         const response = await handler.deleteAMessage(_code, user.id, group.id, translations)
         if ("tag" in response && response.tag == "success") {
             const message = document.getElementById(`loaded-message-${_code}`)
             message?.remove()
         }
+        else if ("tag" in response && response.tag == "redirect")
+            router.push("/login")
     }
 
     function removeActions() {
@@ -130,7 +138,7 @@ export function ChatPage() {
         }
     }
 
-    function displayMessage(data: { id: Number, content: String, author: String, group_id: Number, user_id: Number, code: String }) {
+    function displayMessage(data: { id: number, content: string, author: string, group_id: number, user_id: number, code: string }) {
         const panel = document.getElementById(`panel`)
         const container = document.createElement('div')
         container.setAttribute("id", `loaded-message-${data.code}`)
@@ -143,10 +151,12 @@ export function ChatPage() {
             }
         }
         container.ontouchstart = function (event: TouchEvent) {
+            event.preventDefault()
             setTouchStart(Date.now())
         }
 
         container.ontouchend = function (event: TouchEvent) {
+            event.preventDefault()
             const ms = Date.now() - touchStart
             const difference = Math.floor(ms / 1000)
             if (difference > 1) {
@@ -158,7 +168,7 @@ export function ChatPage() {
         container.oncontextmenu = function (event: MouseEvent) {
             event.preventDefault()
         }
-        const isOwnMessage = data.author == user.username
+        const isOwnMessage = data.author == user.name
         container.className = `overflow-hidden flex flex-col w-full pb-2 ${isOwnMessage ? "justify-end pr-2" : "pl-2"}`
         const fullFormatMessage = document.createElement('div')
         fullFormatMessage.className = "flex w-full"
@@ -178,7 +188,7 @@ export function ChatPage() {
         panel?.appendChild(container)
     }
 
-    function displayReadableMessage(content: String) {
+    function displayReadableMessage(content: string) {
         if (content.length > LEGNTH_ROW_FOR_READABLE_MESSAGE && !content.includes(" ")) {
             const breakingPoints = Math.round(content.length / LEGNTH_ROW_FOR_READABLE_MESSAGE)
             let message = ``
@@ -204,30 +214,27 @@ export function ChatPage() {
         loadTranslations()
         getMessages(group.id)
         if (localStorage) {
-
-            const userStringed = localStorage.getItem("user")
-            if (userStringed)
-                setUser(JSON.parse(userStringed))
-            else {
-                router.push("/login")
+            const accessToken = localStorage.getItem("access_token")
+            const userData = localStorage.getItem("user")
+            if (userData) {
+                setUser(JSON.parse(userData))
             }
-            if (user.username != '') {
-                if (socket == undefined) {
-                    const url = `http://localhost:8000/ws/${user.id}/${user.username}/${group.admin_id}`
-                    localStorage.setItem("ws", url)
-                    const socket = new WebSocket(url)
-                    console.log(socket)
-                    setSocket(socket)
-                }
+            if (socket == undefined) {
+                const url = `http://localhost:8000/ws/${accessToken}/${group.admin_id}`
+                localStorage.setItem("ws", url)
+                const socket = new WebSocket(url)
+                setSocket(socket)
             }
         }
 
     }, [user.id, group, language])
 
     socket?.addEventListener('open', (event) => {
+        event.preventDefault()
     })
 
     socket?.addEventListener('close', (event) => {
+        event.preventDefault()
     })
 
     function setPanelStyleBasedOnDevice() {
@@ -276,7 +283,6 @@ export function ChatPage() {
                     trigger={triggerGettingLastMessage}
                     setTriggerOff={setTriggerGettingLastMessage}
                     socket={socket}
-                    user={user}
                     group={group}
                     setIsWriting={setIsWriting} />}
             </div>) : <p>Loading...</p>}

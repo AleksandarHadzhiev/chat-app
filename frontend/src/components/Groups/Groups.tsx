@@ -8,11 +8,14 @@ import TranslationLoader from "@/tools/TranslationLoader"
 import Notification from "../General/Notification"
 import GroupBox from "./GroupBox"
 import ButtonToOpenAddGroupDialog from "./ButtonToOpenAddGroupDialog"
+import { useRouter } from "next/navigation";
+
 
 //@ts-expect-error
 // Providing a function and can not specify the type
 export default function Groups({ socket }) {
     const _socket: WebSocket = socket
+    const router = useRouter()
     const [switcher, setSwitcher] = useState(false)
     _socket.onmessage = (event) => {
         const json = JSON.parse(event.data)
@@ -55,16 +58,14 @@ export default function Groups({ socket }) {
     const [isOpenDialog, setOpenDialog] = useState(false)
     const [groups, setGroups] = useState([])
     const [user, setUser] = useState<{
-        id: Number,
-        email: String,
-        password: String,
-        username: String,
-        verified: Boolean,
+        id: number,
+        email: string,
+        name: string,
+        verified: boolean,
     }>({
         id: Number(0),
         email: String(),
-        password: String(),
-        username: String(),
+        name: String(),
         verified: Boolean(),
     })
 
@@ -85,13 +86,14 @@ export default function Groups({ socket }) {
 
     async function getAllGroups() {
         const groups = await handler.getAllGroups()
-        setGroups(groups)
+        if ("tag" in groups) { router.push("/login") }
+        else setGroups(groups)
     }
 
     useEffect(() => {
-        const userStringed = localStorage.getItem("user")
-        if (userStringed) {
-            setUser(JSON.parse(userStringed))
+        const userstringed = localStorage.getItem("user")
+        if (userstringed) {
+            setUser(JSON.parse(userstringed))
         }
         getAllGroups()
         loadTranslations()
@@ -101,12 +103,10 @@ export default function Groups({ socket }) {
         const notification = {
             type: "notification",
             data: {
-                user: user.username,
                 action: "groups",
                 group: group_id ? group_id : 0
             }
         }
-        console.log(socket)
         socket?.send(JSON.stringify(notification))
     }
 

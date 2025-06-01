@@ -3,12 +3,12 @@ import { MessageDTO } from "@/ApiCalls/DTOs/Other/MessageDTO"
 import MessagesHandler from "@/ApiCalls/MessagesHandler"
 //@ts-expect-error
 // Providing a function and can not specify the type
-export function SendMessage({ widthType, socket, user, group, setIsWriting, setTriggerOff, trigger, translations }) {
+export function SendMessage({ widthType, socket, group, setIsWriting, setTriggerOff, trigger, translations }) {
 
     const handler = new MessagesHandler()
 
     const [message, setMessage] = useState<{
-        type: String,
+        type: string,
         data: MessageDTO
     }>()
 
@@ -27,11 +27,8 @@ export function SendMessage({ widthType, socket, user, group, setIsWriting, setT
         setMessage({
             type: "message",
             data: {
-                user_id: user.id,
-                author: user.username,
                 content: e.target.value,
                 group_id: group.id,
-                code: "1",
                 created_at: "",
             }
         })
@@ -42,7 +39,6 @@ export function SendMessage({ widthType, socket, user, group, setIsWriting, setT
         const notification = {
             type: "notification",
             data: {
-                user: user.username,
                 action: "writing",
                 group: group.id
             }
@@ -55,7 +51,6 @@ export function SendMessage({ widthType, socket, user, group, setIsWriting, setT
         const notification = {
             type: "notification",
             data: {
-                user: user.username,
                 action: "stopped",
                 group: group.id
             }

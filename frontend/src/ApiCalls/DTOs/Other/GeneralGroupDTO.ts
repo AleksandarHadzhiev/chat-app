@@ -1,4 +1,4 @@
 export type GeneralGroupDTO = {
     title: string;
-    admin: Number;
+    admin: number;
 }

@@ -4,7 +4,7 @@ import LanguagePicker from "../LanguagePicker"
 
 //@ts-expect-error
 // Providing a function and can not specify the type
-export default function SmallNavigation({ setLanguage, setIsVisible, isVisible, translations }) {
+export default function SmallNavigation({ setLanguage, setIsVisible, isVisible }) {
     return (
         <div className="w-full h-full flex bg-white items-center justify-center">
             <div className="w-5/7 h-full flex flex-col">

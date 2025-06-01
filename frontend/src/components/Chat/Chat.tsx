@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import MessagesHandler from "@/ApiCalls/MessagesHandler"
 
@@ -34,8 +33,8 @@ export default function Chat({ widthType, _group, changeChat, isVisible, trigger
     }
 
     function calculateDayDifference(dateSend: any, today: any) {
-        let timeDifference = today - dateSend;
-        let daysDifference = timeDifference / (1000 * 3600 * 24);
+        const timeDifference = today - dateSend;
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
         return Math.round(daysDifference);
     }
 
