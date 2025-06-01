@@ -64,7 +64,10 @@ def test_login(api, data, outcome):
 
 
 def test_login_success(api):
-    response = api.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    response = api.post(
+        "/login",
+        content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}),
+    )
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data

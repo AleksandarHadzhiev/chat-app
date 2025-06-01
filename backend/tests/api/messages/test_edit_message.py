@@ -1,12 +1,11 @@
 import json
 
-from freezegun import freeze_time
 import pytest
+from freezegun import freeze_time
 
 from tests.global_fixtures.boot_up import client as api
 from tests.global_fixtures.messages import send_message as message
 from tests.global_fixtures.users import login_user as access_token
-
 
 test_data = [
     (
@@ -46,7 +45,12 @@ test_data = [
         },
     ),
     (
-        {"content": "wa", "code": "1-1-2023-01-01-12-00-00", "user_id": int(1), "group_id": int(1)},
+        {
+            "content": "wa",
+            "code": "1-1-2023-01-01-12-00-00",
+            "user_id": int(1),
+            "group_id": int(1),
+        },
         {"status": 200, "json": {"message": "success"}},
     ),
 ]
@@ -56,9 +60,7 @@ test_data = [
 @pytest.mark.order(9)
 @pytest.mark.parametrize("data, outcome", test_data)
 def test_edit_message(api, access_token, message, data, outcome):
-    headers = {
-        "Authorization": access_token
-    }
+    headers = {"Authorization": access_token}
     response = api.put("/messages", content=json.dumps(data), headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

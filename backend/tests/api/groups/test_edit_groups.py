@@ -77,7 +77,7 @@ test_data = [
 @pytest.mark.parametrize("id, data, outcome", test_data)
 def test_edit_groups(api, access_token, id, data, outcome):
     access_token = access_token
-    headers={"Authorization": access_token}
+    headers = {"Authorization": access_token}
     response = api.put(f"/groups/{id}", content=json.dumps(data), headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

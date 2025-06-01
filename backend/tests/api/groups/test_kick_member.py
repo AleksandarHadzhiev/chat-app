@@ -72,7 +72,7 @@ test_data = [
 @pytest.mark.parametrize("id, member, admin, outcome", test_data)
 def test_kick_member_out(api, access_token, id, member, admin, outcome):
     access_token = access_token
-    headers={"Authorization": access_token}
+    headers = {"Authorization": access_token}
     response = api.delete(f"/groups/{id}/kick/{member}/{admin}", headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

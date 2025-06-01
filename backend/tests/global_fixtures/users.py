@@ -25,7 +25,10 @@ def create_user_to_verify(api):
 
 @pytest.fixture(scope="session")
 def login_user(api):
-    response = api.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    response = api.post(
+        "/login",
+        content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}),
+    )
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data

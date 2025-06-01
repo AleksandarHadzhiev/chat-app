@@ -1,26 +1,29 @@
 from src.languages.translations.base import Base
 from src.languages.translations.Dutch.emails import DutchEmailsTranslations
-from src.languages.translations.Dutch.forgot_password import (
-    DutchForgotPasswordTranslations,
-)
+from src.languages.translations.Dutch.forgot_password import \
+    DutchForgotPasswordTranslations
 from src.languages.translations.Dutch.groups import GroupsDutchTranlsations
 from src.languages.translations.Dutch.login import DutchLoginTranlsations
 from src.languages.translations.Dutch.messages import MessagesDutchTranlsations
-from src.languages.translations.Dutch.navigation import NavigationDutchTranlsations
-from src.languages.translations.Dutch.registration import DutchRegistrationTranslations
-from src.languages.translations.Dutch.reset_password import (
-    DutchResetPasswordTranslations,
-)
+from src.languages.translations.Dutch.navigation import \
+    NavigationDutchTranlsations
+from src.languages.translations.Dutch.registration import \
+    DutchRegistrationTranslations
+from src.languages.translations.Dutch.reset_password import \
+    DutchResetPasswordTranslations
 from src.languages.translations.English.emails import EnglishEmailsTranslations
-from src.languages.translations.English.forgot_password import (
-    ForgotPasswordTranslations,
-)
+from src.languages.translations.English.forgot_password import \
+    ForgotPasswordTranslations
 from src.languages.translations.English.groups import GroupsEnglishTranlsations
 from src.languages.translations.English.login import LoginTranlsations
-from src.languages.translations.English.messages import MessagesEnglishTranlsations
-from src.languages.translations.English.navigation import NavigationEnglishTranlsations
-from src.languages.translations.English.registration import RegistrationTranslations
-from src.languages.translations.English.reset_password import ResetPasswordTranslations
+from src.languages.translations.English.messages import \
+    MessagesEnglishTranlsations
+from src.languages.translations.English.navigation import \
+    NavigationEnglishTranlsations
+from src.languages.translations.English.registration import \
+    RegistrationTranslations
+from src.languages.translations.English.reset_password import \
+    ResetPasswordTranslations
 
 
 class TranslationsFactory:

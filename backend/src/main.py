@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.utils.rsa_generator import RSAGenerator
 from config import ConfigFactory
 from src.db.db_factory import DBFactory
 from src.groups.route import GroupsRouter
@@ -13,12 +12,11 @@ from src.messages.router import MessagesRouter
 from src.messages.service import MessagesService
 from src.users.routers import UsersRouter
 from src.utils.authentication import Authenticator
+from src.utils.rsa_generator import RSAGenerator
 from src.websocket.ws_server import ConnectionManager
 
 
-def create_app(
-    server="test", password="secret-key-placeholder"
-):
+def create_app(server="test", password="secret-key-placeholder"):
     rsa_gen = RSAGenerator(password=password)
     private_key = rsa_gen.get_private_key()
     public_key = rsa_gen.get_public_key()

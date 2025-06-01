@@ -2,6 +2,7 @@ import pytest
 
 from tests.global_fixtures.boot_up import client as api
 from tests.global_fixtures.users import login_user as access_token
+
 test_data = [
     (
         "/groups/",
@@ -48,7 +49,7 @@ test_data = [
 @pytest.mark.parametrize("url, outcome", test_data)
 def test_groups(api, access_token, url, outcome):
     access_token = access_token
-    headers={"Authorization": access_token}
+    headers = {"Authorization": access_token}
     response = api.get(url=url, headers=headers)
     assert response.status_code == outcome["status"]
     assert response.json() == outcome["json"]

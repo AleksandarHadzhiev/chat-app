@@ -1,7 +1,8 @@
 import json
-from freezegun import freeze_time
+
 import pytest
 from fastapi.testclient import TestClient
+from freezegun import freeze_time
 
 from src.main import create_app
 
@@ -30,9 +31,12 @@ def send_message():
     }
     app = create_app(server="test")["app"]
     client = TestClient(app=app)
-    response = client.post("/login", content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}))
+    response = client.post(
+        "/login",
+        content=json.dumps({"email": "aleks_01_@gmail.com", "password": "admin"}),
+    )
     assert response.status_code == 200
-    assert  "access_token" in response.json()
+    assert "access_token" in response.json()
     token = response.json()["access_token"]
     ws_url = f"/ws/{token}/1"
     with client.websocket_connect(ws_url) as websocket:
