@@ -12,10 +12,6 @@ import MessagesHandler from "@/ApiCalls/MessagesHandler";
 export function ChatPage() {
     const router = useRouter()
 
-    if (localStorage.getItem("access_token") == null) {
-        router.push("/login")
-    }
-
     const handler = new MessagesHandler()
     const LEGNTH_ROW_FOR_READABLE_MESSAGE = 20
     const [touchStart, setTouchStart] = useState(0)
@@ -105,13 +101,6 @@ export function ChatPage() {
             message?.appendChild(container)
         }
     }
-
-    addEventListener("mousedown", (event) => {
-        // From NextJS -> 0 means left click
-        if (event.button == 0) {
-            removeActions()
-        }
-    })
 
     function editMessage(_code: string, content: string) {
         setEditMessage(true)
@@ -211,9 +200,18 @@ export function ChatPage() {
     const [groupsAreVisible, setIsVisible] = useState(true)
 
     useEffect(() => {
+        addEventListener("mousedown", (event) => {
+            // From NextJS -> 0 means left click
+            if (event.button == 0) {
+                removeActions()
+            }
+        })
         loadTranslations()
         getMessages(group.id)
         if (localStorage) {
+            if (localStorage.getItem("access_token") == null) {
+                router.push("/login")
+            }
             const accessToken = localStorage.getItem("access_token")
             const userData = localStorage.getItem("user")
             if (userData) {
@@ -229,13 +227,6 @@ export function ChatPage() {
 
     }, [user.id, group, language])
 
-    socket?.addEventListener('open', (event) => {
-        event.preventDefault()
-    })
-
-    socket?.addEventListener('close', (event) => {
-        event.preventDefault()
-    })
 
     function setPanelStyleBasedOnDevice() {
         if (widthType == "mobile" && groupsAreVisible) return 'hidden'

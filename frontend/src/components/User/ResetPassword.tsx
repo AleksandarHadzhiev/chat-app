@@ -18,6 +18,10 @@ export default function ResetPassword() {
         "button": "Submit",
         "account": "You don't have an account?",
         "signup": "Sing up",
+        "email": "Email",
+        "example": "example@gmail.com",
+        "forgot-password": "Forgot password?",
+        "here": "here"
     })
 
     const { language } = useContext(ChildContext)
