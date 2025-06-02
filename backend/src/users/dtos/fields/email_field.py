@@ -10,5 +10,5 @@ class EmailField(BaseDTO):
         if self.email.replace(" ", "") == "":
             return "empty-email"
         elif "@" not in self.email:
-            return "empty-email"
+            return "invalid-email"
         return {"email": self.email}

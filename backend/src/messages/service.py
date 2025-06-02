@@ -1,3 +1,4 @@
+from src.messages.dtos.factory import DTOFactory
 from src.messages.repositories.factory import RepositoryFactory
 
 
@@ -7,10 +8,61 @@ class MessagesService:
         self.rep = RepositoryFactory(db=db).get_db()
 
     def get_all(self, group_id):
-        # Add proper check for group_id
-        return self.rep.get_all(group_id)
+        group_id_is_passed = (
+            group_id is not None
+            and str(group_id).replace(" ", "") != ""
+            and str(group_id).isnumeric()
+        )
+        if group_id_is_passed and int(group_id) > 0:
+            response = self.rep.get_all(group_id=group_id)
+            return response
+        return {"fail": "missing-id"}
 
-    def create(self, data):
-        print("function")
-        # Add checks for the incoming data
-        self.rep.create(data=data)
+    async def create(self, data):
+        factory = DTOFactory(data=data, settings=self.settings, rep=self.rep)
+        dto = factory.get_dto()
+        response = await dto.execute_validation()
+        if "fail" in response:
+            return response
+        else:
+            self.rep.create(data=data)
+            return {"message": "success"}
+
+    def get_last_message(self, group_id):
+        group_id_is_passed = (
+            group_id is not None
+            and str(group_id).replace(" ", "") != ""
+            and str(group_id).isnumeric()
+        )
+        if group_id_is_passed and int(group_id) > 0:
+            response = self.rep.get_last_message(group_id=group_id)
+            return response
+        return {"fail": "missing-id"}
+
+    async def edit(self, data):
+        factory = DTOFactory(data=data, settings=self.settings, rep=self.rep)
+        dto = factory.get_dto()
+        response = await dto.execute_validation()
+        if "fail" in response:
+            return response
+        else:
+            self.rep.edit(data=data)
+            return {"message": "success"}
+
+    def delete(self, code, group_id, user_id):
+        code_is_passed = (
+            type(code) is str and code is not None and code.replace(" ", "") != ""
+        )
+        group_id_is_passed = (
+            group_id is not None
+            and str(group_id).replace(" ", "") != ""
+            and str(group_id).isnumeric()
+        )
+        user_id_is_passed = (
+            user_id is not None
+            and str(user_id).replace(" ", "") != ""
+            and str(user_id).isnumeric()
+        )
+        if code_is_passed and group_id_is_passed and user_id_is_passed:
+            return self.rep.delete(code=code, group_id=group_id, user_id=user_id)
+        return {"fail": "Incorrect data"}

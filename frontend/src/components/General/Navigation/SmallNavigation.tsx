@@ -1,7 +1,6 @@
 "use client"
 
 import LanguagePicker from "../LanguagePicker"
-import Dropdown from "./Dropdown"
 
 //@ts-expect-error
 // Providing a function and can not specify the type

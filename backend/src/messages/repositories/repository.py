@@ -11,5 +11,14 @@ class Repository:
     def edit(self, data):
         pass
 
-    def delete(self, message_id):
+    async def is_part_of_group(self, user_id, group_id):
+        pass
+
+    async def is_author(self, user_id, code):
+        pass
+
+    def delete(self, code, group_id, user_id):
+        pass
+
+    def get_last_message(self, group_id):
         pass

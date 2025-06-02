@@ -24,6 +24,8 @@ class DutchRegistrationTranslations(Base):
             "empty-code": "Lege code",
             "invalid-code": "Ongeldige code",
             "unverified": "Het opgegeven e-mailadres of de code is niet geverifieerd",
+            "offensive-speech": "De opgegeven gebruikersnaam wordt als aanstootgevend beschouwd. Kies een andere gebruikersnaam.",
+            "user-exists": "Bedankt voor uw registratie, u heeft een e-mail ontvangen.",
         }
 
     def get_translations(self) -> dict:

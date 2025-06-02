@@ -8,7 +8,8 @@ export default class TranslationLoader {
     }
 
     async getTranslatiosn() {
-        return await axios.get("http://localhost:8000/languages/translations/" + this.language + "/" + this.file)
+        const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+        return await axios.get(`${BACKEND_BASE_URL}/languages/translations/` + this.language + "/" + this.file)
     }
 
 }

@@ -4,10 +4,12 @@ from src.users.dtos.forgot_password import ForgotPasswordDTO
 from src.users.dtos.login_dto import LoginDTO
 from src.users.dtos.reset_password_dto import ResetPasswordDTO
 from src.users.dtos.user_dto import UserDTO
+from src.users.repositories.repository import Repository
 
 
 class DTOFactory:
-    def __init__(self, data, settings):
+    def __init__(self, data, settings=None, rep: Repository = None):
+        self.rep = rep
         self.incomind_data = data
         self.settings = settings
         self.supported_formats = [
@@ -15,7 +17,7 @@ class DTOFactory:
             [{"email": "", "code": ""}, CodeDTO()],
             [{"email": "", "password": ""}, LoginDTO()],
             [{"email": ""}, ForgotPasswordDTO()],
-            [{"code": "", "email": "", "password": ""}, ResetPasswordDTO()],
+            [{"email": "", "code": "", "password": ""}, ResetPasswordDTO()],
         ]
 
     def get_dto(self) -> BaseDTO:
@@ -24,6 +26,6 @@ class DTOFactory:
             incoming_keys = list(self.incomind_data.keys())
             if incoming_keys == keys:
                 _dto: BaseDTO = dto[1]
-                _dto.set(data=self.incomind_data, settings=self.settings)
+                _dto.set(data=self.incomind_data, settings=self.settings, rep=self.rep)
                 return _dto
         return None

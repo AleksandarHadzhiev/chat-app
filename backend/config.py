@@ -4,11 +4,27 @@
 class Config:
     """Base config."""
 
-    DATABASE_URL = ""
-    FRONTEND_URL = ""
-    FRONTEND_URL = ""
+    SMTP_SERVER = ""
+    SECRET_KEY = ""
+    PUBLIC_KEY = ""
+    SMTP_PORT = 1025
+    ALGORITHM = "RS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES = 30
     ENVIRONMENT = ""
+    BASE_URL = ""
+    USERNAME = ""
+    PASSWORD = ""
+    HOST = ""
+    DATABASE_PORT = ""
+    DATABASE_DB = ""
+    FRONTEND_URL = ""
     CODE_LENGTH = 4
+
+    def set_secret_key(self, key):
+        self.SECRET_KEY = key
+
+    def set_public_key(self, key):
+        self.PUBLIC_KEY = key
 
 
 class ConfigFactory:
@@ -33,36 +49,49 @@ class ConfigFactory:
 class DevConfig(Config):
     """Development config."""
 
+    SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
+    SMTP_SERVER = "127.0.0.1"
+    SMTP_PORT = 1025
     ENVIRONMENT = "dev"
-
+    BASE_URL = "127.0.0.1"
     USERNAME = "user"
     PASSWORD = "user"
-    HOST = "localhost"
+    HOST = "127.0.0.1"
     DATABASE_PORT = "5432"
     DATABASE_DB = "users"
-    ENVIRONMENT = "dev"
     FRONTEND_URL = "https://localhost:3000"
 
 
 class TestConfig(Config):
     """Test config."""
 
+    SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
+    SMTP_SERVER = "127.0.0.1"
+    SMTP_PORT = 1025
     ENVIRONMENT = "test"
-
+    BASE_URL = "127.0.0.1"
     FRONTEND_URL = "https://localhost:3000"
-    DATABASE_URL = f"sqlite:///"
+    USERNAME = "test"
+    PASSWORD = "test"
+    HOST = "127.0.0.1"
+    DATABASE_PORT = "5432"
+    DATABASE_DB = "test"
 
 
 class DockerConfig(Config):
     """Docker config."""
 
+    SECRET_KEY = "secret-key-placeholder"
+    PUBLIC_KEY = "secret-key-placeholder"
+    SMTP_SERVER = "mailhog"
+    SMTP_PORT = 1025
     ENVIRONMENT = "docker"
-
+    BASE_URL = "0.0.0.0"
+    USERNAME = "docker"
+    PASSWORD = "docker"
     HOST = "database"
-    FRONTEND_URL = (
-        "https://localhost:3000"  # When the dockerization is complete will be changed
-    )
-    DATABASE_NAME = "employees"
-    DATABASE_USER = "user"
-    DATABASE_PASSWORD = "password"
-    PORT_NUMBER = 3306
+    DATABASE_PORT = "5432"
+    DATABASE_DB = "docker"
+    FRONTEND_URL = "https://localhost:3000"

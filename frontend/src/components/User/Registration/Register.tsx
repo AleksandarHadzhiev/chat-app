@@ -34,7 +34,7 @@ export default function Register() {
         stepThree: "",
     })
 
-    const { language } = useContext(ChildContext)
+    const { language, widthType } = useContext(ChildContext)
     useEffect(() => {
         async function load() {
             const loader = new TranslationLoader(language, "registration")
@@ -53,9 +53,9 @@ export default function Register() {
     return (
         <div className="bg-white w-full h-full flex flex-col items-center justify-center text-black space-y-4">
             <Notification notification={notification} response={response} />
-            <RegistrationSteps step={step} translations={data} />
+            <RegistrationSteps step={step} translations={data} widthType={widthType} />
             {
-                step === 1 ? < ProvdeUserData registration={registration} translations={data} /> :
+                step === 1 ? < ProvdeUserData language={language} registration={registration} translations={data} /> :
                     step === 2 ? <ProvdeCode registration={registration} translations={data} /> : <Confirmation translations={data} />
             }
         </div>

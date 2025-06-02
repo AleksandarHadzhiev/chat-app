@@ -1,109 +1,140 @@
 "use client"
-import { Key, useEffect, useState } from "react"
+import { Key, useEffect, useState, useContext } from "react"
 import CreateGroup from "./CreateGroup"
-import axios from "axios"
+import ChildContext from "../General/Context"
 import Search from "./Search"
+import GroupsHandler from "@/ApiCalls/GroupsHandler"
+import TranslationLoader from "@/tools/TranslationLoader"
+import Notification from "../General/Notification"
+import GroupBox from "./GroupBox"
+import ButtonToOpenAddGroupDialog from "./ButtonToOpenAddGroupDialog"
+import { useRouter } from "next/navigation";
 
-export default function Groups() {
+
+//@ts-expect-error
+// Providing a function and can not specify the type
+export default function Groups({ socket }) {
+    const _socket: WebSocket = socket
+    const router = useRouter()
+    const [switcher, setSwitcher] = useState(false)
+    _socket.onmessage = (event) => {
+        const json = JSON.parse(event.data)
+        const data = json.data
+        if (json.type == "notification" && data.action == "groups") {
+            setSwitcher(!switcher)
+        }
+
+    }
+
+    const { language, widthType } = useContext(ChildContext)
+    const handler = new GroupsHandler()
+    const [translations, setTranslations] = useState({
+        "join": "Join",
+        "leave": "Leave",
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "search": "Search",
+        "edit": "Edit",
+        "delete": "Delete",
+        "kick": "Kick member out",
+        "name": "Name",
+        "current name": "Current name",
+        "new name": "New name",
+        "loading": "Loacding...",
+        "role": "Role",
+        "actions": "Actions",
+        "members": "Members",
+        "created group": "You have created a group. Make it popular.",
+        "edited": "You have changed the name of the group.",
+        "deleted": "You have deleted the group.",
+        "left": "You have left the group",
+        "kicked": "You have kicked the member out of the group.",
+        "joined": "You have joined a group.",
+        "already a member": "You are already a member of the group."
+    })
+    const [response, setResponse] = useState("")
+    const [notification, setNotificaiton] = useState("")
     const [isFocued, setIsFocused] = useState(false)
     const [isOpenDialog, setOpenDialog] = useState(false)
     const [groups, setGroups] = useState([])
     const [user, setUser] = useState<{
-        id: Number,
-        email: String,
-        password: String,
-        username: String,
-        verified: Boolean,
+        id: number,
+        email: string,
+        name: string,
+        verified: boolean,
     }>({
         id: Number(0),
         email: String(),
-        password: String(),
-        username: String(),
+        name: String(),
         verified: Boolean(),
     })
 
     function openDialog() {
         setOpenDialog(true)
-        console.log(isOpenDialog)
     }
 
     function closeDialog() {
         setOpenDialog(false)
-        console.log(isOpenDialog)
     }
 
-    function joinServer(group_id: Number) {
-        axios.post(`http://localhost:8000/groups/${user.id}/join/${group_id}`)
-            .then((res) => {
-                console.log(res.status)
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+    async function loadTranslations() {
+        const translationsLoader = new TranslationLoader(language, "groups")
+        const response = await translationsLoader.getTranslatiosn()
+        const data = JSON.parse(response.data)
+        setTranslations(data.translations)
     }
 
-    function getAllGroups() {
-        axios.get("http://localhost:8000/groups/").then((response) => {
-            setGroups(response.data.groups)
-        }).catch((error) => {
-            console.log(error)
-        })
+    async function getAllGroups() {
+        const groups = await handler.getAllGroups()
+        if ("tag" in groups) { router.push("/login") }
+        else setGroups(groups)
     }
 
     useEffect(() => {
-        const userStringed = localStorage.getItem("user")
-        if (userStringed) {
-            setUser(JSON.parse(userStringed))
+        const userstringed = localStorage.getItem("user")
+        if (userstringed) {
+            setUser(JSON.parse(userstringed))
         }
         getAllGroups()
-    }, [user.id, groups.length])
+        loadTranslations()
+    }, [user.id, groups.length, language, response, switcher])
+
+    function triggerUpdate(group_id: any) {
+        const notification = {
+            type: "notification",
+            data: {
+                action: "groups",
+                group: group_id ? group_id : 0
+            }
+        }
+        socket?.send(JSON.stringify(notification))
+    }
 
     return (
         <div className="w-full h-full flex flex-col">
-            <Search setIsFocused={setIsFocused} isFocued={isFocued} />
-            <div className={`${groups ? "w-full h-4/9 flex flex-col space-y-2" : "hidden"}`}>
-                {/* Groups */}
-                {groups && groups.length != 0 ? groups.map((group: any, key: Key) => {
-                    return (
-                        <div key={key} className="ml-2 w-1/3 flex h-1/4 border-1 border-gray-400 hover:border-orange-300" id="global-group">
-                            < div className="w-2/3 pl-4 pt-2 h-full" >
-                                <p className="text-base text-black">{group.title}</p>
-                                <p className="text-sm text-gray-400">Last message</p>
-                            </div>
-                            <div className="w-1/3 h-full pt-2 text-sm/6 text-orange-300 mr-1 mt-2">
-                                <button
-                                    onClick={() => { joinServer(group.id) }}
-                                    className="w-full h-1/2 bg-orange-600 text-white rounded-md hover:bg-orange-400">Join</button>
-                            </div>
-                        </div>
-                    )
-                }) : (<p>Loading...</p>)}
-            </div>
-            <div className={`${isOpenDialog ? 'fixed flex items-center justify-center inset-0 bg-gray-500/75 ' : "hidden"} `}>
-                <div onClick={() => { closeDialog() }} className="absolute top-0 w-screen h-screen transition-opacity flex items-center justify-center">
-                </div>
-                <CreateGroup closeDialog={closeDialog} />
-            </div>
-            {/* <div className="w-full h-3/10 flex items-center justify-center">
-                <div className="h-full w-1/4 rounded-4xl drop-shadow-md border-2 border-gray-200 hover:border-orange-300 text-orange-300 hover:text-orange-400">
-                    <button className="w-full h-full flex flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </button>
-                </div>
-            </div> */}
-            <div className={`${isOpenDialog ? "hidden" : "w-full h-4/9 flex items-center justify-center"}`}>
-                <div onClick={() => { openDialog() }} className="h-1/2 w-1/4 rounded-4xl drop-shadow-md border-2 border-gray-200 hover:border-orange-300 text-orange-300 hover:text-orange-400">
-                    <button className="w-full h-full flex flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            <Search widthType={widthType} setIsFocused={setIsFocused} isFocued={isFocued} translations={translations} />
+            <Notification response={response} notification={notification} />
+            <div className={`${groups ? `w-full ${widthType == "mobile" ? "h-7/9 flex items-center justify-center" : "h-4/9"} flex flex-col space-y-2` : "hidden"}`}>
 
-        </div>
+                {/* Groups */}
+                <div className="overflow-y-auto w-full h-full flex flex-col items-center">
+                    {groups ? groups.map((group: any, key: Key) => {
+                        return (
+                            <div key={key} className={`mt-2 ${widthType == "mobile" ? "w-[95%]" : "w-1/3 ml-2 "} min-h-20 max-h-20 flex h-1/4 border-1 border-gray-400 hover:border-orange-300`} id="global-group">
+                                <GroupBox widthType={widthType} getAllGroups={getAllGroups} setResponse={setResponse} setNotificaiton={setNotificaiton} triggerUpdate={triggerUpdate} groups={groups} user={user} group={group} translations={translations} />
+                            </div>
+                        )
+                    }) : (<p>{translations.loading}</p>)}
+                </div>
+            </div>
+            <div className={`${isOpenDialog ? 'z-998 fixed flex items-center justify-center inset-0 bg-gray-500/75 ' : "hidden"} `}>
+                <div
+                    onClick={() => { closeDialog() }}
+                    className="absolute top-0 w-screen h-screen transition-opacity flex items-center justify-center">
+                </div>
+                <CreateGroup triggerUpdate={triggerUpdate} getAllGroups={getAllGroups} closeDialog={closeDialog} translations={translations} setResponse={setResponse} setNotificaiton={setNotificaiton} />
+            </div>
+            <ButtonToOpenAddGroupDialog widthType={widthType} isOpenDialog={isOpenDialog} openDialog={openDialog} />
+        </div >
     )
 }

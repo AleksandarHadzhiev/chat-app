@@ -1,6 +1,4 @@
-from src.db.mysql import MySQL
 from src.db.postgres import PostgresSQL
-from src.db.sqlite import SQLite
 
 
 class DBFactory:
@@ -8,8 +6,8 @@ class DBFactory:
         self.env: str = env
         self.settings = settings
         self.databases = {
-            "docker": MySQL(),
-            "test": SQLite(),
+            "docker": PostgresSQL(),  # just switch the database by adding new module of database.
+            "test": PostgresSQL(),
             "dev": PostgresSQL(),
         }
 

@@ -30,10 +30,10 @@ export default function LanguageDropDown({ setLn, setLanguage }) {
         setLn(e.currentTarget.innerHTML)
     }
     return (
-        <div className="w-full h-full flex flex-col rounded-lg" id="languages">
+        <div className="z-998 w-full h-full flex flex-col rounded-lg" id="languages">
             {
                 languages.map((language: string, index: Key) => (
-                    <div key={index} className="w-full h-full flex-col hover:bg-gray-400">
+                    <div key={index} className="z-998 w-full h-full flex-col hover:bg-gray-400">
                         <div className="w-full h-full text-black flex items-center justify-center" onClick={(e) => { pickLanguage(e) }} dangerouslySetInnerHTML={{ __html: language }}></div>
                         <div className="w-full h-[2px] bg-gray-700"></div>
                     </div>

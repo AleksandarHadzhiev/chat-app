@@ -9,12 +9,14 @@ class GroupsRouter:
         self.controller = GroupsController(db=db, settings=settings)
         self.router.add_api_route("/", self.controller.create, methods=["POST"])
         self.router.add_api_route(
-            "/user/{user_id}", self.controller.get_all_for_user, methods=["GET"]
+            "/{user_id}", self.controller.get_all_for_user, methods=["GET"]
         )
         self.router.add_api_route("/", self.controller.get_all, methods=["GET"])
         self.router.add_api_route("/{id}", self.controller.get_group, methods=["GET"])
-        self.router.add_api_route("/{id}", self.controller.edit, methods=["POST"])
-        self.router.add_api_route("/{id}", self.controller.delete, methods=["POST"])
+        self.router.add_api_route("/{id}", self.controller.edit, methods=["PUT"])
+        self.router.add_api_route(
+            "/{id}/{admin}", self.controller.delete, methods=["DELETE"]
+        )
         self.router.add_api_route(
             "/{account}/join/{group}", self.controller.join, methods=["POST"]
         )
@@ -22,5 +24,7 @@ class GroupsRouter:
             "/{account}/leave/{group}", self.controller.leave, methods=["POST"]
         )
         self.router.add_api_route(
-            "/{id}/kick/{member}", self.controller.kick_member_out, methods=["POST"]
+            "/{id}/kick/{member}/{admin}",
+            self.controller.kick_member_out,
+            methods=["DELETE"],
         )

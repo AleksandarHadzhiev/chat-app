@@ -42,14 +42,13 @@ export default function Login() {
             email: email,
             password: password
         }
-        const response = await usersAPI.login("http://localhost:8000/login", data, Data)
+        const response = await usersAPI.login(data, Data)
         if ("tag" in response) {
             setResponse(response.tag)
             setNotificaiton(response.message)
         }
         else {
-            localStorage.setItem("user", JSON.stringify(response))
-            router.push('/')
+            router.push('/me')
         }
     }
     return (

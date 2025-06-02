@@ -14,8 +14,11 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: acc@gmail.com
       PGADMIN_DEFAULT_PASSWORD: password
-  postgres:
-    image: postgres
+  dev_db:
+    container_name: dev_db
+    build:
+      context: ./
+      dockerfile: Dockerfile.sql
     restart: unless-stopped
     environment:
       - POSTGRES_USER=user
@@ -23,22 +26,38 @@ services:
       - POSTGRES_DB=users
     ports:
       - '5432:5432'
+    profiles: [ dev ]
 
-  mysql:
-    container_name: database
-    image: mysql:latest
-    ports:
-      - "32001:3306"
+  test_db:
+    container_name: test_db
+    build:
+      context: ./
+      dockerfile: Dockerfile.sql
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: employees
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=test
+    ports:
+      - '5432:5432'
+    profiles: [ test ]
+
+  docker_db:
+    container_name: database
+    build:
+      context: ./
+      dockerfile: Dockerfile.sql
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=docker
+    ports:
+      - '5432:5432'
     profiles: [ app, full ]
+
   backend:
     container_name: api
-    links:
-      - "mysql"
     build: .
     expose:
       - "8000"
@@ -55,5 +74,7 @@ services:
       - "3000"
     ports:
       - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
     restart: "always"
     profiles: [ full ]
