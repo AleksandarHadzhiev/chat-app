@@ -13,4 +13,4 @@ docker compose --profile test up -d
 
 # Run pyteest
 echo "____________________PYTEST____________________"
-pipenv run test-4
+pipenv run test-no-workers
