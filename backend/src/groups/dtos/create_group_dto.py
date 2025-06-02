@@ -31,14 +31,6 @@ class CreateGroupDTO(BaseDTO):
         else:
             self.admin = self.data["admin"]
 
-    async def user_exists(self, data):
-        # Find a way to get Users.Repository here to do the checking
-        user = self.rep.get_by_id(user_id=data)
-        if "user" in user:
-            self.errors.append("user-not-found")
-        else:
-            self.admin = data
-
     async def validate_data(self):
         await asyncio.gather(self.set_admin(), self.set_title())
         if len(self.errors) > 0:

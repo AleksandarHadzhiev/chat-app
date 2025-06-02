@@ -1,29 +1,36 @@
 # chat-app
 
-A chat-app utilizing websockets 
+The application is a real-time chatting, which allows the users to join and create different groups. The real-time chatting aspect of the application is possible due to the integration of websockets. A websocket server in the backend. And a websocket in the frontend which connets to the server. As for the groups and user flows, it is implemented via a REST API backend.
 
 ## Description
 
-A chat application with Next.js as a frontend service and FastAPI as a backend service. Together with that there will be a websocket server running in the backend, and the frontend will serve as a client. The application will provide the option for the user to login using email + password combination. PostgreSQL as a DB service.
+The application is build on 3 main foundations. The first is a frontend running on Next.js - TypeScript. It aims to separate the code into components and take the API calls out of the components as much as possible - building classes where the `axios` calls are made. Together with that it is utilizing the WebSocket API to build a socket, which will connect to the second foundation of the app, the WebSocket server.
+
+The WebSocket server is running in together with the third foundation - the backend, which runs on FastAPI (Python). Both run together at the same host. The server has its own "ednpoint" which saves the socket - accepts and closses it when needed. Each socket is connected to a client which in the backend is represented with the id of the user which is using the frontend.
+
+The backend has three main flows - users, groups and messages. Each of them has its own endpoints and tables in a database. The database is in PostgreSQL - via a docker image of it for all the environments - dev, test and docker. There is a `Dockerfile` for the database which integrates a custom `init.sql` file - creates the tables and adds some basic data to it - main user (admin - the developer = "me"), the first group and some test data - used during tests.
+
+The users endpoints are - register, login, forgot_password, reset_password, me and authorize. The registration and forgot_password integrate a SMTP functionality to send an email containing code (used to verify the user - updates the verified field for the user in the DB)- registration, link (leads to rest_password page in the frontend) - forgot_password. The authorize is part of the reset_password. As it works as an additional check if the user trying to reset the password in the frontend is allowed to do that action.
+
+For the login flow, the user receives an access_token - a JWT generated with the `PyJWT` and `cryptography`. `cryptography` is a library which allows the creation of a secret and the decryption of the secret. In the case of the application the secret is a private+public key pair - RSA - an asymmetric key cryptography. The choice was made due to the higher security that an asymmetric key cryptography provides compared a symmetric one. 
+
+The access_token is then used - provided and checked for - in eveyr other endpoint - /me included.
+
+The groups and messages endpoints are the standard CRUD operations. The only difference is the creation of message, which is not an endpoint. It is part of the WebSocket server, where the server starts by a user - client - connects to it. Once connected the server listens for any messages by a socket. When a message is received the server sends the message to the socket - client in the frontend, but also stores it in the database.
+
 
 ## Backend
 
-The backed will be split in a few separate major endpoints - users, groups, messages. And each of them will have their own subendpoint, for example: `/login`, `groups/all`, `messages/{group_id}`.
-
-The websocket server will be running in the backend as well. The websocker server will communicate directly with both the client and utillize backend functionalities - store the message (backend), send the message (to the frontend).
-
-To fully run the backend for developemnt and to play around first run the docker compose file command: `docker compose --profile dev up` add `-d` if you want to keep it running in the background and still use the same terminal. Then run `pipenv run start <password>` to start the local backend. The password field can be anything you like, or leave it empty as there is a default value to it in the backend, it serves as a password for the `rs` secret generator in the backend. The generator is used to generate a secret_key and public_key for the jwt token, which is used as an access_token for the endpoints -> groups and messages. 
+To fully run the backend for developemnt and to play around first run the docker compose file command: `docker compose --profile dev up` add `-d` if you want to keep it running in the background and still use the same terminal. Then run `pipenv run start <password>` to start the local backend. The password field can be anything you like, or leave it empty as there is a default value to it in the backend, it serves as a password for the `rsa` secret generator in the backend.
 
 To run the tests simply run, if you have not started the database containers first run `docker compose --profile test up -d` and then
 `pipenv run test-no-workers`. 
 
 To run the backend completely in docker - no need for `pipenv run start` - run: `docker compose --profile app up -d`.
 
-To run both the backend and frontend inside docker - no need for either `pipenv run start` or `npm run dev` - run `docker compose --profile full up -d. 
+To run both the backend and frontend inside docker - no need for either `pipenv run start` or `npm run dev` - run `docker compose --profile full up -d`. 
 
 ## Frontend
-
-The frontend will utilzie  `axios` for the calls to the backend and the built-int websocket, to connect to the websocket. It will be split in different components for better separation of concerns.
 
 To run the frontend there are three options. But first you have to have the backend up and running. If the backend is running you can run either of the three options:
 ```

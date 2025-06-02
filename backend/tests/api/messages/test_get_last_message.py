@@ -3,8 +3,7 @@ import json
 import pytest
 from freezegun import freeze_time
 
-from src.messages.repositories.postgres_repository import \
-    break_down_long_messages
+from src.messages.repositories.postgres_repository import break_down_long_messages
 from tests.global_fixtures.boot_up import client as api
 from tests.global_fixtures.messages import send_message as message
 from tests.global_fixtures.users import login_user as access_token

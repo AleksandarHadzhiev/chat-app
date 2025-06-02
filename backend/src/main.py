@@ -70,27 +70,35 @@ def create_app(server="test", password="secret-key-placeholder"):
                         data = await websocket.receive_text()
                         message = json.loads(data)
                         if message["type"] == "message":
-                            message["data"]["user_id"] = user.id
-                            message["data"]["author"] = user.username
-                            group_id = message["data"]["group_id"]
-                            code = connection_manager.generate_special_code(
-                                user_id=user.id, group_id=group_id
-                            )
-                            message["data"]["code"] = code
-                            service = MessagesService(db=db, settings=config)
-                            response = await service.create(message["data"])
-                            if "fail" in response:
-                                data = {"type": "fail", "data": response["fail"]}
-                                await connection_manager.broadcast(message=data)
-                            else:
-                                await connection_manager.broadcast(message=message)
+                            await _send_message(message=message, user=user)
                         elif message["type"] == "notification":
-                            message["data"]["user"] = user.username
-                            await connection_manager.broadcast(message=message)
-
+                            await _send_notificatio(message=message, user=user)
                 except WebSocketDisconnect:
                     await connection_manager.disconnect(id=user.id)
             else:
                 websocket.send_json({"type": "fail", "data": response["fail"]})
+
+    async def _send_message(message, user):
+        message["data"]["user_id"] = user.id
+        message["data"]["author"] = user.username
+        group_id = message["data"]["group_id"]
+        code = connection_manager.generate_special_code(
+            user_id=user.id, group_id=group_id
+        )
+        message["data"]["code"] = code
+        service = MessagesService(db=db, settings=config)
+        response = await service.create(message["data"])
+        await _handle_broadcast(response=response, message=message)
+
+    async def _handle_broadcast(response, message):
+        if "fail" in response:
+            data = {"type": "fail", "data": response["fail"]}
+            await connection_manager.broadcast(message=data)
+        else:
+            await connection_manager.broadcast(message=message)
+
+    async def _send_notificatio(message, user):
+        message["data"]["user"] = user.username
+        await connection_manager.broadcast(message=message)
 
     return {"app": app, "config": config}

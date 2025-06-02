@@ -11,7 +11,7 @@ n = len(sys.argv)
 environments = ["docker", "dev", "test"]
 
 env = sys.argv[1]
-password="secret-key-placeholder"
+password = "secret-key-placeholder"
 if n == 3:
     password = sys.argv[2]
 if env in environments:
